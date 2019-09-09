@@ -1,0 +1,36 @@
+﻿<Window x:Name="PDMMain" x:Class="PremierDesignManagement.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PremierDesignManagement"
+        mc:Ignorable="d"
+        Title="Premier Design Management" Height="800" Width="1400" ResizeMode="CanMinimize" Icon="assets/Premier_P_Logo_Red_RGB_Large_Trans.png" Background="White" Foreground="Black" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Color x:Key="BorderColour1">#FF51545D</Color>
+    </Window.Resources>
+    <Grid>
+        <Image Margin="-235,95,1447,604" Source="assets/Premier_Logo_Single_Line_Red_Grey_RGB_Large_Trans.png" Stretch="Fill"/>
+        <Grid x:Name="TaskListGrid" HorizontalAlignment="Left" Height="769" Margin="300,0,0,0" VerticalAlignment="Top" Width="1092">
+            <DataGrid HorizontalAlignment="Left" Height="447" Margin="117,167,0,0" VerticalAlignment="Top" Width="836"/>
+        </Grid>
+        <Image Margin="-220,215,1447,506" Source="assets/Premier_Logo_Single_Line_RGB_Large_Trans.png" Stretch="Fill"/>
+        <Grid x:Name="SidebarGrid" HorizontalAlignment="Left" Height="771" VerticalAlignment="Top" Width="300">
+            <Rectangle x:Name="Sidebar" Fill="#FFCACBCF" HorizontalAlignment="Left" Height="769" Stroke="#FFC3C4C8" VerticalAlignment="Top" Width="300"/>
+            <Image Margin="100,650,100,21" Source="assets/Premier_P_Logo_Red_RGB_Large_Trans.png" Stretch="Fill" Width="100" Height="100"/>
+            <Border x:Name="TaskListBorder" BorderThickness="10,0,0,0" Margin="20,20,0,691" Height="60" Width="280">
+                <Border.BorderBrush>
+                    <SolidColorBrush Color="#FF51545D"/>
+                </Border.BorderBrush>
+                <TextBlock x:Name="TaskListButton" TextWrapping="Wrap" FontSize="30" TextAlignment="Right" Foreground="{Binding BorderBrush, ElementName=TaskListBorder}" HorizontalAlignment="Left" Width="270" Padding="0,9,10,0" Height="60" MouseLeftButtonUp="TaskListButtonClick"><Run Text="Task List"/></TextBlock>
+            </Border>
+            <Border x:Name="CalendarBorder" BorderBrush="#FF51545D" BorderThickness="10,0,0,0" Margin="20,80,0,631" Height="60" Width="280">
+                <TextBlock x:Name="CalendarButton" TextWrapping="Wrap" FontSize="30" TextAlignment="Right" Foreground="{Binding BorderBrush, ElementName=CalendarBorder}" HorizontalAlignment="Left" Width="270" Padding="0,9,10,0" Text="Calendar" Height="60" MouseLeftButtonUp="CalendarButtonClick"/>
+            </Border>
+        </Grid>
+        <Grid x:Name="CalendarGrid" HorizontalAlignment="Left" Height="769" Margin="300,0,0,0" VerticalAlignment="Top" Width="1092" d:IsHidden="True" Visibility="Hidden">
+            <Button Content="Button" HorizontalAlignment="Left" Height="99" Margin="314,256,0,0" VerticalAlignment="Top" Width="322"/>
+        </Grid>
+
+    </Grid>
+</Window>
