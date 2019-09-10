@@ -52,12 +52,22 @@ namespace PremierDesignManagement.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\dave.shearing\\Source" +
-            "\\Repos\\premierdesignmanagement\\PremierDesignManagement\\PDMDatabase.mdf;Integrate" +
-            "d Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\PDMDatabase.m" +
+            "df;Integrated Security=True")]
         public string PDMDatabaseConnectionString {
             get {
                 return ((string)(this["PDMDatabaseConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\elect\\source\\repos\\P" +
+            "remierDesignManagement\\PremierDesignManagement\\PDMDatabase.mdf;Integrated Securi" +
+            "ty=True")]
+        public string DatabaseConnHome {
+            get {
+                return ((string)(this["DatabaseConnHome"]));
             }
         }
     }

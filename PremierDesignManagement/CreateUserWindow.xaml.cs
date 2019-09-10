@@ -30,7 +30,7 @@ namespace PremierDesignManagement
         private void CreateUserButtonClick(object sender, RoutedEventArgs e)
         {
             Security security = new Security();
-            SqlConnection sqlConnection = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString);
+            SqlConnection sqlConnection = new SqlConnection(Properties.Settings.Default.DatabaseConnHome);
 
             string userSalt = security.GenerateSalt();
             string hashedPassword = security.HashPassword(PasswordTextBox.Text, userSalt);

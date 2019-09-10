@@ -135,10 +135,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\Premier_P_Logo_Red_RGB_Small_Trans.png" />
-    <Content Include="PDMDatabase.mdf" />
-    <Content Include="PDMDatabase_log.ldf">
+    <AdditionalFiles Include="PDMDatabase.mdf" />
+    <AdditionalFiles Include="PDMDatabase_log.ldf">
       <DependentUpon>PDMDatabase.mdf</DependentUpon>
-    </Content>
+    </AdditionalFiles>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
