@@ -1,9 +1,12 @@
-﻿<Application x:Class="PremierDesignManagement.App"
+﻿<Application
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PremierDesignManagement"
+             xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="PremierDesignManagement.App"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
+        <System:String x:Key="WelcomeTextString">Welcome</System:String>
+
     </Application.Resources>
 </Application>
