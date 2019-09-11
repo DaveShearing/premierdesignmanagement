@@ -7,6 +7,9 @@
     <Application.Resources>
 
         <System:String x:Key="WelcomeTextString">Welcome</System:String>
+        <System:Int16 x:Key="MainWindowBlurRadius">0</System:Int16>
+        <System:Double x:Key="BlurEffectRadius">0</System:Double>
+        <Visibility x:Key="LogInButtonVisibility">Visible</Visibility>
 
     </Application.Resources>
 </Application>

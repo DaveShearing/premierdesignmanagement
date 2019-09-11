@@ -1,0 +1,27 @@
+Event Details
+-------------
+Event Name
+Start Date
+Deadline
+Attendees
+Budget
+
+Venues
+-----
+Venue
+Website
+Floor Plans/CADs
+Notes
+
+Venue Rooms
+-----------
+Room
+Photos
+Notes
+
+Clients
+-------
+Client Name
+Current Organisation Link
+Notes
+

@@ -30,32 +30,62 @@ namespace PremierDesignManagement
         private void CreateUserButtonClick(object sender, RoutedEventArgs e)
         {
             Security security = new Security();
-            SqlConnection sqlConnection = new SqlConnection(Properties.Settings.Default.DatabaseConnHome);
+            SqlConnection sqlConnection = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString);
 
             string userSalt = security.GenerateSalt();
-            string hashedPassword = security.HashPassword(PasswordTextBox.Text, userSalt);
+            string hashedPassword = security.HashPassword(PasswordTextBox.Password, userSalt);
 
-            SqlCommand sqlCommand = new SqlCommand("CreateUserSP", sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.Parameters.AddWithValue("@username", UsernameTextBox.Text);
-            sqlCommand.Parameters.AddWithValue("@forename", ForenameTextBox.Text);
-            sqlCommand.Parameters.AddWithValue("@surname", SurnameTextBox.Text);
-            sqlCommand.Parameters.AddWithValue("@emailaddress", EmailTextBox.Text);
-            sqlCommand.Parameters.AddWithValue("@passwordSalt",userSalt);
-            sqlCommand.Parameters.AddWithValue("@passwordHash", hashedPassword);
+            //Initialise CheckUsernameSP
+            SqlCommand checkUserComm = new SqlCommand("CheckUsernameSP", sqlConnection);
+            checkUserComm.CommandType = CommandType.StoredProcedure;
+            checkUserComm.Parameters.AddWithValue("@username", UsernameTextBox.Text);
+            SqlParameter userFound = new SqlParameter("@userFound", SqlDbType.Int);
+            userFound.Direction = ParameterDirection.Output;
+            userFound.Size = 30;
+            checkUserComm.Parameters.Add(userFound);
 
+            //Run CheckUsernameSP
             sqlConnection.Open();
+            int x = checkUserComm.ExecuteNonQuery();
+            int userFoundInDB = (int)checkUserComm.Parameters["@userFound"].Value;
 
-            int i = sqlCommand.ExecuteNonQuery();
-
-            if (i != 0)
+            //Add user to DB if not already
+            if (userFoundInDB == 0)
             {
-                Console.WriteLine("User Created");
+                SqlCommand sqlCommand = new SqlCommand("CreateUserSP", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@username", UsernameTextBox.Text);
+                sqlCommand.Parameters.AddWithValue("@forename", ForenameTextBox.Text);
+                sqlCommand.Parameters.AddWithValue("@surname", SurnameTextBox.Text);
+                sqlCommand.Parameters.AddWithValue("@emailaddress", EmailTextBox.Text);
+                sqlCommand.Parameters.AddWithValue("@passwordSalt", userSalt);
+                sqlCommand.Parameters.AddWithValue("@passwordHash", hashedPassword);
+
+                //sqlConnection.Open();
+
+                int i = sqlCommand.ExecuteNonQuery();
+
+                if (i == 0)
+                {
+                    Console.WriteLine("User Created");
+                }
+
+                sqlConnection.Close();
+
+                Close();
+
+            } else
+            {
+                Console.WriteLine("User already exists. Please Log In.");
             }
+
+            
+
+            
 
             sqlConnection.Close();
 
-            Close();
+            //Close();
         }
 
         //Cancel User creation
@@ -64,5 +94,9 @@ namespace PremierDesignManagement
             Close();
         }
 
+        private void UsernameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

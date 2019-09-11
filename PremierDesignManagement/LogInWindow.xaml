@@ -5,17 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PremierDesignManagement"
         mc:Ignorable="d"
-        Title="Log In" Height="289.455" Width="379.602" ResizeMode="NoResize" Icon="assets/Premier_P_Logo_Red_RGB_Small_Trans.png" Background="#FFFF505B" Topmost="True" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" AutomationProperties.IsOffscreenBehavior="Onscreen" ShowInTaskbar="False">
-    <Grid>
+        Title="Log In" Height="289.455" Width="379.602" ResizeMode="NoResize" Icon="assets/Premier_P_Logo_Red_RGB_Small_Trans.png" Background="#FFFF505B" Topmost="True" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" AutomationProperties.IsOffscreenBehavior="Onscreen" ShowInTaskbar="False" Closed="LogInWindowClosed">
+    <Grid FocusManager.FocusedElement="{Binding ElementName=UsernameTextBox}">
         <Image Margin="-207,56,653,212" Source="assets/Premier_Logo_Single_Line_Red_Grey_RGB_Large_Trans.png" Stretch="Fill"/>
         <Image Margin="-114,251,575,39" Source="assets/Premier_Logo_Single_Line_RGB_Large_Trans.png" Stretch="Fill"/>
-        <TextBox x:Name="UsernameTextBox" HorizontalAlignment="Left" Height="40" Margin="30,37,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="310" FontSize="20" MaxLines="1" TextAlignment="Center" Padding="0,4,0,0" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2"/>
-        <TextBox x:Name="PasswordTextBox" HorizontalAlignment="Left" Height="40" Margin="30,103,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="310" FontSize="20" MaxLines="1" TextAlignment="Center" Padding="0,4,0,0" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2"/>
+        <TextBox x:Name="UsernameTextBox" HorizontalAlignment="Left" Height="40" Margin="30,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="310" FontSize="20" MaxLines="1" TextAlignment="Center" Padding="0,4,0,0" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2" TextChanged="UsernameTextBox_TextChanged" TabIndex="0"/>
+        <TextBox x:Name="PasswordTextBoxOLD" HorizontalAlignment="Left" Height="40" Margin="30,103,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="310" FontSize="20" MaxLines="1" TextAlignment="Center" Padding="0,4,0,0" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2"/>
         <Label Content="Username" HorizontalAlignment="Left" Height="23" Margin="25,14,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
         <Label Content="Password" HorizontalAlignment="Left" Height="23" Margin="25,80,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
-        <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Height="40" Margin="220,181,0,0" VerticalAlignment="Top" Width="120" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="CancelButtonClick"/>
-        <Button x:Name="LogInButton" Content="Log In" HorizontalAlignment="Left" Height="40" Margin="30,181,0,0" VerticalAlignment="Top" Width="120" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="LogInButtonClick"/>
+        <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Height="40" Margin="220,181,0,0" VerticalAlignment="Top" Width="120" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="CancelButtonClick" TabIndex="3" IsCancel="True"/>
+        <Button x:Name="LogInButton" Content="Log In" HorizontalAlignment="Left" Height="40" Margin="30,181,0,0" VerticalAlignment="Top" Width="120" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="LogInButtonClick" TabIndex="2" IsDefault="True"/>
         <TextBlock x:Name="CreateUserTextBlock" HorizontalAlignment="Left" Height="17" Margin="31,226,0,0" TextWrapping="Wrap" Text="Create User" VerticalAlignment="Top" Width="67" TextDecorations="Underline" Foreground="#FFCFD0D3" MouseLeftButtonUp="CreateUserTextBlockClick"/>
+        <PasswordBox x:Name="PasswordTextBox" HorizontalAlignment="Left" Height="40" Margin="31,103,0,0" VerticalAlignment="Top" Width="309" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FFDEDFE2" BorderBrush="#FF51545D" Foreground="#FF51545D" FontSize="20" Padding="0,0,0,4" TabIndex="1"/>
 
     </Grid>
 </Window>

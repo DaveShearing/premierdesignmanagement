@@ -12,7 +12,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="PDMDatabaseConnectionString" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\PDMDatabase.mdf;Integrated Security=True</Value>
+      <Value Profile="(Default)">Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\dave.shearing\Source\Repos\premierdesignmanagement\PremierDesignManagement\PDMDatabase.mdf;Integrated Security=True</Value>
     </Setting>
     <Setting Name="DatabaseConnHome" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\elect\source\repos\PremierDesignManagement\PremierDesignManagement\PDMDatabase.mdf;Integrated Security=True</Value>

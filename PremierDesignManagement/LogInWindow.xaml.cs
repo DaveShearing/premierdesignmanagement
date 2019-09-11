@@ -27,11 +27,13 @@ namespace PremierDesignManagement
         public LogInWindow()
         {
             InitializeComponent();
+            Application.Current.Resources["BlurEffectRadius"] = (double)10;
         }
 
         //Cancel Log In
         private void CancelButtonClick(object sender, RoutedEventArgs e)
         {
+            Application.Current.Resources["BlurEffectRadius"] = (double)0;
             Close();
         }
 
@@ -39,14 +41,12 @@ namespace PremierDesignManagement
         private void LogInButtonClick(object sender, RoutedEventArgs e)
         {
             Security security = new Security();
-            SqlConnection sqlConnection = new SqlConnection(Properties.Settings.Default.DatabaseConnHome);
+            SqlConnection sqlConnection = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString);
             SqlCommand sqlCommand = new SqlCommand("GetSaltAndHashSP", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
 
             sqlCommand.Parameters.AddWithValue("@username", (string)UsernameTextBox.Text);
-            //sqlCommand.Parameters.Add("@passwordSalt", SqlDbType.NChar);
-            //sqlCommand.Parameters.Add("@passwordHash", SqlDbType.NChar);
-
+            
             SqlParameter returnedSalt = new SqlParameter("@passwordSalt", SqlDbType.NVarChar);
             SqlParameter returnedHash = new SqlParameter("@passwordHash", SqlDbType.NVarChar);
             SqlParameter returnedUserFound = new SqlParameter("@userFound", SqlDbType.Int);
@@ -70,9 +70,9 @@ namespace PremierDesignManagement
             int userFound = (int)sqlCommand.Parameters["@userFound"].Value;
             
 
-            sqlConnection.Close();
+            
                         
-            string passwordhash = security.HashPassword(PasswordTextBox.Text, databaseSalt);
+            string passwordhash = security.HashPassword(PasswordTextBox.Password, databaseSalt);
 
             Console.WriteLine(databaseSalt);
             Console.WriteLine(databaseHash);
@@ -85,8 +85,30 @@ namespace PremierDesignManagement
                 MainWindow.Username = UsernameTextBox.Text;
 
                 //Sets welcome string to User
-                Application.Current.Properties["username"] = UsernameTextBox.Text;
-                Application.Current.Resources["WelcomeTextString"] = "Welcome, " + Application.Current.Properties["username"];
+                SqlCommand getUser = new SqlCommand("GetNamesSP", sqlConnection);
+                getUser.CommandType = CommandType.StoredProcedure;
+                getUser.Parameters.AddWithValue("@username", UsernameTextBox.Text);
+                SqlParameter forename = new SqlParameter("@forename", SqlDbType.NVarChar);
+                SqlParameter surname = new SqlParameter("@surname", SqlDbType.NVarChar);
+                forename.Direction = ParameterDirection.Output;
+                surname.Direction = ParameterDirection.Output;
+                forename.Size = 30;
+                surname.Size = 40;
+                getUser.Parameters.Add(forename);
+                getUser.Parameters.Add(surname);
+
+                int x = getUser.ExecuteNonQuery();
+                string forenameDB = getUser.Parameters["@forename"].Value.ToString();
+                string surnameDB = getUser.Parameters["@surname"].Value.ToString();
+
+                Application.Current.Properties["username"] = getUser.Parameters["@username"].Value.ToString();
+                Application.Current.Properties["forename"] = getUser.Parameters["@forename"].Value.ToString();
+                Application.Current.Properties["surname"] = getUser.Parameters["@surname"].Value.ToString();
+                Application.Current.Resources["WelcomeTextString"] = "Welcome, " + Application.Current.Properties["forename"];
+                Application.Current.Resources["BlurEffectRadius"] = (double)0;
+                Application.Current.Resources["LogInButtonVisibility"] = Visibility.Hidden;
+
+                sqlConnection.Close();
 
                 Close();
 
@@ -104,9 +126,9 @@ namespace PremierDesignManagement
                 Console.WriteLine("Log In Failed");
             }
 
-            
-            
-            
+            sqlConnection.Close();
+
+
         }
 
         //Create New User
@@ -116,5 +138,14 @@ namespace PremierDesignManagement
             createUser.Show();
         }
 
+        private void UsernameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void LogInWindowClosed(object sender, EventArgs e)
+        {
+            Application.Current.Resources["BlurEffectRadius"] = (double)0;
+        }
     }
 }

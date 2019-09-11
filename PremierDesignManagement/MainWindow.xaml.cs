@@ -45,7 +45,9 @@ namespace PremierDesignManagement
             forename = null;
             surname = null;
 
-            
+            LogInWindow logIn = new LogInWindow();
+            logIn.Show();
+            Application.Current.Resources["BlurEffectRadius"] = (double)10;
 
         }
         
