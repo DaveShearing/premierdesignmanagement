@@ -16,8 +16,10 @@
             <BlurEffect Radius="{DynamicResource BlurEffectRadius}" />
         </Grid.Effect>
         <Image Margin="-235,95,1447,604" Source="assets/Premier_Logo_Single_Line_Red_Grey_RGB_Large_Trans.png" Stretch="Fill"/>
-        <Grid x:Name="TaskListGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" d:IsHidden="True" Visibility="Hidden">
-            <DataGrid HorizontalAlignment="Left" Height="447" Margin="117,167,0,0" VerticalAlignment="Top" Width="836"/>
+        <Grid x:Name="TaskListGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Visible">
+            <DataGrid HorizontalAlignment="Left" Height="447" Margin="48,121,0,0" VerticalAlignment="Top" Width="836"/>
+            <TextBlock x:Name="TitleText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="Task List" VerticalAlignment="Top" Width="640" FontSize="36"/>
+            <Button x:Name="CreateTaskButton" Content="Create Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="986,121,0,0" Height="38" FontSize="18" MouseLeftButtonUp="LogInButtonClick" Click="CreateTaskButtonClick"/>
         </Grid>
         <Image Margin="-220,215,1447,506" Source="assets/Premier_Logo_Single_Line_RGB_Large_Trans.png" Stretch="Fill"/>
         <Grid x:Name="SidebarGrid" HorizontalAlignment="Left" Height="771" VerticalAlignment="Top" Width="300" ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -36,10 +38,10 @@
                 <TextBlock x:Name="HomeButton" TextWrapping="Wrap" FontSize="30" TextAlignment="Right" Foreground="{Binding BorderBrush, ElementName=HomeBorder}" HorizontalAlignment="Left" Width="170" Padding="0,9,10,0" Height="60" MouseLeftButtonUp="HomeButtonClick"><Run Text="Home"/></TextBlock>
             </Border>
         </Grid>
-        <Grid x:Name="CalendarGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Hidden" d:IsHidden="True">
+        <Grid x:Name="CalendarGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Hidden">
             <Button Content="Button" HorizontalAlignment="Left" Height="99" Margin="314,256,0,0" VerticalAlignment="Top" Width="322"/>
         </Grid>
-        <Grid x:Name="HomeGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190">
+        <Grid x:Name="HomeGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Hidden">
             <TextBlock x:Name="WelcomeText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="{DynamicResource WelcomeTextString}" VerticalAlignment="Top" Width="640" FontSize="36"/>
             <Button x:Name="LogInButton" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1044,29,0,0" Height="38" FontSize="18" MouseLeftButtonUp="LogInButtonClick" Click="LogInButtonClick" Visibility="{DynamicResource LogInButtonVisibility}"/>
         </Grid>

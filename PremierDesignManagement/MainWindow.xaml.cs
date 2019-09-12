@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Security.Cryptography;
+using System.Data.SqlClient;
 
 namespace PremierDesignManagement
 {
@@ -41,6 +42,13 @@ namespace PremierDesignManagement
         {
             InitializeComponent();
 
+            HomeBorder.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFFF4F5A");
+            CalendarBorder.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+            TaskListBorder.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+            HomeGrid.Visibility = Visibility.Visible;
+            CalendarGrid.Visibility = Visibility.Hidden;
+            TaskListGrid.Visibility = Visibility.Hidden;
+
             username = null;
             forename = null;
             surname = null;
@@ -48,6 +56,19 @@ namespace PremierDesignManagement
             LogInWindow logIn = new LogInWindow();
             logIn.Show();
             Application.Current.Resources["BlurEffectRadius"] = (double)10;
+
+            using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
+            {
+                SqlCommand getUsers = new SqlCommand("SELECT Forename, Surname FROM dbo.Users", sqlConn);
+                sqlConn.Open();
+
+                SqlDataReader reader = getUsers.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    //TODO
+                }
+            }
 
         }
         
@@ -91,50 +112,12 @@ namespace PremierDesignManagement
             HomeGrid.Visibility = Visibility.Hidden;
         }
 
-        /*
-        //Hashes password with salt using SHA256
-        private string HashPassword(string password, string salt)
+        private void CreateTaskButtonClick(object sender, RoutedEventArgs e)
         {
-            
-            string hashedPassword;
-            byte[] hashByte;
-            byte[] passwordByte = Encoding.ASCII.GetBytes(password);
-            byte[] saltByte = Encoding.ASCII.GetBytes(salt);
-            byte[] saltedPassword = new byte[passwordByte.Length + saltByte.Length];
-
-            System.Buffer.BlockCopy(passwordByte, 0, saltedPassword, 0, passwordByte.Length);
-            System.Buffer.BlockCopy(saltByte, 0, saltedPassword, passwordByte.Length, salt.Length);
-            
-
-            hashByte = sha256SP.ComputeHash(saltedPassword);
-            hashedPassword = hashByte.ToString();
-
-            return hashedPassword;
-
+            Window createTask = new CreateTaskWindow();
+            createTask.Show();
         }
 
-        //Generates salt for password hashing
-        private string GenerateSalt()
-        {
-            string salt;
-            byte[] saltByte = new byte[24];
 
-            rngSP.GetBytes(saltByte);
-            salt = saltByte.ToString();
-
-            return salt;
-        }
-
-        //Verifies entered password against database hash
-        private bool VerifyPassword(string username, string password)
-        {
-            bool verified = false;
-
-            
-
-
-            return verified;
-        }
-        */
     }
 }

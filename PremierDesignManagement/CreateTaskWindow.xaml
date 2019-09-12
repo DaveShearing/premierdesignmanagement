@@ -1,0 +1,28 @@
+﻿<Window x:Class="PremierDesignManagement.CreateTaskWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PremierDesignManagement"
+        mc:Ignorable="d"
+        Title="Create Task" Height="647" Width="662" Background="#FFCACBCF" ResizeMode="CanMinimize" Icon="assets/Premier_P_Logo_Red_RGB_Small_Trans.png" WindowStartupLocation="CenterScreen">
+    <Grid FocusManager.FocusedElement="{Binding ElementName=TaskNameTextBox}">
+        <TextBox x:Name="TaskNameTextBox" HorizontalAlignment="Left" Height="40" Margin="30,44,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="592" FontSize="20" MaxLines="1" TextAlignment="Center" Padding="0,4,0,0" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2" TabIndex="0" MaxLength="30"/>
+        <Label x:Name="TaskNameLabel" Content="Task Name" HorizontalAlignment="Left" Height="23" Margin="25,21,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
+        <Label x:Name="StartDateLabel" Content="Start Date" HorizontalAlignment="Left" Height="23" Margin="25,93,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
+        <DatePicker x:Name="StartDatePicker" TabIndex="1" HorizontalAlignment="Left" Height="40" Margin="30,117,0,0" VerticalAlignment="Top" Width="273" Padding="4,0,0,1" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2" FontSize="20" FirstDayOfWeek="Monday" VerticalContentAlignment="Center"/>
+        <Label x:Name="DeadlineLabel" Content="Deadline" HorizontalAlignment="Left" Height="23" Margin="344,93,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
+        <DatePicker x:Name="DeadlinePicker" TabIndex="2" HorizontalAlignment="Left" Height="40" Margin="349,117,0,0" VerticalAlignment="Top" Width="273" Padding="4,0,0,1" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2" FontSize="20" FirstDayOfWeek="Monday" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="TaskDetailsTextBox" HorizontalAlignment="Left" Height="266" Margin="30,254,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="592" FontSize="14" TextAlignment="Left" Padding="2,4,2,2" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2" TabIndex="3" MaxLength="5000" TextChanged="TaskDetailsTextBox_TextChanged" VerticalScrollBarVisibility="Visible" AcceptsReturn="True" AcceptsTab="True"/>
+        <Label x:Name="TaskDetailsLabel" Content="Task Details" HorizontalAlignment="Left" Height="24" Margin="26,230,0,0" VerticalAlignment="Top" Width="110" Padding="5,5,5,0" Foreground="#FF51545D"/>
+        <Button x:Name="CreateTaskButton" Content="Create Task" HorizontalAlignment="Left" Height="40" Margin="98,552,0,0" VerticalAlignment="Top" Width="120" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="CreateTaskButtonClick" TabIndex="4"/>
+        <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Height="40" Margin="429,552,0,0" VerticalAlignment="Top" Width="120" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="CancelButtonClick" IsCancel="True"/>
+        <TextBox x:Name="TaskNameTextBox_Copy" HorizontalAlignment="Left" Height="40" Margin="30,185,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="273" FontSize="20" MaxLines="1" TextAlignment="Center" Padding="0,4,0,0" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2" TabIndex="0" MaxLength="30"/>
+        <Label x:Name="TaskNameLabel_Copy" Content="Task Name" HorizontalAlignment="Left" Height="23" Margin="25,162,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
+        <Label x:Name="StatusLabel" Content="Status" HorizontalAlignment="Left" Height="23" Margin="344,162,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
+        <ComboBox x:Name="StatusComboBox" HorizontalAlignment="Left" Height="40" Margin="349,185,0,0" VerticalAlignment="Top" Width="273" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2" SelectedIndex="0">
+            <ComboBoxItem Content="New"/>
+        </ComboBox>
+
+    </Grid>
+</Window>

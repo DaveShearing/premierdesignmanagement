@@ -61,73 +61,87 @@ namespace PremierDesignManagement
             sqlCommand.Parameters.Add(returnedHash);
             sqlCommand.Parameters.Add(returnedUserFound);
 
-            sqlConnection.Open();
-            int i = sqlCommand.ExecuteNonQuery();
-
-            
-            string databaseSalt = sqlCommand.Parameters["@passwordSalt"].Value.ToString();
-            string databaseHash = sqlCommand.Parameters["@passwordHash"].Value.ToString();
-            int userFound = (int)sqlCommand.Parameters["@userFound"].Value;
-            
-
-            
-                        
-            string passwordhash = security.HashPassword(PasswordTextBox.Password, databaseSalt);
-
-            Console.WriteLine(databaseSalt);
-            Console.WriteLine(databaseHash);
-            Console.WriteLine(passwordhash);
-
-            if (databaseHash.Equals(passwordhash))
+            try
             {
-                Console.WriteLine("Log In Success");
 
-                MainWindow.Username = UsernameTextBox.Text;
+                sqlConnection.Open();
+                int i = sqlCommand.ExecuteNonQuery();
 
-                //Sets welcome string to User
-                SqlCommand getUser = new SqlCommand("GetNamesSP", sqlConnection);
-                getUser.CommandType = CommandType.StoredProcedure;
-                getUser.Parameters.AddWithValue("@username", UsernameTextBox.Text);
-                SqlParameter forename = new SqlParameter("@forename", SqlDbType.NVarChar);
-                SqlParameter surname = new SqlParameter("@surname", SqlDbType.NVarChar);
-                forename.Direction = ParameterDirection.Output;
-                surname.Direction = ParameterDirection.Output;
-                forename.Size = 30;
-                surname.Size = 40;
-                getUser.Parameters.Add(forename);
-                getUser.Parameters.Add(surname);
 
-                int x = getUser.ExecuteNonQuery();
-                string forenameDB = getUser.Parameters["@forename"].Value.ToString();
-                string surnameDB = getUser.Parameters["@surname"].Value.ToString();
+                string databaseSalt = sqlCommand.Parameters["@passwordSalt"].Value.ToString();
+                string databaseHash = sqlCommand.Parameters["@passwordHash"].Value.ToString();
+                int userFound = (int)sqlCommand.Parameters["@userFound"].Value;
 
-                Application.Current.Properties["username"] = getUser.Parameters["@username"].Value.ToString();
-                Application.Current.Properties["forename"] = getUser.Parameters["@forename"].Value.ToString();
-                Application.Current.Properties["surname"] = getUser.Parameters["@surname"].Value.ToString();
-                Application.Current.Resources["WelcomeTextString"] = "Welcome, " + Application.Current.Properties["forename"];
-                Application.Current.Resources["BlurEffectRadius"] = (double)0;
-                Application.Current.Resources["LogInButtonVisibility"] = Visibility.Hidden;
+                UsernameExistsLabel.Content = "";
+                PasswordIncorrectLabel.Content = "";
 
-                sqlConnection.Close();
 
-                Close();
+                string passwordhash = security.HashPassword(PasswordTextBox.Password, databaseSalt);
 
-            } else
-            {
-                if (userFound == 0)
+                Console.WriteLine(databaseSalt);
+                Console.WriteLine(databaseHash);
+                Console.WriteLine(passwordhash);
+
+                if (databaseHash.Equals(passwordhash))
                 {
-                    Console.WriteLine("User not found.");
-                } else
+                    Console.WriteLine("Log In Success");
+
+                    MainWindow.Username = UsernameTextBox.Text;
+
+                    //Sets welcome string to User
+                    SqlCommand getUser = new SqlCommand("GetNamesSP", sqlConnection);
+                    getUser.CommandType = CommandType.StoredProcedure;
+                    getUser.Parameters.AddWithValue("@username", UsernameTextBox.Text);
+                    SqlParameter forename = new SqlParameter("@forename", SqlDbType.NVarChar);
+                    SqlParameter surname = new SqlParameter("@surname", SqlDbType.NVarChar);
+                    forename.Direction = ParameterDirection.Output;
+                    surname.Direction = ParameterDirection.Output;
+                    forename.Size = 30;
+                    surname.Size = 40;
+                    getUser.Parameters.Add(forename);
+                    getUser.Parameters.Add(surname);
+
+                    int x = getUser.ExecuteNonQuery();
+                    string forenameDB = getUser.Parameters["@forename"].Value.ToString();
+                    string surnameDB = getUser.Parameters["@surname"].Value.ToString();
+
+                    Application.Current.Properties["username"] = getUser.Parameters["@username"].Value.ToString();
+                    Application.Current.Properties["forename"] = getUser.Parameters["@forename"].Value.ToString();
+                    Application.Current.Properties["surname"] = getUser.Parameters["@surname"].Value.ToString();
+                    Application.Current.Resources["WelcomeTextString"] = "Welcome, " + Application.Current.Properties["forename"];
+                    Application.Current.Resources["BlurEffectRadius"] = (double)0;
+                    Application.Current.Resources["LogInButtonVisibility"] = Visibility.Hidden;
+
+                    sqlConnection.Close();
+
+                    Close();
+
+                }
+                else
                 {
-                    Console.WriteLine("Incorrect password.");
+                    if (userFound == 0)
+                    {
+
+                        UsernameExistsLabel.Content = "User not found.";
+                        Console.WriteLine("User not found.");
+                    }
+                    else
+                    {
+                        PasswordIncorrectLabel.Content = "Incorrect Password";
+                        Console.WriteLine("Incorrect password.");
+                    }
+
+
+                    Console.WriteLine("Log In Failed");
                 }
 
 
-                Console.WriteLine("Log In Failed");
+                sqlConnection.Close();
+
+            } catch (SqlException sqle)
+            {
+                MessageBox.Show("Server unavailable.");
             }
-
-            sqlConnection.Close();
-
 
         }
 

@@ -44,46 +44,67 @@ namespace PremierDesignManagement
             userFound.Size = 30;
             checkUserComm.Parameters.Add(userFound);
 
-            //Run CheckUsernameSP
-            sqlConnection.Open();
-            int x = checkUserComm.ExecuteNonQuery();
-            int userFoundInDB = (int)checkUserComm.Parameters["@userFound"].Value;
-
-            //Add user to DB if not already
-            if (userFoundInDB == 0)
+            try
             {
-                SqlCommand sqlCommand = new SqlCommand("CreateUserSP", sqlConnection);
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@username", UsernameTextBox.Text);
-                sqlCommand.Parameters.AddWithValue("@forename", ForenameTextBox.Text);
-                sqlCommand.Parameters.AddWithValue("@surname", SurnameTextBox.Text);
-                sqlCommand.Parameters.AddWithValue("@emailaddress", EmailTextBox.Text);
-                sqlCommand.Parameters.AddWithValue("@passwordSalt", userSalt);
-                sqlCommand.Parameters.AddWithValue("@passwordHash", hashedPassword);
 
-                //sqlConnection.Open();
+                //Run CheckUsernameSP
+                sqlConnection.Open();
+                int x = checkUserComm.ExecuteNonQuery();
+                int userFoundInDB = (int)checkUserComm.Parameters["@userFound"].Value;
 
-                int i = sqlCommand.ExecuteNonQuery();
+                bool matchingPasswords = PasswordTextBox.Password.Equals(VerifyPasswordTextBox.Password);
 
-                if (i == 0)
+                //Add user to DB if not already
+                if (userFoundInDB == 1)
                 {
-                    Console.WriteLine("User Created");
+                    UsernameAvailableLabel.Content = "Username already taken.";
+                }
+                else if (userFoundInDB == 0 && matchingPasswords == false)
+                {
+                    UsernameAvailableLabel.Content = "Username available.";
+                    PasswordMatchLabel.Content = "Passwords do not match.";
+                }
+                else if (userFoundInDB == 0 && matchingPasswords == true)
+                {
+                    UsernameAvailableLabel.Content = "";
+                    PasswordMatchLabel.Content = "";
+                    SqlCommand sqlCommand = new SqlCommand("CreateUserSP", sqlConnection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@username", UsernameTextBox.Text);
+                    sqlCommand.Parameters.AddWithValue("@forename", ForenameTextBox.Text);
+                    sqlCommand.Parameters.AddWithValue("@surname", SurnameTextBox.Text);
+                    sqlCommand.Parameters.AddWithValue("@emailaddress", EmailTextBox.Text);
+                    sqlCommand.Parameters.AddWithValue("@passwordSalt", userSalt);
+                    sqlCommand.Parameters.AddWithValue("@passwordHash", hashedPassword);
+
+                    //sqlConnection.Open();
+
+                    int i = sqlCommand.ExecuteNonQuery();
+
+                    if (i == 0)
+                    {
+                        Console.WriteLine("User Created");
+                    }
+
+                    sqlConnection.Close();
+
+                    Close();
+
+                }
+                else
+                {
+                    Console.WriteLine("User already exists. Please Log In.");
                 }
 
+
+
+
+
                 sqlConnection.Close();
-
-                Close();
-
-            } else
+            } catch (SqlException sqle)
             {
-                Console.WriteLine("User already exists. Please Log In.");
+                MessageBox.Show("Server unavailable");
             }
-
-            
-
-            
-
-            sqlConnection.Close();
 
             //Close();
         }
