@@ -87,6 +87,7 @@
     <Compile Include="CreateTaskWindow.xaml.cs">
       <DependentUpon>CreateTaskWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataStructures.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="CreateUserWindow.xaml.cs">
       <DependentUpon>CreateUserWindow.xaml</DependentUpon>

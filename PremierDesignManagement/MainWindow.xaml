@@ -17,7 +17,15 @@
         </Grid.Effect>
         <Image Margin="-235,95,1447,604" Source="assets/Premier_Logo_Single_Line_Red_Grey_RGB_Large_Trans.png" Stretch="Fill"/>
         <Grid x:Name="TaskListGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Visible">
-            <DataGrid HorizontalAlignment="Left" Height="447" Margin="48,121,0,0" VerticalAlignment="Top" Width="836"/>
+            <DataGrid x:Name="TaskList" HorizontalAlignment="Left" Height="447" Margin="48,121,0,0" VerticalAlignment="Top" Width="836">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Task Name" MaxWidth="500" MinWidth="200"/>
+                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Start Date" MaxWidth="100" MinWidth="50"/>
+                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Deadline" MaxWidth="100" MinWidth="50"/>
+                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Assigned To" MaxWidth="100" MinWidth="50"/>
+                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Task Status" MaxWidth="100" MinWidth="50"/>
+                </DataGrid.Columns>
+            </DataGrid>
             <TextBlock x:Name="TitleText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="Task List" VerticalAlignment="Top" Width="640" FontSize="36"/>
             <Button x:Name="CreateTaskButton" Content="Create Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="986,121,0,0" Height="38" FontSize="18" MouseLeftButtonUp="LogInButtonClick" Click="CreateTaskButtonClick"/>
         </Grid>

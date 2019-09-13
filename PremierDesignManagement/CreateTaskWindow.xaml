@@ -17,12 +17,12 @@
         <Label x:Name="TaskDetailsLabel" Content="Task Details" HorizontalAlignment="Left" Height="24" Margin="26,230,0,0" VerticalAlignment="Top" Width="110" Padding="5,5,5,0" Foreground="#FF51545D"/>
         <Button x:Name="CreateTaskButton" Content="Create Task" HorizontalAlignment="Left" Height="40" Margin="98,552,0,0" VerticalAlignment="Top" Width="120" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="CreateTaskButtonClick" TabIndex="4"/>
         <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Height="40" Margin="429,552,0,0" VerticalAlignment="Top" Width="120" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="CancelButtonClick" IsCancel="True"/>
-        <TextBox x:Name="TaskNameTextBox_Copy" HorizontalAlignment="Left" Height="40" Margin="30,185,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="273" FontSize="20" MaxLines="1" TextAlignment="Center" Padding="0,4,0,0" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2" TabIndex="0" MaxLength="30"/>
-        <Label x:Name="TaskNameLabel_Copy" Content="Task Name" HorizontalAlignment="Left" Height="23" Margin="25,162,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
+        <Label x:Name="AssignToLabel" Content="Assign To" HorizontalAlignment="Left" Height="23" Margin="25,162,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
         <Label x:Name="StatusLabel" Content="Status" HorizontalAlignment="Left" Height="23" Margin="344,162,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
         <ComboBox x:Name="StatusComboBox" HorizontalAlignment="Left" Height="40" Margin="349,185,0,0" VerticalAlignment="Top" Width="273" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2" SelectedIndex="0">
             <ComboBoxItem Content="New"/>
         </ComboBox>
+        <ComboBox x:Name="AssignToComboBox" HorizontalAlignment="Left" Height="40" Margin="30,185,0,0" VerticalAlignment="Top" Width="273" FontSize="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2" SelectedIndex="0"/>
 
     </Grid>
 </Window>

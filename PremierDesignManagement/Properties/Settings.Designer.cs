@@ -84,9 +84,23 @@ namespace PremierDesignManagement.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection Users {
+        public global::System.Collections.Specialized.StringCollection UsersStringCollection {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["Users"]));
+                return ((global::System.Collections.Specialized.StringCollection)(this["UsersStringCollection"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>dave.shearing</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection UsernamesStringCollection {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["UsernamesStringCollection"]));
+            }
+            set {
+                this["UsernamesStringCollection"] = value;
             }
         }
     }

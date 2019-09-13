@@ -20,8 +20,17 @@
     <Setting Name="PDMDatabaseLocal" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\dave.shearing\Source\Repos\premierdesignmanagement\PremierDesignManagement\PDMDatabase.mdf;Integrated Security=True</Value>
     </Setting>
-    <Setting Name="Users" Type="System.Collections.Specialized.StringCollection" Scope="Application">
-      <Value Profile="(Default)" />
+    <Setting Name="UsersStringCollection" GenerateDefaultValueInCode="false" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;Dave Shearing&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="UsernamesStringCollection" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;dave.shearing&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
     </Setting>
   </Settings>
 </SettingsFile>
