@@ -17,6 +17,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Collections.Specialized;
 
+
 namespace PremierDesignManagement
 {
     /// <summary>
@@ -61,51 +62,12 @@ namespace PremierDesignManagement
             logIn.Show();
             Application.Current.Resources["BlurEffectRadius"] = (double)10;
 
-            //Loads users from DB into app
-            SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString);
-            SqlCommand getUsers = new SqlCommand("SELECT Username, Forename, Surname FROM dbo.Users;", sqlConn);
-            sqlConn.Open();
-
-            SqlDataReader reader = getUsers.ExecuteReader();
-
-            Properties.Settings.Default.UsernamesStringCollection.Clear();
-            Properties.Settings.Default.UsersStringCollection.Clear();
+            DataHandling.getUsers();
             
-            
-            while (reader.Read())
-            {
-                string username = reader.GetString(0);
-                string name = reader.GetString(1) + " " + reader.GetString(2);
-                Properties.Settings.Default.UsernamesStringCollection.Add(username);
-                Properties.Settings.Default.UsersStringCollection.Add(name);
-            }
-
-            reader.Close();
-
-            //Loads tasks from DB into app
-            SqlCommand getTasks = new SqlCommand("SELECT TaskName, StartDate, Deadline, AssignedTo, TaskStatus FROM dbo.Tasks", sqlConn);
-
-            DataStructures.TaskRowStruct taskRow = new DataStructures.TaskRowStruct();
-            
-            
-            int RowLength;
+            DataHandling.getTasksFull();
+            //TaskList2.ItemsSource = DataStructures.taskRows;
 
             
-            reader = getTasks.ExecuteReader();
-
-            while (reader.Read())
-            {
-                taskRow.taskName = reader.GetString(0);
-                taskRow.startDate = reader.GetDateTime(1);
-                taskRow.deadline = reader.GetDateTime(2);
-                taskRow.assignedTo = reader.GetString(3);
-                taskRow.taskStatus = reader.GetString(4);
-
-                //TODO
-            }
-
-            reader.Close();
-            sqlConn.Close();
 
             foreach (String username in Properties.Settings.Default.UsernamesStringCollection)
             {
@@ -167,6 +129,15 @@ namespace PremierDesignManagement
             createTask.Show();
         }
 
+        private void EditTaskButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ViewTaskButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
 
     }
 }

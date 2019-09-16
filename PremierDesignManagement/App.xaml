@@ -14,6 +14,8 @@
         <Specialized:StringCollection x:Key="UsersStringCollection">
             <System:String>123</System:String>
         </Specialized:StringCollection>
+        <local:DataStructures x:Key="taskRows"></local:DataStructures>
+        
         
 
     </Application.Resources>

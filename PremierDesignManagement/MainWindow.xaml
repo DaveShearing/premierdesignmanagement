@@ -8,26 +8,58 @@
         Title="Premier Design Management" Height="800" Width="1400" ResizeMode="CanMinimize" Icon="assets/Premier_P_Logo_Red_RGB_Small_Trans.png" Background="White" Foreground="Black" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Color x:Key="BorderColour1">#FF51545D</Color>
-        
+
     </Window.Resources>
-    
+
     <Grid x:Name="MainGrid">
         <Grid.Effect>
             <BlurEffect Radius="{DynamicResource BlurEffectRadius}" />
         </Grid.Effect>
         <Image Margin="-235,95,1447,604" Source="assets/Premier_Logo_Single_Line_Red_Grey_RGB_Large_Trans.png" Stretch="Fill"/>
         <Grid x:Name="TaskListGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Visible">
-            <DataGrid x:Name="TaskList" HorizontalAlignment="Left" Height="447" Margin="48,121,0,0" VerticalAlignment="Top" Width="836">
-                <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Task Name" MaxWidth="500" MinWidth="200"/>
-                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Start Date" MaxWidth="100" MinWidth="50"/>
-                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Deadline" MaxWidth="100" MinWidth="50"/>
-                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Assigned To" MaxWidth="100" MinWidth="50"/>
-                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Task Status" MaxWidth="100" MinWidth="50"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            <TextBlock x:Name="TitleText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="Task List" VerticalAlignment="Top" Width="640" FontSize="36"/>
-            <Button x:Name="CreateTaskButton" Content="Create Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="986,121,0,0" Height="38" FontSize="18" MouseLeftButtonUp="LogInButtonClick" Click="CreateTaskButtonClick"/>
+            <TextBlock x:Name="TitleText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="Task List" VerticalAlignment="Top" Width="640" FontSize="36" Foreground="#FF51545D"/>
+            <Button x:Name="CreateTaskButton" Content="Create Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,121,0,0" Height="38" FontSize="18" Click="CreateTaskButtonClick" Foreground="#FF51545D"/>
+            <ListView x:Name="TaskList2"  HorizontalAlignment="Left" Height="495" Margin="48,121,0,0" VerticalAlignment="Top" Width="923" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center">
+                <ListView.Resources>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Foreground" Value="#FF51545D"/>
+                        <Setter Property="BorderBrush" Value="#FF51545D"/>
+                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Margin" Value="0,0,0,5"/>
+                        <Setter Property="Padding" Value="0,0,0,0"/>
+                    </Style>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Foreground" Value="#FF51545D"/>
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False">
+                        <GridViewColumn Header="Task Name" Width="400">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding taskName}" FontFamily="Segoe UI Semibold" FontSize="18"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Start Date" Width="110" DisplayMemberBinding="{Binding startDate, StringFormat=d, ConverterCulture=en-GB}">
+                            
+                        </GridViewColumn>
+                        <GridViewColumn Header="Deadline" Width="110" DisplayMemberBinding="{Binding deadline, StringFormat=d, ConverterCulture=en-GB}"/>
+                        <GridViewColumn Header="Assigned To" Width="120" DisplayMemberBinding="{Binding assignedTo}"/>
+                        <GridViewColumn Header="Task Status" Width="170">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding taskStatus}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="SemiBold"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Button x:Name="EditTaskButton" Content="Edit Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,177,0,0" Height="38" FontSize="18" Click="EditTaskButtonClick" Foreground="#FF51545D"/>
+            <Button x:Name="ViewTaskButton" Content="View Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,234,0,0" Height="38" FontSize="18" Click="ViewTaskButtonClick" Foreground="#FF51545D"/>
         </Grid>
         <Image Margin="-220,215,1447,506" Source="assets/Premier_Logo_Single_Line_RGB_Large_Trans.png" Stretch="Fill"/>
         <Grid x:Name="SidebarGrid" HorizontalAlignment="Left" Height="771" VerticalAlignment="Top" Width="300" ScrollViewer.VerticalScrollBarVisibility="Disabled">

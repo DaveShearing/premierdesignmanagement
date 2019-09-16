@@ -49,6 +49,9 @@ namespace PremierDesignManagement
                 int i = createTask.ExecuteNonQuery();
             }
 
+            
+            DataHandling.getTasksFull();
+
             Close();
         }
 

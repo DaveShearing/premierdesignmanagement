@@ -4,22 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using System.Configuration;
+
 
 namespace PremierDesignManagement
 {
+    
     class DataStructures
     {
+        
         public class TaskRowStruct
         {
-            public string taskName;
-            public DateTime startDate;
-            public DateTime deadline;
-            public string details;
-            public string taskListFileTableDir;
-            public string assignedBy;
-            public string assignedTo;
-            public string taskStatus;
+            public string taskName{ get; set; }
+            public DateTime startDate { get; set; }
+            public DateTime deadline { get; set; }
+            public string details { get; set; }
+            public string taskListFileTableDir { get; set; }
+            public string assignedBy { get; set; }
+            public string assignedTo { get; set; }
+            public string taskStatus { get; set; }
         }
+
+        
+        public static List<TaskRowStruct> taskRows = new List<TaskRowStruct>();
+        
+        //TODO - serialisation to read in to xaml for task list table from settings value
 
     }
 }
