@@ -10,7 +10,7 @@ using System.Configuration;
 namespace PremierDesignManagement
 {
     
-    class DataStructures
+    public class DataStructures
     {
         
         public class TaskRowStruct
@@ -28,7 +28,5 @@ namespace PremierDesignManagement
         
         public static List<TaskRowStruct> taskRows = new List<TaskRowStruct>();
         
-        //TODO - serialisation to read in to xaml for task list table from settings value
-
     }
 }

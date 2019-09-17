@@ -19,7 +19,7 @@
         <Grid x:Name="TaskListGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Visible">
             <TextBlock x:Name="TitleText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="Task List" VerticalAlignment="Top" Width="640" FontSize="36" Foreground="#FF51545D"/>
             <Button x:Name="CreateTaskButton" Content="Create Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,121,0,0" Height="38" FontSize="18" Click="CreateTaskButtonClick" Foreground="#FF51545D"/>
-            <ListView x:Name="TaskList2"  HorizontalAlignment="Left" Height="495" Margin="48,121,0,0" VerticalAlignment="Top" Width="923" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center">
+            <ListView x:Name="TaskList2" x:FieldModifier="public" HorizontalAlignment="Left" Height="495" Margin="48,121,0,0" VerticalAlignment="Top" Width="923" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single">
                 <ListView.Resources>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -34,6 +34,9 @@
                         <Setter Property="Foreground" Value="#FF51545D"/>
                     </Style>
                 </ListView.Resources>
+                <ListView.ItemsSource>
+                    <Binding Mode="OneWay" Source="{StaticResource taskRows}"/>
+                </ListView.ItemsSource>
                 <ListView.View>
                     <GridView AllowsColumnReorder="False">
                         <GridViewColumn Header="Task Name" Width="400">
@@ -60,6 +63,7 @@
             </ListView>
             <Button x:Name="EditTaskButton" Content="Edit Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,177,0,0" Height="38" FontSize="18" Click="EditTaskButtonClick" Foreground="#FF51545D"/>
             <Button x:Name="ViewTaskButton" Content="View Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,234,0,0" Height="38" FontSize="18" Click="ViewTaskButtonClick" Foreground="#FF51545D"/>
+            <Button x:Name="UpdateTasksButton" Content="Update Tasks" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" Margin="1019,578,0,0" Height="38" FontSize="18" Click="UpdateTasksButtonClick" Foreground="#FF51545D"/>
         </Grid>
         <Image Margin="-220,215,1447,506" Source="assets/Premier_Logo_Single_Line_RGB_Large_Trans.png" Stretch="Fill"/>
         <Grid x:Name="SidebarGrid" HorizontalAlignment="Left" Height="771" VerticalAlignment="Top" Width="300" ScrollViewer.VerticalScrollBarVisibility="Disabled">

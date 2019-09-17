@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 using System.Data.SqlClient;
 using System.Data;
 using System.Collections.Specialized;
+using System.Threading;
 
 
 namespace PremierDesignManagement
@@ -43,6 +44,8 @@ namespace PremierDesignManagement
 
         public MainWindow()
         {
+            Application.Current.Resources.Add("taskrows", DataStructures.taskRows);
+
             InitializeComponent();
 
             //Sets initial GUI state
@@ -60,14 +63,21 @@ namespace PremierDesignManagement
             //Opens new Log In Window
             LogInWindow logIn = new LogInWindow();
             logIn.Show();
-            Application.Current.Resources["BlurEffectRadius"] = (double)10;
+            System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)10;
 
-            DataHandling.getUsers();
-            
-            DataHandling.getTasksFull();
+            DataHandling.GetUsers();
+            DataHandling.GetTasksFull();
+
+            //System.Threading.ThreadPool.QueueUserWorkItem(DataHandling.RefreshDataLoop, PDMMain);
+
+            //Thread refreshDataThread = new Thread(DataHandling.RefreshDataLoop);
+            //refreshDataThread.Start(PDMMain);
+            //DataHandling.RefreshDataLoop();
+
+
             //TaskList2.ItemsSource = DataStructures.taskRows;
 
-            
+
 
             foreach (String username in Properties.Settings.Default.UsernamesStringCollection)
             {
@@ -131,12 +141,20 @@ namespace PremierDesignManagement
 
         private void EditTaskButtonClick(object sender, RoutedEventArgs e)
         {
-
+            DataStructures.TaskRowStruct selectedTask = (DataStructures.TaskRowStruct)TaskList2.SelectedItems[0];
+            
+            Window editTask = new EditTaskWindow(selectedTask);
+            editTask.Show();
         }
 
         private void ViewTaskButtonClick(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void UpdateTasksButtonClick(object sender, RoutedEventArgs e)
+        {
+            DataHandling.GetTasksFull();
         }
 
     }

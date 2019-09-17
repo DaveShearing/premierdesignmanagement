@@ -27,13 +27,13 @@ namespace PremierDesignManagement
         public LogInWindow()
         {
             InitializeComponent();
-            Application.Current.Resources["BlurEffectRadius"] = (double)10;
+            System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)10;
         }
 
         //Cancel Log In
         private void CancelButtonClick(object sender, RoutedEventArgs e)
         {
-            Application.Current.Resources["BlurEffectRadius"] = (double)0;
+            System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)0;
             Close();
         }
 
@@ -105,12 +105,12 @@ namespace PremierDesignManagement
                     string forenameDB = getUser.Parameters["@forename"].Value.ToString();
                     string surnameDB = getUser.Parameters["@surname"].Value.ToString();
 
-                    Application.Current.Properties["username"] = getUser.Parameters["@username"].Value.ToString();
-                    Application.Current.Properties["forename"] = getUser.Parameters["@forename"].Value.ToString();
-                    Application.Current.Properties["surname"] = getUser.Parameters["@surname"].Value.ToString();
-                    Application.Current.Resources["WelcomeTextString"] = "Welcome, " + Application.Current.Properties["forename"];
-                    Application.Current.Resources["BlurEffectRadius"] = (double)0;
-                    Application.Current.Resources["LogInButtonVisibility"] = Visibility.Hidden;
+                    System.Windows.Application.Current.Properties["username"] = getUser.Parameters["@username"].Value.ToString();
+                    System.Windows.Application.Current.Properties["forename"] = getUser.Parameters["@forename"].Value.ToString();
+                    System.Windows.Application.Current.Properties["surname"] = getUser.Parameters["@surname"].Value.ToString();
+                    System.Windows.Application.Current.Resources["WelcomeTextString"] = "Welcome, " + System.Windows.Application.Current.Properties["forename"];
+                    System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)0;
+                    System.Windows.Application.Current.Resources["LogInButtonVisibility"] = Visibility.Hidden;
 
                     sqlConnection.Close();
 
@@ -159,7 +159,7 @@ namespace PremierDesignManagement
 
         private void LogInWindowClosed(object sender, EventArgs e)
         {
-            Application.Current.Resources["BlurEffectRadius"] = (double)0;
+            System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)0;
         }
     }
 }

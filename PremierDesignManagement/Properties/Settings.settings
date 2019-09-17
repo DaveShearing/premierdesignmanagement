@@ -35,5 +35,16 @@
     <Setting Name="taskRows" Type="System.Windows.Documents.List" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="MainWorkflow" Type="System.Collections.Specialized.StringCollection" Scope="Application">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;New&lt;/string&gt;
+  &lt;string&gt;In Progress&lt;/string&gt;
+  &lt;string&gt;Review&lt;/string&gt;
+  &lt;string&gt;Approved&lt;/string&gt;
+  &lt;string&gt;Changes Requested&lt;/string&gt;
+  &lt;string&gt;Completed&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

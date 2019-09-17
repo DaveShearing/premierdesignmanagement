@@ -25,6 +25,7 @@ namespace PremierDesignManagement
         {
             InitializeComponent();
             AssignToComboBox.ItemsSource = Properties.Settings.Default.UsersStringCollection;
+            StatusComboBox.ItemsSource = Properties.Settings.Default.MainWorkflow;
         }
 
         private void CreateTaskButtonClick (object sender, RoutedEventArgs e)
@@ -41,7 +42,7 @@ namespace PremierDesignManagement
                 createTask.Parameters.AddWithValue("@deadline", DeadlinePicker.SelectedDate);
                 createTask.Parameters.AddWithValue("@details", TaskDetailsTextBox.Text);
                 createTask.Parameters.AddWithValue("@tasklistfiletabledir", "");
-                createTask.Parameters.AddWithValue("@assignedby", Application.Current.Properties["username"]);
+                createTask.Parameters.AddWithValue("@assignedby", System.Windows.Application.Current.Properties["username"]);
                 createTask.Parameters.AddWithValue("@assignedto", assignedUsername);
                 createTask.Parameters.AddWithValue("@taskstatus", ((ComboBoxItem)StatusComboBox.SelectedItem).Content.ToString());
 
@@ -50,7 +51,8 @@ namespace PremierDesignManagement
             }
 
             
-            DataHandling.getTasksFull();
+
+            DataHandling.GetTasksFull();
 
             Close();
         }
