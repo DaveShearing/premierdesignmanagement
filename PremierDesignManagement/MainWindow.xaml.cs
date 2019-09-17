@@ -149,7 +149,20 @@ namespace PremierDesignManagement
 
         private void ViewTaskButtonClick(object sender, RoutedEventArgs e)
         {
+            DataStructures.TaskRowStruct selectedTask = new DataStructures.TaskRowStruct();
 
+            try
+            {
+                selectedTask = (DataStructures.TaskRowStruct)TaskList2.SelectedItems[0];
+                ViewTaskWindow viewTaskWindow = new ViewTaskWindow(selectedTask);
+                viewTaskWindow.Show();
+            } catch (ArgumentOutOfRangeException)
+            {
+
+            }
+
+            //ViewTaskWindow viewTaskWindow = new ViewTaskWindow(selectedTask);
+            //viewTaskWindow.Show();
         }
 
         private void UpdateTasksButtonClick(object sender, RoutedEventArgs e)

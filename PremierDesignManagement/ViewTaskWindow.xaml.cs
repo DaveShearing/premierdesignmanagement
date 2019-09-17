@@ -19,9 +19,14 @@ namespace PremierDesignManagement
     /// </summary>
     public partial class ViewTaskWindow : Window
     {
-        public ViewTaskWindow()
+        public DataStructures.TaskRowStruct selectedTask;
+
+        public ViewTaskWindow(DataStructures.TaskRowStruct task)
         {
             InitializeComponent();
+
+            selectedTask = task;
+            TaskNameLabel.Content = selectedTask.taskName;
         }
 
         public void CancelButtonClick(object sender, RoutedEventArgs e)
