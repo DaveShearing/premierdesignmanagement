@@ -39,16 +39,14 @@
                 </ListView.ItemsSource>
                 <ListView.View>
                     <GridView AllowsColumnReorder="False">
-                        <GridViewColumn Header="Task Name" Width="400">
+                        <GridViewColumn Header="Task Name" Width="290">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding taskName}" FontFamily="Segoe UI Semibold" FontSize="18"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Start Date" Width="110" DisplayMemberBinding="{Binding startDate, StringFormat=d, ConverterCulture=en-GB}">
-                            
-                        </GridViewColumn>
+                        <GridViewColumn Header="Start Date" Width="110" DisplayMemberBinding="{Binding startDate, StringFormat=d, ConverterCulture=en-GB}"></GridViewColumn>
                         <GridViewColumn Header="Deadline" Width="110" DisplayMemberBinding="{Binding deadline, StringFormat=d, ConverterCulture=en-GB}"/>
                         <GridViewColumn Header="Assigned To" Width="120" DisplayMemberBinding="{Binding assignedTo}"/>
                         <GridViewColumn Header="Task Status" Width="170">
@@ -58,6 +56,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
+                        <GridViewColumn Header="Last Edited" Width="120" DisplayMemberBinding="{Binding lastEdited, StringFormat='HH:mm&#x0a;dd/MM/yyyy', ConverterCulture=en-GB}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -86,7 +85,7 @@
             <Button Content="Button" HorizontalAlignment="Left" Height="99" Margin="314,256,0,0" VerticalAlignment="Top" Width="322"/>
         </Grid>
         <Grid x:Name="HomeGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Hidden">
-            <TextBlock x:Name="WelcomeText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="{DynamicResource WelcomeTextString}" VerticalAlignment="Top" Width="640" FontSize="36"/>
+            <TextBlock x:Name="WelcomeText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="{DynamicResource WelcomeTextString}" VerticalAlignment="Top" Width="640" FontSize="36" Foreground="#FF51545D"/>
             <Button x:Name="LogInButton" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1044,29,0,0" Height="38" FontSize="18" MouseLeftButtonUp="LogInButtonClick" Click="LogInButtonClick" Visibility="{DynamicResource LogInButtonVisibility}"/>
         </Grid>
 

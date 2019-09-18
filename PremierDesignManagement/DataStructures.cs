@@ -23,6 +23,9 @@ namespace PremierDesignManagement
             public string assignedBy { get; set; }
             public string assignedTo { get; set; }
             public string taskStatus { get; set; }
+            public DateTime lastEdited { get; set; }
+            public string lastEditedBy { get; set; }
+            
         }
 
         

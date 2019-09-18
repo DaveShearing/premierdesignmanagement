@@ -46,7 +46,7 @@ namespace PremierDesignManagement
         {
             using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
             {
-                SqlCommand getTasks = new SqlCommand("SELECT TaskName, StartDate, Deadline, AssignedTo, TaskStatus FROM dbo.Tasks", sqlConn);
+                SqlCommand getTasks = new SqlCommand("SELECT TaskName, StartDate, Deadline, AssignedTo, TaskStatus, LastEdited FROM dbo.Tasks", sqlConn);
 
                 sqlConn.Open();
 
@@ -72,6 +72,7 @@ namespace PremierDesignManagement
                     taskRow.deadline = reader.GetDateTime(2);
                     taskRow.assignedTo = (string)reader.GetString(3);
                     taskRow.taskStatus = (string)reader.GetString(4);
+                    taskRow.lastEdited = reader.GetDateTime(5);
 
                     DataStructures.taskRows.Add(taskRow);
                 }
@@ -95,7 +96,8 @@ namespace PremierDesignManagement
         {
             using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
             {
-                SqlCommand getTasks = new SqlCommand("SELECT TaskName, StartDate, Deadline, Details, TaskListFileTableDir, AssignedBy, AssignedTo, TaskStatus FROM dbo.Tasks", sqlConn);
+                SqlCommand getTasks = new SqlCommand("SELECT TaskName, StartDate, Deadline, Details, TaskListFileTableDir, AssignedBy, AssignedTo, TaskStatus, " +
+                    "LastEdited, LastEditedBy FROM dbo.Tasks", sqlConn);
 
                 sqlConn.Open();
 
@@ -122,6 +124,8 @@ namespace PremierDesignManagement
                     taskRow.assignedBy = reader.GetString(5);
                     taskRow.assignedTo = (string)reader.GetString(6);
                     taskRow.taskStatus = (string)reader.GetString(7);
+                    taskRow.lastEdited = reader.GetDateTime(8);
+                    taskRow.lastEditedBy = reader.GetString(9);
 
                     DataStructures.taskRows.Add(taskRow);
                 }
@@ -235,6 +239,8 @@ namespace PremierDesignManagement
                 updateTaskComm.Parameters.AddWithValue("@assignedby", assignedBy);
                 updateTaskComm.Parameters.AddWithValue("@assignedto", assignedTo);
                 updateTaskComm.Parameters.AddWithValue("@taskstatus", taskStatus);
+                updateTaskComm.Parameters.AddWithValue("@lastedited", DateTime.Now);
+                updateTaskComm.Parameters.AddWithValue("@lasteditedby", System.Windows.Application.Current.Properties["username"]);
 
                 sqlConn.Open();
                 int i = updateTaskComm.ExecuteNonQuery();

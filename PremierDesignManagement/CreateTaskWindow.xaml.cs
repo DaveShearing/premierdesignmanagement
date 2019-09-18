@@ -45,6 +45,7 @@ namespace PremierDesignManagement
                 createTask.Parameters.AddWithValue("@assignedby", System.Windows.Application.Current.Properties["username"]);
                 createTask.Parameters.AddWithValue("@assignedto", assignedUsername);
                 createTask.Parameters.AddWithValue("@taskstatus", ((ComboBoxItem)StatusComboBox.SelectedItem).Content.ToString());
+                createTask.Parameters.AddWithValue("@lastedited", DateTime.Now);
 
                 sqlConn.Open();
                 int i = createTask.ExecuteNonQuery();

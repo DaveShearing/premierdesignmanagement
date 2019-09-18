@@ -5,17 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PremierDesignManagement"
         mc:Ignorable="d"
-        Title="View Task" Height="900" Width="600" Background="#FFCACBCF">
+        Title="View Task" Height="900" Width="621" Background="#FFCACBCF">
     <Grid>
         <Image Margin="-235,95,645,702" Source="assets/Premier_Logo_Single_Line_Red_Grey_RGB_Large_Trans.png" Stretch="Fill"/>
         <Image Margin="-220,215,645,604" Source="assets/Premier_Logo_Single_Line_RGB_Large_Trans.png" Stretch="Fill"/>
-        <Label x:Name="TaskNameLabel" Content="Task Name" HorizontalAlignment="Left" Height="23" Margin="25,21,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
-        <Label x:Name="StartDateLabel" Content="Start Date:" HorizontalAlignment="Left" Height="23" Margin="25,93,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
-        <Label x:Name="DeadlineLabel" Content="Deadline:" HorizontalAlignment="Left" Height="23" Margin="344,93,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
-        <Label x:Name="TaskDetailsLabel" Content="Task Details" HorizontalAlignment="Left" Height="24" Margin="26,230,0,0" VerticalAlignment="Top" Width="110" Padding="5,5,5,0" Foreground="#FF51545D"/>
-        <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Height="40" Margin="429,806,0,0" VerticalAlignment="Top" Width="120" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="CancelButtonClick" IsCancel="True"/>
-        <Label x:Name="AssignToLabel" Content="Assigned To:" HorizontalAlignment="Left" Height="23" Margin="25,162,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
-        <Label x:Name="StatusLabel" Content="Status:" HorizontalAlignment="Left" Height="23" Margin="344,162,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>
+        <Label x:Name="TaskNameLabel" Content="Task Name" HorizontalAlignment="Left" Height="33" Margin="25,21,0,0" VerticalAlignment="Top" Width="541" Padding="0,0,0,0" Foreground="#FF51545D" FontSize="26"/>
+        <Label x:Name="StartDateLabel" Content="Start Date:" HorizontalAlignment="Left" Height="23" Margin="25,65,0,0" VerticalAlignment="Top" Width="154" Padding="0,0,0,0" Foreground="#FF51545D" FontSize="14"/>
+        <Label x:Name="DeadlineLabel" Content="Deadline:" HorizontalAlignment="Left" Height="23" Margin="210,65,0,0" VerticalAlignment="Top" Width="154" Padding="0,0,0,0" Foreground="#FF51545D" FontSize="14"/>
+        <Label x:Name="TaskDetailsLabel" Content="Task Details" HorizontalAlignment="Left" Height="34" Margin="25,149,0,0" VerticalAlignment="Top" Width="212" Padding="0,0,0,0" Foreground="#FF51545D" FontSize="19"/>
+        <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Height="40" Margin="446,806,0,0" VerticalAlignment="Top" Width="120" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="CancelButtonClick" IsCancel="True"/>
+        <Label x:Name="AssignToLabel" Content="Assigned To:" HorizontalAlignment="Left" Height="23" Margin="25,95,0,0" VerticalAlignment="Top" Width="214" Padding="0,0,0,0" Foreground="#FF51545D" FontSize="14"/>
+        <Label x:Name="StatusLabel" Content="Status:" HorizontalAlignment="Left" Height="23" Margin="210,95,0,0" VerticalAlignment="Top" Width="154" Padding="0,0,0,0" Foreground="#FF51545D" FontSize="14"/>
+        <Label x:Name="LastEditedLabel" Content="Last Edited:" HorizontalAlignment="Left" Height="23" Margin="382,65,0,0" VerticalAlignment="Top" Width="204" Padding="0,0,0,0" Foreground="#FF51545D" FontSize="14"/>
+        <Button x:Name="EditTaskButton" Content="Edit Task" HorizontalAlignment="Left" Height="27" Margin="459,149,0,0" VerticalAlignment="Top" Width="107" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="EditTaskButtonClick"/>
+        <Label x:Name="LastEditedByLabel" Content="Last Edited By:" HorizontalAlignment="Left" Height="23" Margin="382,95,0,0" VerticalAlignment="Top" Width="204" Padding="0,0,0,0" Foreground="#FF51545D" FontSize="14"/>
+        <Grid x:Name="TaskDetailsGrid" HorizontalAlignment="Left" Height="600" Margin="26,188,0,0" VerticalAlignment="Top" Width="560">
+            <Grid.RowDefinitions>
+                <RowDefinition x:Name="DetailsRow" Height="400"/>
+                <RowDefinition x:Name="UpdateRow" Height="50" MaxHeight="200" MinHeight="50"/>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="DetailsTextBlock"  HorizontalAlignment="Left" Height="400" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="542" Foreground="#FF51545D" FontSize="13"/>
+            <TextBlock HorizontalAlignment="Left" Height="36" Margin="10,5,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="515"/>
+        </Grid>
 
     </Grid>
 </Window>
