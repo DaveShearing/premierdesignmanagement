@@ -30,6 +30,17 @@ namespace PremierDesignManagement
 
         
         public static List<TaskRowStruct> taskRows = new List<TaskRowStruct>();
-        
+
+        public class UpdateRowStruct
+        {
+            public int updateID { get; set; }
+            public string updatedBy { get; set; }
+            public DateTime updateTimeDate { get; set; }
+            public string updateDetails { get; set; }
+
+        }
+
+        public static List<UpdateRowStruct> updateRows = new List<UpdateRowStruct>();
+
     }
 }

@@ -247,6 +247,73 @@ namespace PremierDesignManagement
             }
         }
 
+        public static void AddTaskUpdate(int taskID, string updateDetails)
+        {
+            using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
+            {
+                SqlCommand addTaskUpdateComm = new SqlCommand("AddTaskUpdateSP", sqlConn);
+                addTaskUpdateComm.CommandType = CommandType.StoredProcedure;
+                addTaskUpdateComm.Parameters.AddWithValue("@taskID", taskID);
+                addTaskUpdateComm.Parameters.AddWithValue("@updatedBy", System.Windows.Application.Current.Properties["username"]);
+                addTaskUpdateComm.Parameters.AddWithValue("@updateTimeDate", DateTime.Now);
+                addTaskUpdateComm.Parameters.AddWithValue("@updateDetails", updateDetails);
+
+                sqlConn.Open();
+                int i = addTaskUpdateComm.ExecuteNonQuery();
+            }
+        }
+
+        public static int GetTaskUpdates(int taskID)
+        {
+            using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
+            {
+                SqlCommand getTaskUpdatesComm = new SqlCommand("GetTaskUpdatesSP", sqlConn);
+                getTaskUpdatesComm.CommandType = CommandType.StoredProcedure;
+
+                SqlParameter updateID = new SqlParameter("@updateID", SqlDbType.Int);
+                updateID.Direction = ParameterDirection.Output;
+                SqlParameter updatedBy = new SqlParameter("@updatedBy", SqlDbType.NVarChar);
+                updatedBy.Direction = ParameterDirection.Output;
+                updatedBy.Size = 100;
+                SqlParameter updateTimeDate = new SqlParameter("@updateTimeDate", SqlDbType.SmallDateTime);
+                updateTimeDate.Direction = ParameterDirection.Output;
+                SqlParameter updateDetails = new SqlParameter("@updateDetails", SqlDbType.NVarChar);
+                updateDetails.Direction = ParameterDirection.Output;
+                updateDetails.Size = 4000;
+
+                getTaskUpdatesComm.Parameters.Add(updateID);
+                getTaskUpdatesComm.Parameters.AddWithValue("@taskID", taskID);
+                getTaskUpdatesComm.Parameters.Add(updatedBy);
+                getTaskUpdatesComm.Parameters.Add(updateTimeDate);
+                getTaskUpdatesComm.Parameters.Add(updateDetails);
+
+                sqlConn.Open();
+
+                SqlDataReader reader = getTaskUpdatesComm.ExecuteReader();
+
+                DataStructures.updateRows.Clear();
+
+                int noOfUpdates = 0;
+
+                while (reader.Read())
+                {
+                    DataStructures.UpdateRowStruct taskUpdate = new DataStructures.UpdateRowStruct();
+                    taskUpdate.updateID = reader.GetInt32(0);
+                    taskUpdate.updatedBy = reader.GetString(1);
+                    taskUpdate.updateTimeDate = reader.GetDateTime(2);
+                    taskUpdate.updateDetails = reader.GetString(3);
+
+                    DataStructures.updateRows.Add(taskUpdate);
+                    noOfUpdates++;
+                }
+
+                reader.Close();
+                sqlConn.Close();
+
+                return noOfUpdates;
+            }
+        }
+
         public static void RefreshDataLoop(object data)
         {
             MainWindow mainWindow = (MainWindow)data;

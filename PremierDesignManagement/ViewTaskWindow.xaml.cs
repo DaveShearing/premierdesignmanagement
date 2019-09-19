@@ -20,6 +20,14 @@ namespace PremierDesignManagement
     public partial class ViewTaskWindow : Window
     {
         public DataStructures.TaskRowStruct selectedTask;
+        public int selectedTaskID;
+        public int noOfUpdates;
+        public RowDefinition addUpdateRow;
+        public Rectangle divider;
+        public TextBlock addUpdateTextBlock;
+        public TextBox addUpdateTextBox;
+        public Button addUpdateButton;
+        string updateText;
 
         public ViewTaskWindow(DataStructures.TaskRowStruct task)
         {
@@ -36,7 +44,118 @@ namespace PremierDesignManagement
             LastEditedByLabel.Content = LastEditedByLabel.Content.ToString() + " " + selectedTask.lastEditedBy;
 
 
-            //TODO: Add code to generate rows for updates
+            InitUpdateRows();
+            InitAddUpdateRow();
+
+        }
+
+        private void InitAddUpdateRow()
+        {
+            addUpdateRow = new RowDefinition();
+            addUpdateRow.Height = new GridLength(100, GridUnitType.Auto);
+            TaskDetailsGrid.RowDefinitions.Add(addUpdateRow);
+
+            divider = new Rectangle();
+            addUpdateTextBlock = new TextBlock();
+            addUpdateTextBox = new TextBox();
+            addUpdateButton = new Button();
+
+            divider.Width = 470;
+            divider.Height = 1;
+            divider.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+            divider.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+            divider.Margin = new Thickness(20, 0, 0, 0);
+            divider.VerticalAlignment = VerticalAlignment.Top;
+            divider.HorizontalAlignment = HorizontalAlignment.Left;
+
+            addUpdateTextBlock.Text = "Add new update...";
+            addUpdateTextBlock.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+            addUpdateTextBlock.Margin = new Thickness(0, 10, 0, 0);
+
+            addUpdateTextBox.Height = 50;
+            addUpdateTextBox.Width = 510;
+            addUpdateTextBox.HorizontalAlignment = HorizontalAlignment.Left;
+            addUpdateTextBox.VerticalAlignment = VerticalAlignment.Top;
+            addUpdateTextBox.Margin = new Thickness(0, 30, 0, 0);
+            addUpdateTextBox.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+            addUpdateTextBox.Name = "addUpdateTextBox";
+            addUpdateTextBox.TextChanged += AddUpdateTextChanged;
+            addUpdateTextBox.TextWrapping = TextWrapping.Wrap;
+            //addUpdateTextBox.AcceptsReturn = true;
+            addUpdateTextBox.KeyDown += AddUpdateKeyPressed;
+            
+
+            addUpdateButton.Name = "addUpdateButton";
+            addUpdateButton.Click += AddUpdateButtonClick;
+            addUpdateButton.HorizontalAlignment = HorizontalAlignment.Left;
+            addUpdateButton.VerticalAlignment = VerticalAlignment.Top;
+            addUpdateButton.Margin = new Thickness(0, 90, 0, 0);
+            addUpdateButton.Height = 30;
+            addUpdateButton.Width = 100;
+            addUpdateButton.Content = "Add Update";
+            addUpdateButton.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+            addUpdateButton.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFFF4F5A");
+            addUpdateButton.FontSize = 16;
+            //addUpdateButton.IsDefault = true;
+            
+
+            Grid.SetRow(divider, noOfUpdates+1);
+            Grid.SetRow(addUpdateTextBlock, noOfUpdates + 1);
+            Grid.SetRow(addUpdateTextBox, noOfUpdates + 1);
+            Grid.SetRow(addUpdateButton, noOfUpdates + 1);
+            TaskDetailsGrid.Children.Add(divider);
+            TaskDetailsGrid.Children.Add(addUpdateTextBlock);
+            TaskDetailsGrid.Children.Add(addUpdateTextBox);
+            TaskDetailsGrid.Children.Add(addUpdateButton);
+
+            addUpdateTextBox.Focus();
+            TaskDetailsScrollViewer.ScrollToBottom();
+        }
+
+        private void InitUpdateRows()
+        {
+            selectedTaskID = DataHandling.GetTaskID(selectedTask.taskName, selectedTask.details);
+            noOfUpdates = DataHandling.GetTaskUpdates(selectedTaskID);
+
+            for (int i = 0; i < noOfUpdates; i++)
+            {
+                RowDefinition updateRow = new RowDefinition();
+                updateRow.Height = new GridLength(100, GridUnitType.Auto);
+                TaskDetailsGrid.RowDefinitions.Add(updateRow);
+
+                string updateHeaderString = DataStructures.updateRows[i].updatedBy + " at " + DataStructures.updateRows[i].updateTimeDate.ToString("HH:mm dd/MM/yyyy")
+                    + ": ";
+                string updateContentString = DataStructures.updateRows[i].updateDetails;
+
+                TextBlock updateHeaderTextBlock = new TextBlock();
+                updateHeaderTextBlock.Text = updateHeaderString;
+                updateHeaderTextBlock.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFFF4F5A");
+                updateHeaderTextBlock.Margin = new Thickness(0, 10, 0, 10);
+                updateHeaderTextBlock.FontSize = 12;
+
+                TextBlock updateContentTextBlock = new TextBlock();
+                updateContentTextBlock.Text = updateContentString;
+                updateContentTextBlock.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+                updateContentTextBlock.Margin = new Thickness(20, 30, 20, 10);
+                updateContentTextBlock.FontSize = 14;
+                updateContentTextBlock.TextWrapping = TextWrapping.Wrap;
+
+                Rectangle divider = new Rectangle();
+                divider.Width = 470;
+                divider.Height = 1;
+                divider.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+                divider.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+                divider.Margin = new Thickness(20, 0, 0, 0);
+                divider.VerticalAlignment = VerticalAlignment.Top;
+                divider.HorizontalAlignment = HorizontalAlignment.Left;
+
+                Grid.SetRow(divider, i + 1);
+                Grid.SetRow(updateHeaderTextBlock, i + 1);
+                Grid.SetRow(updateContentTextBlock, i + 1);
+                TaskDetailsGrid.Children.Add(divider);
+                TaskDetailsGrid.Children.Add(updateHeaderTextBlock);
+                TaskDetailsGrid.Children.Add(updateContentTextBlock);
+            }
         }
 
         public void EditTaskButtonClick(object sender, RoutedEventArgs e)
@@ -49,6 +168,49 @@ namespace PremierDesignManagement
         public void CancelButtonClick(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void TaskDetailsGrid_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+
+        }
+
+        private void AddUpdateTextChanged(object sender, TextChangedEventArgs e)
+        {
+            updateText = addUpdateTextBox.Text;
+        }
+
+        private void AddUpdateKeyPressed (object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (Keyboard.Modifiers == ModifierKeys.Shift)
+                {
+                    addUpdateTextBox.Text += Environment.NewLine;
+                } else
+                {
+                    if (updateText != null)
+                    {
+                        DataHandling.AddTaskUpdate(selectedTaskID, addUpdateTextBox.Text);
+
+                        ViewTaskWindow updatedTask = new ViewTaskWindow(selectedTask);
+                        updatedTask.Show();
+                        Close();
+                    }
+                }
+            }
+        }
+
+        private void AddUpdateButtonClick (object sender, RoutedEventArgs e)
+        {
+            if (updateText != null)
+            {
+                DataHandling.AddTaskUpdate(selectedTaskID, addUpdateTextBox.Text);
+
+                ViewTaskWindow updatedTask = new ViewTaskWindow(selectedTask);
+                updatedTask.Show();
+                Close();
+            }
         }
     }
 }
