@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace PremierDesignManagement
 {
@@ -41,14 +42,22 @@ namespace PremierDesignManagement
                 createTask.Parameters.AddWithValue("@startdate", StartDatePicker.SelectedDate);
                 createTask.Parameters.AddWithValue("@deadline", DeadlinePicker.SelectedDate);
                 createTask.Parameters.AddWithValue("@details", TaskDetailsTextBox.Text);
-                createTask.Parameters.AddWithValue("@tasklistfiletabledir", "");
+                createTask.Parameters.AddWithValue("@tasklistfiletabledir", TaskNameTextBox.Text);
                 createTask.Parameters.AddWithValue("@assignedby", System.Windows.Application.Current.Properties["username"]);
                 createTask.Parameters.AddWithValue("@assignedto", assignedUsername);
-                createTask.Parameters.AddWithValue("@taskstatus", ((ComboBoxItem)StatusComboBox.SelectedItem).Content.ToString());
+                createTask.Parameters.AddWithValue("@taskstatus", StatusComboBox.SelectedItem.ToString());
                 createTask.Parameters.AddWithValue("@lastedited", DateTime.Now);
 
                 sqlConn.Open();
                 int i = createTask.ExecuteNonQuery();
+
+                string sqlQuery = "INSERT INTO dbo.TaskListFiles (name,is_directory,is_archive) VALUES ('" + TaskNameTextBox.Text + "', 1, 0);";
+                SqlCommand createFileTableDirComm = new SqlCommand(sqlQuery,sqlConn);
+                createFileTableDirComm.CommandType = CommandType.Text;
+                createFileTableDirComm.ExecuteNonQuery();
+
+                Directory.SetCurrentDirectory(Properties.Settings.Default.FileDirectory);
+                Directory.CreateDirectory(TaskNameTextBox.Text);
             }
 
             
@@ -67,5 +76,7 @@ namespace PremierDesignManagement
         {
 
         }
+
+        
     }
 }

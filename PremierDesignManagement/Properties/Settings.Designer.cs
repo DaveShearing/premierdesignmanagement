@@ -128,5 +128,14 @@ namespace PremierDesignManagement.Properties {
                 return ((global::System.Collections.Specialized.StringCollection)(this["MainWorkflow"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\APPS-1.premier.local\\Shared\\Technical\\PDM\\Task Files\\")]
+        public string FileDirectory {
+            get {
+                return ((string)(this["FileDirectory"]));
+            }
+        }
     }
 }

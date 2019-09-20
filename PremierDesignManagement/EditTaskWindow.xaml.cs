@@ -63,5 +63,7 @@ namespace PremierDesignManagement
         {
 
         }
+
+        //TODO: Add Task Update entries for all changed fields. (base string in class with += for each changed field) 
     }
 }

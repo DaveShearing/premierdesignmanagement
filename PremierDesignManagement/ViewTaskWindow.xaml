@@ -33,5 +33,7 @@
                 <TextBlock x:Name="DetailsTextBlock"  HorizontalAlignment="Left" MinHeight="50" Margin="0,0,0,20" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="540" Foreground="#FF51545D" FontSize="13"/>
             </Grid>
         </ScrollViewer>
+        <Button x:Name="ViewFilesButton" Content="View Files" HorizontalAlignment="Left" Height="27" Margin="335,149,0,0" VerticalAlignment="Top" Width="107" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="ViewFilesButtonClick"/>
+        <Button x:Name="AddFilesButton" Content="Add Files" HorizontalAlignment="Left" Height="27" Margin="210,149,0,0" VerticalAlignment="Top" Width="107" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="AddFilesButtonClick"/>
     </Grid>
 </Window>

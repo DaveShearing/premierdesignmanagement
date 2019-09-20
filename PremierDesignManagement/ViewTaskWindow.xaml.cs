@@ -11,6 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
+using System.Diagnostics;
+using System.Security;
+using Microsoft.Win32;
 
 namespace PremierDesignManagement
 {
@@ -81,8 +85,9 @@ namespace PremierDesignManagement
             addUpdateTextBox.Name = "addUpdateTextBox";
             addUpdateTextBox.TextChanged += AddUpdateTextChanged;
             addUpdateTextBox.TextWrapping = TextWrapping.Wrap;
-            //addUpdateTextBox.AcceptsReturn = true;
+            KeyBinding keyBinding = new KeyBinding(EditingCommands.EnterLineBreak, Key.Enter, ModifierKeys.Shift);
             addUpdateTextBox.KeyDown += AddUpdateKeyPressed;
+            addUpdateTextBox.InputBindings.Add(keyBinding);
             
 
             addUpdateButton.Name = "addUpdateButton";
@@ -96,9 +101,7 @@ namespace PremierDesignManagement
             addUpdateButton.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
             addUpdateButton.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFFF4F5A");
             addUpdateButton.FontSize = 16;
-            //addUpdateButton.IsDefault = true;
             
-
             Grid.SetRow(divider, noOfUpdates+1);
             Grid.SetRow(addUpdateTextBlock, noOfUpdates + 1);
             Grid.SetRow(addUpdateTextBox, noOfUpdates + 1);
@@ -186,7 +189,9 @@ namespace PremierDesignManagement
             {
                 if (Keyboard.Modifiers == ModifierKeys.Shift)
                 {
+                    int ci = addUpdateTextBox.CaretIndex;
                     addUpdateTextBox.Text += Environment.NewLine;
+                    addUpdateTextBox.CaretIndex = ci + 1;
                 } else
                 {
                     if (updateText != null)
@@ -211,6 +216,29 @@ namespace PremierDesignManagement
                 updatedTask.Show();
                 Close();
             }
+        }
+
+        private void ViewFilesButtonClick (object sender, RoutedEventArgs e)
+        {
+            ProcessStartInfo openTaskDirectory = new ProcessStartInfo("explorer.exe", Properties.Settings.Default.FileDirectory + selectedTask.taskListFileTableDir + "\\");
+            Process.Start(openTaskDirectory);
+        }
+
+        private void AddFilesButtonClick (object sender, RoutedEventArgs e)
+        {
+            string taskFilesUpdateString = DataHandling.AddTaskFiles(selectedTask);
+
+            string[] taskFilesArray = selectedTask.taskFiles.ToArray();
+            string taskFiles = String.Join(",", taskFilesArray);
+            
+            
+            DataHandling.AddTaskUpdate(selectedTaskID, taskFilesUpdateString);
+            
+            DataHandling.GetTasksFull();
+
+            ViewTaskWindow updatedTask = new ViewTaskWindow(selectedTask);
+            updatedTask.Show();
+            Close();
         }
     }
 }
