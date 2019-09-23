@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using Microsoft.Win32;
 
 namespace PremierDesignManagement
 {
@@ -22,6 +23,10 @@ namespace PremierDesignManagement
     /// </summary>
     public partial class CreateTaskWindow : Window
     {
+        DataStructures.TaskRowStruct newTask = new DataStructures.TaskRowStruct();
+        OpenFileDialog selectFiles = new OpenFileDialog();
+        
+
         public CreateTaskWindow()
         {
             InitializeComponent();
@@ -31,22 +36,37 @@ namespace PremierDesignManagement
 
         private void CreateTaskButtonClick (object sender, RoutedEventArgs e)
         {
+            int assignedToUserIndex = Properties.Settings.Default.UsersStringCollection.IndexOf(AssignToComboBox.Text);
+            string assignedUsername = Properties.Settings.Default.UsernamesStringCollection[assignedToUserIndex];
+
+            newTask.taskName = TaskNameTextBox.Text;
+            newTask.startDate = StartDatePicker.SelectedDate.Value;
+            newTask.deadline = DeadlinePicker.SelectedDate.Value;
+            newTask.details = TaskDetailsTextBox.Text;
+            newTask.taskListFileTableDir = TaskNameTextBox.Text;
+            newTask.assignedBy = System.Windows.Application.Current.Properties["username"].ToString();
+            newTask.assignedTo = assignedUsername;
+            newTask.taskStatus = StatusComboBox.SelectedValue.ToString();
+            newTask.lastEdited = DateTime.Now;
+            newTask.taskFiles = new List<string>();
+            string[] taskFilesArray = newTask.taskFiles.ToArray();
+            string taskFilesString = string.Join(",", taskFilesArray);
+
             using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
             {
-                int assignedToUserIndex = Properties.Settings.Default.UsersStringCollection.IndexOf(AssignToComboBox.Text);
-                string assignedUsername = Properties.Settings.Default.UsernamesStringCollection[assignedToUserIndex];
-
+                
                 SqlCommand createTask = new SqlCommand("CreateTaskSP", sqlConn);
                 createTask.CommandType = CommandType.StoredProcedure;
-                createTask.Parameters.AddWithValue("@taskname", TaskNameTextBox.Text);
-                createTask.Parameters.AddWithValue("@startdate", StartDatePicker.SelectedDate);
-                createTask.Parameters.AddWithValue("@deadline", DeadlinePicker.SelectedDate);
-                createTask.Parameters.AddWithValue("@details", TaskDetailsTextBox.Text);
-                createTask.Parameters.AddWithValue("@tasklistfiletabledir", TaskNameTextBox.Text);
-                createTask.Parameters.AddWithValue("@assignedby", System.Windows.Application.Current.Properties["username"]);
-                createTask.Parameters.AddWithValue("@assignedto", assignedUsername);
-                createTask.Parameters.AddWithValue("@taskstatus", StatusComboBox.SelectedItem.ToString());
-                createTask.Parameters.AddWithValue("@lastedited", DateTime.Now);
+                createTask.Parameters.AddWithValue("@taskname", newTask.taskName);
+                createTask.Parameters.AddWithValue("@startdate", newTask.startDate);
+                createTask.Parameters.AddWithValue("@deadline", newTask.deadline);
+                createTask.Parameters.AddWithValue("@details", newTask.details);
+                createTask.Parameters.AddWithValue("@tasklistfiletabledir", newTask.taskListFileTableDir);
+                createTask.Parameters.AddWithValue("@assignedby", newTask.assignedBy);
+                createTask.Parameters.AddWithValue("@assignedto", newTask.assignedTo);
+                createTask.Parameters.AddWithValue("@taskstatus", newTask.taskStatus);
+                createTask.Parameters.AddWithValue("@lastedited", newTask.lastEdited);
+                createTask.Parameters.AddWithValue("@taskFiles", taskFilesString);
 
                 sqlConn.Open();
                 int i = createTask.ExecuteNonQuery();
@@ -58,23 +78,42 @@ namespace PremierDesignManagement
 
                 Directory.SetCurrentDirectory(Properties.Settings.Default.FileDirectory);
                 Directory.CreateDirectory(TaskNameTextBox.Text);
+
+                
             }
 
-            
-
             DataHandling.GetTasksFull();
+
+            int newTaskID = DataHandling.GetTaskID(newTask.taskName, newTask.details);
+
+            string taskFilesUpdateString = DataHandling.AddTaskFiles(newTask, selectFiles);
+
+            if (taskFilesUpdateString.Equals("Added File(s): ") == false)
+            {
+                DataHandling.AddTaskUpdate(newTaskID, taskFilesUpdateString);
+
+                DataHandling.GetTasksFull();
+            }
+
 
             Close();
         }
 
         private void CancelButtonClick (object sender, RoutedEventArgs e)
         {
+            DataHandling.GetTasksFull();
             Close();
         }
 
         private void TaskDetailsTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private void AddFilesButtonClick (object sender, RoutedEventArgs e)
+        {
+            selectFiles.Multiselect = true;
+            selectFiles.ShowDialog();
         }
 
         

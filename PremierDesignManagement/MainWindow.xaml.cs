@@ -60,24 +60,12 @@ namespace PremierDesignManagement
             forename = null;
             surname = null;
 
+            DataHandling.GetUsers();
+
             //Opens new Log In Window
             LogInWindow logIn = new LogInWindow();
             logIn.Show();
             System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)10;
-
-            DataHandling.GetUsers();
-            DataHandling.GetTasksFull();
-
-            //System.Threading.ThreadPool.QueueUserWorkItem(DataHandling.RefreshDataLoop, PDMMain);
-
-            //Thread refreshDataThread = new Thread(DataHandling.RefreshDataLoop);
-            //refreshDataThread.Start(PDMMain);
-            //DataHandling.RefreshDataLoop();
-
-
-            //TaskList2.ItemsSource = DataStructures.taskRows;
-
-
 
             foreach (String username in Properties.Settings.Default.UsernamesStringCollection)
             {
@@ -109,6 +97,8 @@ namespace PremierDesignManagement
             HomeGrid.Visibility = Visibility.Visible;
             CalendarGrid.Visibility = Visibility.Hidden;
             TaskListGrid.Visibility = Visibility.Hidden;
+
+            DataHandling.GetTasksFull();
         }
 
         //Shows Task List Tab
@@ -120,6 +110,8 @@ namespace PremierDesignManagement
             CalendarGrid.Visibility = Visibility.Hidden;
             TaskListGrid.Visibility = Visibility.Visible;
             HomeGrid.Visibility = Visibility.Hidden;
+
+            DataHandling.GetTasksFull();
         }
 
         //Shows Calendar Tab
@@ -141,33 +133,89 @@ namespace PremierDesignManagement
 
         private void EditTaskButtonClick(object sender, RoutedEventArgs e)
         {
-            DataStructures.TaskRowStruct selectedTask = (DataStructures.TaskRowStruct)TaskList2.SelectedItems[0];
+            DataStructures.TaskRowStruct selectedTask = new DataStructures.TaskRowStruct();
             
-            Window editTask = new EditTaskWindow(selectedTask);
-            editTask.Show();
+            if ((sender as Button).Name.Equals(EditTaskButton.Name))
+            {
+                selectedTask = (DataStructures.TaskRowStruct)TaskList2.SelectedItems[0];
+            } else if ((sender as Button).Name.Equals(EditTaskButton_ByYou.Name))
+            {
+                selectedTask = (DataStructures.TaskRowStruct)AssignedByYouList.SelectedItems[0];
+            } else
+            {
+                selectedTask = (DataStructures.TaskRowStruct)AssignedToYouList.SelectedItems[0];
+            }
+
+            try
+            {
+                Window editTask = new EditTaskWindow(selectedTask);
+                editTask.Show();
+            } catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("Please select a task");
+            }
         }
 
         private void ViewTaskButtonClick(object sender, RoutedEventArgs e)
         {
             DataStructures.TaskRowStruct selectedTask = new DataStructures.TaskRowStruct();
 
-            try
+            if ((sender as Button).Name.Equals(ViewTaskButton.Name))
             {
                 selectedTask = (DataStructures.TaskRowStruct)TaskList2.SelectedItems[0];
-                ViewTaskWindow viewTaskWindow = new ViewTaskWindow(selectedTask);
-                viewTaskWindow.Show();
-            } catch (ArgumentOutOfRangeException)
+            }
+            else if ((sender as Button).Name.Equals(ViewTaskButton_ByYou.Name))
             {
-
+                selectedTask = (DataStructures.TaskRowStruct)AssignedByYouList.SelectedItems[0];
+            }
+            else
+            {
+                selectedTask = (DataStructures.TaskRowStruct)AssignedToYouList.SelectedItems[0];
             }
 
-            //ViewTaskWindow viewTaskWindow = new ViewTaskWindow(selectedTask);
-            //viewTaskWindow.Show();
+            try
+            {
+                ViewTaskWindow viewTaskWindow = new ViewTaskWindow(selectedTask);
+                viewTaskWindow.Show();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("Please select a task");
+            }
+
         }
 
         private void UpdateTasksButtonClick(object sender, RoutedEventArgs e)
         {
             DataHandling.GetTasksFull();
+        }
+
+        private void MouseDoubleClickItem (object sender, RoutedEventArgs e)
+        {
+            DataStructures.TaskRowStruct selectedTask = new DataStructures.TaskRowStruct();
+
+            if ((sender as ListViewItem).IsDescendantOf(TaskList2Grid))
+            {
+                selectedTask = (sender as DataStructures.TaskRowStruct);
+            }
+            else if ((sender as Button).Name.Equals(ViewTaskButton_ByYou.Name))
+            {
+                selectedTask = (DataStructures.TaskRowStruct)AssignedByYouList.SelectedItems[0];
+            }
+            else
+            {
+                selectedTask = (DataStructures.TaskRowStruct)AssignedToYouList.SelectedItems[0];
+            }
+
+            try
+            {
+                ViewTaskWindow viewTaskWindow = new ViewTaskWindow(selectedTask);
+                viewTaskWindow.Show();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("Please select a task");
+            }
         }
 
     }

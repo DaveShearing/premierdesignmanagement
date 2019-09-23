@@ -170,6 +170,7 @@ namespace PremierDesignManagement
 
         public void CancelButtonClick(object sender, RoutedEventArgs e)
         {
+            DataHandling.GetTasksFull();
             Close();
         }
 
@@ -210,7 +211,10 @@ namespace PremierDesignManagement
         {
             if (updateText != null)
             {
+                DataHandling.UpdateTask(selectedTask);
                 DataHandling.AddTaskUpdate(selectedTaskID, addUpdateTextBox.Text);
+
+                DataHandling.GetTasksFull();
 
                 ViewTaskWindow updatedTask = new ViewTaskWindow(selectedTask);
                 updatedTask.Show();
@@ -228,17 +232,24 @@ namespace PremierDesignManagement
         {
             string taskFilesUpdateString = DataHandling.AddTaskFiles(selectedTask);
 
+            if (selectedTask.taskFiles == null)
+            {
+                selectedTask.taskFiles = new List<string>();
+            }
+
             string[] taskFilesArray = selectedTask.taskFiles.ToArray();
             string taskFiles = String.Join(",", taskFilesArray);
-            
-            
-            DataHandling.AddTaskUpdate(selectedTaskID, taskFilesUpdateString);
-            
-            DataHandling.GetTasksFull();
 
-            ViewTaskWindow updatedTask = new ViewTaskWindow(selectedTask);
-            updatedTask.Show();
-            Close();
+            if (taskFilesUpdateString.Equals("Added File(s): ") == false)
+            {
+                DataHandling.AddTaskUpdate(selectedTaskID, taskFilesUpdateString);
+
+                DataHandling.GetTasksFull();
+
+                ViewTaskWindow updatedTask = new ViewTaskWindow(selectedTask);
+                updatedTask.Show();
+                Close();
+            }
         }
     }
 }

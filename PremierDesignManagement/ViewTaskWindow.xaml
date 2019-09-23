@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PremierDesignManagement"
         mc:Ignorable="d"
-        Title="View Task" Height="900" Width="621" Background="#FFCACBCF" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+        Title="View Task" Height="900" Width="621" Background="#FFCACBCF" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Icon="assets/pdmicon.ico">
     <Grid>
         <Image Margin="-235,95,645,702" Source="assets/Premier_Logo_Single_Line_Red_Grey_RGB_Large_Trans.png" Stretch="Fill"/>
         <Image Margin="-220,215,645,604" Source="assets/Premier_Logo_Single_Line_RGB_Large_Trans.png" Stretch="Fill"/>

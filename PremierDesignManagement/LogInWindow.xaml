@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PremierDesignManagement"
         mc:Ignorable="d"
-        Title="Log In" Height="289.455" Width="379.602" ResizeMode="NoResize" Icon="assets/Premier_P_Logo_Red_RGB_Small_Trans.png" Background="#FFFF505B" Topmost="True" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" AutomationProperties.IsOffscreenBehavior="Onscreen" ShowInTaskbar="False" Closed="LogInWindowClosed">
+        Title="Log In" Height="262.455" Width="379.602" ResizeMode="NoResize" Icon="assets/Premier_P_Logo_Red_RGB_Small_Trans.png" Background="#FFFF505B" Topmost="True" WindowStartupLocation="CenterScreen" ScrollViewer.VerticalScrollBarVisibility="Disabled" AutomationProperties.IsOffscreenBehavior="Onscreen" ShowInTaskbar="False" Closed="LogInWindowClosed" WindowStyle="None">
     <Grid FocusManager.FocusedElement="{Binding ElementName=UsernameTextBox}">
         <Image Margin="-207,56,653,212" Source="assets/Premier_Logo_Single_Line_Red_Grey_RGB_Large_Trans.png" Stretch="Fill"/>
         <Image Margin="-114,251,575,39" Source="assets/Premier_Logo_Single_Line_RGB_Large_Trans.png" Stretch="Fill"/>

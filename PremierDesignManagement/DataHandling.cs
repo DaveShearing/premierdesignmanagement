@@ -111,10 +111,14 @@ namespace PremierDesignManagement
                     if (window.GetType() == typeof(MainWindow))
                     {
                         (window as MainWindow).TaskList2.ItemsSource = null;
+                        (window as MainWindow).AssignedByYouList.ItemsSource = null;
+                        (window as MainWindow).AssignedToYouList.ItemsSource = null;
                     }
                 }
                 
                 DataStructures.taskRows.Clear();
+                DataStructures.assignedByTaskRows.Clear();
+                DataStructures.assignedToTaskRows.Clear();
 
                 while (reader.Read())
                 {
@@ -163,12 +167,29 @@ namespace PremierDesignManagement
                 sqlConn.Close();
             }
 
+            foreach (DataStructures.TaskRowStruct task in DataStructures.taskRows)
+            {
+                if (task.assignedBy.Equals(Application.Current.Properties["username"].ToString()))
+                {
+                    DataStructures.assignedByTaskRows.Add(task);
+                }
+            }
+
+            foreach (DataStructures.TaskRowStruct task in DataStructures.taskRows)
+            {
+                if (task.assignedTo.Equals(Application.Current.Properties["username"].ToString()))
+                {
+                    DataStructures.assignedToTaskRows.Add(task);
+                }
+            }
+
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(MainWindow))
                 {
                     (window as MainWindow).TaskList2.ItemsSource = DataStructures.taskRows;
-                    
+                    (window as MainWindow).AssignedByYouList.ItemsSource = DataStructures.assignedByTaskRows;
+                    (window as MainWindow).AssignedToYouList.ItemsSource = DataStructures.assignedToTaskRows;
                 }
             }
         }
@@ -253,7 +274,7 @@ namespace PremierDesignManagement
         }
 
         public static void UpdateTask(int taskID, string taskName, DateTime startDate, DateTime deadline, string details, string taskListFileTableDir, string assignedBy,
-            string assignedTo, string taskStatus)
+            string assignedTo, string taskStatus, string taskFiles)
         {
             
 
@@ -272,6 +293,7 @@ namespace PremierDesignManagement
                 updateTaskComm.Parameters.AddWithValue("@taskstatus", taskStatus);
                 updateTaskComm.Parameters.AddWithValue("@lastedited", DateTime.Now);
                 updateTaskComm.Parameters.AddWithValue("@lasteditedby", System.Windows.Application.Current.Properties["username"]);
+                updateTaskComm.Parameters.AddWithValue("@taskFiles", taskFiles);
 
                 sqlConn.Open();
                 int i = updateTaskComm.ExecuteNonQuery();
@@ -297,6 +319,11 @@ namespace PremierDesignManagement
                 updateTaskComm.Parameters.AddWithValue("@taskstatus", selectedTask.taskStatus);
                 updateTaskComm.Parameters.AddWithValue("@lastedited", DateTime.Now);
                 updateTaskComm.Parameters.AddWithValue("@lasteditedby", System.Windows.Application.Current.Properties["username"]);
+
+                if (selectedTask.taskFiles == null)
+                {
+                    selectedTask.taskFiles = new List<string>();
+                }
 
                 string[] taskFilesArray = selectedTask.taskFiles.ToArray();
                 string taskFiles = string.Join(",", taskFilesArray);
@@ -450,6 +477,84 @@ namespace PremierDesignManagement
 
                     noOfFiles++;
                 }
+
+                string[] taskFilesArray = selectedTask.taskFiles.ToArray();
+                string taskFiles = String.Join(",", taskFilesArray);
+
+                DataHandling.UpdateTask(selectedTask);
+
+            }
+
+            return taskFilesUpdateString;
+        }
+
+        public static string AddTaskFiles(DataStructures.TaskRowStruct selectedTask, OpenFileDialog selectFiles)
+        {
+            string taskFilesUpdateString = "Added File(s): ";
+            int noOfFiles = 0;
+
+            foreach (string filename in selectFiles.FileNames)
+            {
+                FileInfo fileInfo = new FileInfo(filename);
+
+
+                try
+                {
+                    if (selectedTask.taskFiles == null)
+                    {
+                        selectedTask.taskFiles = new List<string>();
+
+                        selectedTask.taskFiles.Add(fileInfo.Name);
+                        File.Copy(filename, Properties.Settings.Default.FileDirectory + selectedTask.taskListFileTableDir + @"\" + fileInfo.Name);
+
+                        if (noOfFiles < selectFiles.FileNames.Length)
+                        {
+                            taskFilesUpdateString += fileInfo.Name + ", ";
+                        }
+                        else
+                        {
+                            taskFilesUpdateString += fileInfo.Name;
+                        }
+
+                    }
+                    else
+                    {
+                        if (selectedTask.taskFiles.Contains(fileInfo.Name) == false)
+                        {
+                            selectedTask.taskFiles.Add(fileInfo.Name);
+                        }
+
+                        File.Copy(filename, Properties.Settings.Default.FileDirectory + selectedTask.taskListFileTableDir + @"\" + fileInfo.Name);
+
+                        if (noOfFiles < selectFiles.FileNames.Length)
+                        {
+                            taskFilesUpdateString += fileInfo.Name + ", ";
+                        }
+                        else
+                        {
+                            taskFilesUpdateString += fileInfo.Name;
+                        }
+                    }
+
+
+
+                }
+                catch (IOException ioe)
+                {
+                    File.Delete(Properties.Settings.Default.FileDirectory + selectedTask.taskListFileTableDir + @"\" + fileInfo.Name);
+                    File.Copy(filename, Properties.Settings.Default.FileDirectory + selectedTask.taskListFileTableDir + @"\" + fileInfo.Name);
+
+                    if (noOfFiles < selectFiles.FileNames.Length)
+                    {
+                        taskFilesUpdateString += fileInfo.Name + " (replaced existing), ";
+                    }
+                    else
+                    {
+                        taskFilesUpdateString += fileInfo.Name + " (replaced existing)";
+                    }
+                }
+
+                noOfFiles++;
             }
 
             string[] taskFilesArray = selectedTask.taskFiles.ToArray();
@@ -464,6 +569,7 @@ namespace PremierDesignManagement
         {
             System.IO.File.Copy(localFileLocation, fileTableDirectory);
         }
+
 
 
         public static void RefreshDataLoop(object data)

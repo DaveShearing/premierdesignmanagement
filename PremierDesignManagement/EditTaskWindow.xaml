@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PremierDesignManagement"
         mc:Ignorable="d"
-        Title="Edit Task" Height="647" Width="662" Background="#FFCACBCF" ResizeMode="CanMinimize" Icon="assets/Premier_P_Logo_Red_RGB_Small_Trans.png" WindowStartupLocation="CenterScreen">
+        Title="Edit Task" Height="647" Width="662" Background="#FFCACBCF" ResizeMode="CanMinimize" Icon="assets/pdmicon.ico" WindowStartupLocation="CenterScreen">
     <Grid FocusManager.FocusedElement="{Binding ElementName=TaskNameTextBox}">
         <TextBox x:Name="TaskNameTextBox" HorizontalAlignment="Left" Height="40" Margin="30,44,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="592" FontSize="20" MaxLines="1" TextAlignment="Center" Padding="0,4,0,0" Foreground="#FF51545D" BorderBrush="#FF51545D" Background="#FFDEDFE2" TabIndex="0" MaxLength="30"/>
         <Label x:Name="TaskNameLabel" Content="Task Name" HorizontalAlignment="Left" Height="23" Margin="25,21,0,0" VerticalAlignment="Top" Width="111" Padding="5,5,5,0" Foreground="#FF51545D"/>

@@ -35,6 +35,7 @@ namespace PremierDesignManagement
         {
             System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)0;
             Close();
+            Application.Current.Shutdown();
         }
 
         //Log in as User
@@ -114,6 +115,8 @@ namespace PremierDesignManagement
 
                     sqlConnection.Close();
 
+                    DataHandling.GetTasksFull();
+
                     Close();
 
                 }
@@ -161,5 +164,6 @@ namespace PremierDesignManagement
         {
             System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)0;
         }
+
     }
 }
