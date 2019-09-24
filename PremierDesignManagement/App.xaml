@@ -15,7 +15,14 @@
             <System:String>123</System:String>
         </Specialized:StringCollection>
         <local:DataStructures x:Key="taskRows"></local:DataStructures>
-        
+        <Specialized:StringCollection x:Key="MainWorkflow">
+            <System:String>New</System:String>
+            <System:String>In Progress</System:String>
+            <System:String>Review</System:String>
+            <System:String>Approved</System:String>
+            <System:String>Changes Requested</System:String>
+            <System:String>Completed</System:String>
+        </Specialized:StringCollection>
         
 
     </Application.Resources>

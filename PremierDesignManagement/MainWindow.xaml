@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PremierDesignManagement"
+        xmlns:settings="PremierDesignManagement.Properties.Settings"
         mc:Ignorable="d"
         Title="Premier Task Management" Height="800" Width="1400" ResizeMode="CanMinimize" Icon="assets/pdmicon.ico" Background="White" Foreground="Black" WindowStartupLocation="CenterScreen"
         >
     <Window.Resources>
         <Color x:Key="BorderColour1">#FF51545D</Color>
-
+        
     </Window.Resources>
 
     <Grid x:Name="MainGrid">
@@ -17,11 +18,12 @@
             <BlurEffect Radius="{DynamicResource BlurEffectRadius}" />
         </Grid.Effect>
         <Image Margin="-235,95,1447,604" Source="assets/Premier_Logo_Single_Line_Red_Grey_RGB_Large_Trans.png" Stretch="Fill"/>
-        <Grid x:Name="TaskListGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Hidden">
+        <Grid x:Name="TaskListGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190">
             <TextBlock x:Name="TitleText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="Task List" VerticalAlignment="Top" Width="640" FontSize="36" Foreground="#FF51545D"/>
             <Button x:Name="CreateTaskButton" Content="Create Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,121,0,0" Height="38" FontSize="18" Click="CreateTaskButtonClick" Foreground="#FF51545D"/>
-            <ListView x:Name="TaskList2" x:FieldModifier="public" HorizontalAlignment="Left" Height="495" Margin="48,121,0,0" VerticalAlignment="Top" Width="923" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single">
+            <ListView x:Name="TaskList2" x:FieldModifier="public" HorizontalAlignment="Left" Height="609" Margin="48,121,0,0" VerticalAlignment="Top" Width="923" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single" MouseDoubleClick="MouseDoubleClickItem">
                 <ListView.Resources>
+                    <ContextMenu x:Key="TaskStatusContextMenu" DataContext="Properties.Settings" ItemsSource="{Binding Source=}"/>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         <Setter Property="Foreground" Value="#FF51545D"/>
@@ -33,37 +35,53 @@
                     <Style TargetType="GridViewColumnHeader">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         <Setter Property="Foreground" Value="#FF51545D"/>
+                        <Style.Triggers>
+                            <Trigger Property="Content" Value="TaskStatusColumn">
+                                <Setter Property="ContextMenu" Value="{StaticResource TaskStatusContextMenu}"/>
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
+                    
                 </ListView.Resources>
                 <ListView.ItemsSource>
                     <Binding Mode="OneWay" Source="{StaticResource taskRows}"/>
                 </ListView.ItemsSource>
                 <ListView.View>
                     <GridView AllowsColumnReorder="False">
-                        <GridViewColumn Header="Task Name" Width="350">
+                        <GridViewColumn x:Name="TaskNameColumn" Width="350">
+                            <DataGridColumnHeader Tag="TaskNameColumnHeader" BorderBrush="Transparent" HorizontalContentAlignment="Center" Click="HeaderClick" MouseRightButtonUp="HeaderRightClick" Width="345">Task Name</DataGridColumnHeader>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding taskName}" FontFamily="Segoe UI Semibold" FontSize="18"/>
+                                    <TextBlock x:Name="taskNameBinding" Text="{Binding taskName}" FontFamily="Segoe UI Semibold" FontSize="18"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Start Date" Width="90" DisplayMemberBinding="{Binding startDate, StringFormat=d, ConverterCulture=en-GB}"></GridViewColumn>
-                        <GridViewColumn Header="Deadline" Width="90" DisplayMemberBinding="{Binding deadline, StringFormat=d, ConverterCulture=en-GB}"/>
-                        <GridViewColumn Header="Assigned To" Width="120" DisplayMemberBinding="{Binding assignedTo}"/>
-                        <GridViewColumn Header="Task Status" Width="150">
+                        <GridViewColumn Width="90" DisplayMemberBinding="{Binding startDate, StringFormat=d, ConverterCulture=en-GB}">
+                            <DataGridColumnHeader Tag="StartDateColumnHeader" BorderBrush="Transparent" HorizontalContentAlignment="Center" Click="HeaderClick" MouseRightButtonUp="HeaderRightClick" Width="86">Start Date</DataGridColumnHeader>
+                        </GridViewColumn>
+                        <GridViewColumn Width="90" DisplayMemberBinding="{Binding deadline, StringFormat=d, ConverterCulture=en-GB}">
+                            <DataGridColumnHeader Tag="DeadlineColumnHeader" BorderBrush="Transparent" HorizontalContentAlignment="Center" Click="HeaderClick" MouseRightButtonUp="HeaderRightClick" Width="86">Deadline</DataGridColumnHeader>
+                        </GridViewColumn>
+                        <GridViewColumn Width="120" DisplayMemberBinding="{Binding assignedTo}">
+                            <DataGridColumnHeader Tag="AssignedToColumnHeader" BorderBrush="Transparent" HorizontalContentAlignment="Center" Click="HeaderClick" MouseRightButtonUp="HeaderRightClick" Width="115">Assigned To</DataGridColumnHeader>
+                        </GridViewColumn>
+                        <GridViewColumn Width="150">
+                            <DataGridColumnHeader Tag="TaskStatusColumnHeader" BorderBrush="Transparent" HorizontalContentAlignment="Center" Click="HeaderClick" MouseRightButtonUp="HeaderRightClick" Width="145" ContextMenu="{StaticResource TaskStatusContextMenu}">Task Status</DataGridColumnHeader>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding taskStatus}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="SemiBold"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Last Edited" Width="90" DisplayMemberBinding="{Binding lastEdited, StringFormat='HH:mm&#x0a;dd/MM/yyyy', ConverterCulture=en-GB}"/>
+                        <GridViewColumn Width="90" DisplayMemberBinding="{Binding lastEdited, StringFormat='HH:mm&#x0a;dd/MM/yyyy', ConverterCulture=en-GB}">
+                            <DataGridColumnHeader Tag="LastEditedColumnHeader" BorderBrush="Transparent" HorizontalContentAlignment="Center" Click="HeaderClick" MouseRightButtonUp="HeaderRightClick" Width="85">Last Edited</DataGridColumnHeader>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
             <Button x:Name="EditTaskButton" Content="Edit Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,177,0,0" Height="38" FontSize="18" Click="EditTaskButtonClick" Foreground="#FF51545D"/>
             <Button x:Name="ViewTaskButton" Content="View Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,234,0,0" Height="38" FontSize="18" Click="ViewTaskButtonClick" Foreground="#FF51545D"/>
-            <Button x:Name="UpdateTasksButton" Content="Update Tasks" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" Margin="1019,578,0,0" Height="38" FontSize="18" Click="UpdateTasksButtonClick" Foreground="#FF51545D"/>
+            <Button x:Name="UpdateTasksButton" Content="Update Tasks" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" Margin="1024,692,0,0" Height="38" FontSize="18" Click="UpdateTasksButtonClick" Foreground="#FF51545D"/>
         </Grid>
         <Image Margin="-220,215,1447,506" Source="assets/Premier_Logo_Single_Line_RGB_Large_Trans.png" Stretch="Fill"/>
         <Grid x:Name="SidebarGrid" HorizontalAlignment="Left" Height="771" VerticalAlignment="Top" Width="300" ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -85,7 +103,7 @@
         <Grid x:Name="CalendarGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Hidden">
             <Button Content="Button" HorizontalAlignment="Left" Height="99" Margin="314,256,0,0" VerticalAlignment="Top" Width="322"/>
         </Grid>
-        <Grid x:Name="HomeGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190">
+        <Grid x:Name="HomeGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" d:IsHidden="True">
             <TextBlock x:Name="WelcomeText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="{DynamicResource WelcomeTextString}" VerticalAlignment="Top" Width="640" FontSize="36" Foreground="#FF51545D"/>
             <Button x:Name="LogInButton" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1044,29,0,0" Height="38" FontSize="18" MouseLeftButtonUp="LogInButtonClick" Click="LogInButtonClick" Visibility="{DynamicResource LogInButtonVisibility}"/>
             <Button x:Name="CreateTaskButton_Copy" Content="Create Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="1023,364,0,0" Height="38" FontSize="18" Click="CreateTaskButtonClick" Foreground="#FF51545D"/>
@@ -98,7 +116,6 @@
                         <Setter Property="Height" Value="40"/>
                         <Setter Property="Margin" Value="0,0,0,5"/>
                         <Setter Property="Padding" Value="0,0,0,0"/>
-                        <EventSetter Event="MouseDoubleClick" Handler="MouseDoubleClickItem"/>
                     </Style>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -131,7 +148,7 @@
             <Button x:Name="EditTaskButton_ToYou" Content="Edit Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="1023,164,0,0" Height="38" FontSize="18" Click="EditTaskButtonClick" Foreground="#FF51545D"/>
             <Button x:Name="ViewTaskButton_ToYou" Content="View Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="1023,221,0,0" Height="38" FontSize="18" Click="ViewTaskButtonClick" Foreground="#FF51545D"/>
             <Button x:Name="UpdateTasksButton_Home" Content="Update Tasks" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118" Margin="1023,692,0,0" Height="38" FontSize="18" Click="UpdateTasksButtonClick" Foreground="#FF51545D"/>
-            <ListView x:Name="AssignedByYouList" x:FieldModifier="public" HorizontalAlignment="Left" Height="239" Margin="48,491,0,0" VerticalAlignment="Top" Width="924" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single">
+            <ListView x:Name="AssignedByYouList" x:FieldModifier="public" HorizontalAlignment="Left" Height="239" Margin="48,491,0,0" VerticalAlignment="Top" Width="924" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single" MouseDoubleClick="MouseDoubleClickItem">
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>

@@ -12,6 +12,7 @@ using System.Threading;
 using System.IO;
 using System.Data.SqlTypes;
 using Microsoft.Win32;
+using System.ComponentModel;
 
 namespace PremierDesignManagement
 {
@@ -190,6 +191,9 @@ namespace PremierDesignManagement
                     (window as MainWindow).TaskList2.ItemsSource = DataStructures.taskRows;
                     (window as MainWindow).AssignedByYouList.ItemsSource = DataStructures.assignedByTaskRows;
                     (window as MainWindow).AssignedToYouList.ItemsSource = DataStructures.assignedToTaskRows;
+
+                    (window as MainWindow).taskListView = (CollectionView)CollectionViewSource.GetDefaultView((window as MainWindow).TaskList2.ItemsSource);
+                    (window as MainWindow).taskListView.SortDescriptions.Add(new SortDescription("lastEdited", ListSortDirection.Descending));
                 }
             }
         }
@@ -332,6 +336,7 @@ namespace PremierDesignManagement
 
                 sqlConn.Open();
                 int i = updateTaskComm.ExecuteNonQuery();
+                sqlConn.Close();
             }
         }
 
@@ -348,6 +353,7 @@ namespace PremierDesignManagement
 
                 sqlConn.Open();
                 int i = addTaskUpdateComm.ExecuteNonQuery();
+                sqlConn.Close();
             }
         }
 

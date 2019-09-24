@@ -17,6 +17,8 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Collections.Specialized;
 using System.Threading;
+using System.ComponentModel;
+using System.Windows.Controls.Primitives;
 
 
 namespace PremierDesignManagement
@@ -30,7 +32,8 @@ namespace PremierDesignManagement
 
     public partial class MainWindow : Window
     {
-        
+        public CollectionView taskListView;
+        public DataGridColumnHeader taskListSortColumn;
 
         public static string username;
         public static string forename;
@@ -168,15 +171,22 @@ namespace PremierDesignManagement
             {
                 selectedTask = (DataStructures.TaskRowStruct)AssignedByYouList.SelectedItems[0];
             }
-            else
+            else if ((sender as Button).Name.Equals(ViewTaskButton_ToYou.Name))
             {
                 selectedTask = (DataStructures.TaskRowStruct)AssignedToYouList.SelectedItems[0];
+            } else
+            {
+                MessageBox.Show("Please select a task");
             }
 
             try
             {
-                ViewTaskWindow viewTaskWindow = new ViewTaskWindow(selectedTask);
-                viewTaskWindow.Show();
+                if (selectedTask != null)
+                {
+                    ViewTaskWindow viewTaskWindow = new ViewTaskWindow(selectedTask);
+                    viewTaskWindow.Show();
+                }
+                
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -194,28 +204,87 @@ namespace PremierDesignManagement
         {
             DataStructures.TaskRowStruct selectedTask = new DataStructures.TaskRowStruct();
 
-            if ((sender as ListViewItem).IsDescendantOf(TaskList2Grid))
+            selectedTask = ((FrameworkElement) e.OriginalSource).DataContext as DataStructures.TaskRowStruct;
+
+            if (selectedTask == null)
             {
-                selectedTask = (sender as DataStructures.TaskRowStruct);
-            }
-            else if ((sender as Button).Name.Equals(ViewTaskButton_ByYou.Name))
-            {
-                selectedTask = (DataStructures.TaskRowStruct)AssignedByYouList.SelectedItems[0];
-            }
-            else
-            {
-                selectedTask = (DataStructures.TaskRowStruct)AssignedToYouList.SelectedItems[0];
+                //MessageBox.Show("Please select a task");
             }
 
             try
             {
-                ViewTaskWindow viewTaskWindow = new ViewTaskWindow(selectedTask);
-                viewTaskWindow.Show();
+                if (selectedTask != null)
+                {
+                    ViewTaskWindow viewTaskWindow = new ViewTaskWindow(selectedTask);
+                    viewTaskWindow.Show();
+                }
+                
             }
             catch (ArgumentOutOfRangeException)
             {
-                MessageBox.Show("Please select a task");
+                //MessageBox.Show("Please select a task");
             }
+        }
+
+        private void TaskListMouseClick (object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void HeaderClick (object sender, RoutedEventArgs e)
+        {
+            
+            DataGridColumnHeader columnHeader = (sender as DataGridColumnHeader);
+            string column = columnHeader.Content.ToString();
+            string sortBy = "lastEdited";
+
+            switch (column)
+            {
+                case "Task Name":
+                    sortBy = "taskName";
+                    break;
+                case "Start Date":
+                    sortBy = "startDate";
+                    break;
+                case "Deadline":
+                    sortBy = "deadline";
+                    break;
+                case "Assigned To":
+                    sortBy = "assignedTo";
+                    break;
+                case "Task Status":
+                    sortBy = "taskStatus";
+                    break;
+                case "Last Edited":
+                    sortBy = "lastEdited";
+                    break;
+            }
+
+            SortDescription previousSort = taskListView.SortDescriptions[0];
+
+            
+            taskListView.SortDescriptions.Clear();
+            
+
+            ListSortDirection newDirection = ListSortDirection.Descending;
+            
+
+            if (taskListSortColumn == columnHeader && previousSort.Direction == ListSortDirection.Descending)
+            {
+                newDirection = ListSortDirection.Ascending;
+            }
+
+            taskListSortColumn = columnHeader;
+            taskListView.SortDescriptions.Add(new SortDescription(sortBy, newDirection));
+        }
+
+        private void HeaderRightClick (object sender, RoutedEventArgs e)
+        {
+            DataGridColumnHeader columnHeader = (sender as DataGridColumnHeader);
+            columnHeader.ContextMenu.IsOpen = true;
+
+            //TODO: Set context menu items to app resource.
+            //TODO: Also do the same for the status combo box!!
         }
 
     }

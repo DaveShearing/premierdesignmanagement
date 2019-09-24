@@ -197,9 +197,22 @@ namespace PremierDesignManagement
                 {
                     if (updateText != null)
                     {
+                        DataHandling.UpdateTask(selectedTask);
                         DataHandling.AddTaskUpdate(selectedTaskID, addUpdateTextBox.Text);
 
-                        ViewTaskWindow updatedTask = new ViewTaskWindow(selectedTask);
+                        DataHandling.GetTasksFull();
+
+                        int taskIndex = 0;
+
+                        foreach (DataStructures.TaskRowStruct task in DataStructures.taskRows)
+                        {
+                            if (task.taskName.Equals(selectedTask.taskName))
+                            {
+                                taskIndex = DataStructures.taskRows.IndexOf(task);
+                            }
+                        }
+
+                        ViewTaskWindow updatedTask = new ViewTaskWindow(DataStructures.taskRows[taskIndex]);
                         updatedTask.Show();
                         Close();
                     }
@@ -216,7 +229,17 @@ namespace PremierDesignManagement
 
                 DataHandling.GetTasksFull();
 
-                ViewTaskWindow updatedTask = new ViewTaskWindow(selectedTask);
+                int taskIndex = 0;
+
+                foreach (DataStructures.TaskRowStruct task in DataStructures.taskRows)
+                {
+                    if (task.taskName.Equals(selectedTask.taskName))
+                    {
+                        taskIndex = DataStructures.taskRows.IndexOf(task);
+                    }
+                }
+
+                ViewTaskWindow updatedTask = new ViewTaskWindow(DataStructures.taskRows[taskIndex]);
                 updatedTask.Show();
                 Close();
             }
