@@ -114,12 +114,14 @@ namespace PremierDesignManagement
                         (window as MainWindow).TaskList2.ItemsSource = null;
                         (window as MainWindow).AssignedByYouList.ItemsSource = null;
                         (window as MainWindow).AssignedToYouList.ItemsSource = null;
+                        
                     }
                 }
                 
                 DataStructures.taskRows.Clear();
                 DataStructures.assignedByTaskRows.Clear();
                 DataStructures.assignedToTaskRows.Clear();
+                DataStructures.taskNames.Clear();
 
                 while (reader.Read())
                 {
@@ -162,6 +164,7 @@ namespace PremierDesignManagement
                     }
                     
                     DataStructures.taskRows.Add(taskRow);
+                    
                 }
 
                 reader.Close();
@@ -174,15 +177,26 @@ namespace PremierDesignManagement
                 {
                     DataStructures.assignedByTaskRows.Add(task);
                 }
-            }
 
-            foreach (DataStructures.TaskRowStruct task in DataStructures.taskRows)
-            {
                 if (task.assignedTo.Equals(Application.Current.Properties["username"].ToString()))
                 {
                     DataStructures.assignedToTaskRows.Add(task);
                 }
+
+                DataStructures.taskNames.Add(task.taskName);
             }
+
+            foreach (DataStructures.TaskRowStruct task in DataStructures.taskRows)
+            {
+                /*
+                if (task.assignedTo.Equals(Application.Current.Properties["username"].ToString()))
+                {
+                    DataStructures.assignedToTaskRows.Add(task);
+                }
+                */
+            }
+
+            
 
             foreach (Window window in Application.Current.Windows)
             {
@@ -191,9 +205,14 @@ namespace PremierDesignManagement
                     (window as MainWindow).TaskList2.ItemsSource = DataStructures.taskRows;
                     (window as MainWindow).AssignedByYouList.ItemsSource = DataStructures.assignedByTaskRows;
                     (window as MainWindow).AssignedToYouList.ItemsSource = DataStructures.assignedToTaskRows;
+                    
 
                     (window as MainWindow).taskListView = (CollectionView)CollectionViewSource.GetDefaultView((window as MainWindow).TaskList2.ItemsSource);
                     (window as MainWindow).taskListView.SortDescriptions.Add(new SortDescription("lastEdited", ListSortDirection.Descending));
+                    (window as MainWindow).assignedByListView = (CollectionView)CollectionViewSource.GetDefaultView((window as MainWindow).AssignedByYouList.ItemsSource);
+                    (window as MainWindow).assignedByListView.SortDescriptions.Add(new SortDescription("lastEdited", ListSortDirection.Descending));
+                    (window as MainWindow).assignedToListView = (CollectionView)CollectionViewSource.GetDefaultView((window as MainWindow).AssignedToYouList.ItemsSource);
+                    (window as MainWindow).assignedToListView.SortDescriptions.Add(new SortDescription("lastEdited", ListSortDirection.Descending));
                 }
             }
         }

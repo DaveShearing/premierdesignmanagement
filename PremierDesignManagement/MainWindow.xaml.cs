@@ -19,6 +19,7 @@ using System.Collections.Specialized;
 using System.Threading;
 using System.ComponentModel;
 using System.Windows.Controls.Primitives;
+using System.Globalization;
 
 
 namespace PremierDesignManagement
@@ -32,8 +33,10 @@ namespace PremierDesignManagement
 
     public partial class MainWindow : Window
     {
-        public CollectionView taskListView;
-        public DataGridColumnHeader taskListSortColumn;
+        public CollectionView taskListView, assignedToListView, assignedByListView;
+        public DataGridColumnHeader taskListSortColumn, assignedToListSortColumn, assignedByListSortColumn;
+        public CultureInfo cultureInfo = new CultureInfo("en-GB", false);
+        public StringCollection mainWorkflowPlusAll = new StringCollection();
 
         public static string username;
         public static string forename;
@@ -80,7 +83,8 @@ namespace PremierDesignManagement
                 Console.WriteLine(name);
             }
 
-            
+            mainWorkflowPlusAll = Properties.Settings.Default.MainWorkflow;
+            mainWorkflowPlusAll.Add("All");
 
         }
         
@@ -283,9 +287,328 @@ namespace PremierDesignManagement
             DataGridColumnHeader columnHeader = (sender as DataGridColumnHeader);
             columnHeader.ContextMenu.IsOpen = true;
 
-            //TODO: Set context menu items to app resource.
-            //TODO: Also do the same for the status combo box!!
+            if (columnHeader.Tag.Equals("TaskStatusColumnHeader"))
+            {
+                columnHeader.ContextMenu.ItemsSource = mainWorkflowPlusAll;
+            }
+
+            if (columnHeader.Tag.Equals("TaskNameColumnHeader"))
+            {
+                
+            }
+        }
+
+        private void TaskNameContextMenuSearchBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key.Equals(Key.Enter))
+            {
+                string enteredText = (sender as TextBox).Text.ToString();
+                DataStructures.filteredTaskRows.Clear();
+                TaskList2.ItemsSource = null;
+
+                if (enteredText != "")
+                {
+                    foreach (DataStructures.TaskRowStruct taskRow in DataStructures.taskRows)
+                    {
+                        if (cultureInfo.CompareInfo.IndexOf(taskRow.taskName, enteredText, CompareOptions.IgnoreCase) >= 0) {
+                            DataStructures.filteredTaskRows.Add(taskRow);
+                        }
+                    }
+
+                    TaskList2.ItemsSource = DataStructures.filteredTaskRows;
+
+                } else
+                {
+                    TaskList2.ItemsSource = DataStructures.taskRows;
+                }
+
+                
+
+
+
+            }
+        }
+
+        private void TaskStatusMenuClick(object sender, RoutedEventArgs e)
+        {
+            string selectedStatus = (e.OriginalSource as MenuItem).Header.ToString();
+
+            Console.WriteLine(selectedStatus);
+
+            DataStructures.filteredTaskRows.Clear();
+            TaskList2.ItemsSource = null;
+
+            if (selectedStatus != "All")
+            {
+                foreach (DataStructures.TaskRowStruct taskRow in DataStructures.taskRows)
+                {
+                    if (taskRow.taskStatus.Equals(selectedStatus))
+                    {
+                        DataStructures.filteredTaskRows.Add(taskRow);
+                    }
+                }
+
+                TaskList2.ItemsSource = DataStructures.filteredTaskRows;
+
+            }
+            else
+            {
+                TaskList2.ItemsSource = DataStructures.taskRows;
+            }
+
+        }
+
+        private void HeaderRightClickAssignedTo(object sender, RoutedEventArgs e)
+        {
+            DataGridColumnHeader columnHeader = (sender as DataGridColumnHeader);
+            columnHeader.ContextMenu.IsOpen = true;
+
+            if (columnHeader.Tag.Equals("TaskStatusColumnHeader"))
+            {
+                columnHeader.ContextMenu.ItemsSource = mainWorkflowPlusAll;
+            }
+
+            if (columnHeader.Tag.Equals("TaskNameColumnHeader"))
+            {
+
+            }
+        }
+
+        private void HeaderClickAssignedTo(object sender, RoutedEventArgs e)
+        {
+
+            DataGridColumnHeader columnHeader = (sender as DataGridColumnHeader);
+            string column = columnHeader.Content.ToString();
+            string sortBy = "lastEdited";
+
+            switch (column)
+            {
+                case "Task Name":
+                    sortBy = "taskName";
+                    break;
+                case "Start Date":
+                    sortBy = "startDate";
+                    break;
+                case "Deadline":
+                    sortBy = "deadline";
+                    break;
+                case "Assigned To":
+                    sortBy = "assignedTo";
+                    break;
+                case "Task Status":
+                    sortBy = "taskStatus";
+                    break;
+                case "Last Edited":
+                    sortBy = "lastEdited";
+                    break;
+            }
+
+            SortDescription previousSort = assignedToListView.SortDescriptions[0];
+
+
+            assignedToListView.SortDescriptions.Clear();
+
+
+            ListSortDirection newDirection = ListSortDirection.Descending;
+
+
+            if (assignedToListSortColumn == columnHeader && previousSort.Direction == ListSortDirection.Descending)
+            {
+                newDirection = ListSortDirection.Ascending;
+            }
+
+            assignedToListSortColumn = columnHeader;
+            assignedToListView.SortDescriptions.Add(new SortDescription(sortBy, newDirection));
+        }
+
+        private void TaskNameContextMenuSearchBox_KeyDownAssignedTo(object sender, KeyEventArgs e)
+        {
+            if (e.Key.Equals(Key.Enter))
+            {
+                string enteredText = (sender as TextBox).Text.ToString();
+                DataStructures.filteredTaskRows.Clear();
+                AssignedToYouList.ItemsSource = null;
+
+                if (enteredText != "")
+                {
+                    foreach (DataStructures.TaskRowStruct taskRow in DataStructures.assignedToTaskRows)
+                    {
+                        if (cultureInfo.CompareInfo.IndexOf(taskRow.taskName, enteredText, CompareOptions.IgnoreCase) >= 0)
+                        {
+                            DataStructures.filteredTaskRows.Add(taskRow);
+                        }
+                    }
+
+                    AssignedToYouList.ItemsSource = DataStructures.filteredTaskRows;
+
+                }
+                else
+                {
+                    AssignedToYouList.ItemsSource = DataStructures.assignedToTaskRows;
+                }
+
+
+
+
+
+            }
+        }
+
+        private void TaskStatusMenuClickAssignedTo(object sender, RoutedEventArgs e)
+        {
+            string selectedStatus = (e.OriginalSource as MenuItem).Header.ToString();
+
+            Console.WriteLine(selectedStatus);
+
+            DataStructures.filteredTaskRows.Clear();
+            AssignedToYouList.ItemsSource = null;
+
+            if (selectedStatus != "All")
+            {
+                foreach (DataStructures.TaskRowStruct taskRow in DataStructures.assignedToTaskRows)
+                {
+                    if (taskRow.taskStatus.Equals(selectedStatus))
+                    {
+                        DataStructures.filteredTaskRows.Add(taskRow);
+                    }
+                }
+
+                AssignedToYouList.ItemsSource = DataStructures.filteredTaskRows;
+
+            }
+            else
+            {
+                AssignedToYouList.ItemsSource = DataStructures.assignedToTaskRows;
+            }
+
+        }
+
+        private void HeaderRightClickAssignedBy(object sender, RoutedEventArgs e)
+        {
+            DataGridColumnHeader columnHeader = (sender as DataGridColumnHeader);
+            columnHeader.ContextMenu.IsOpen = true;
+
+            if (columnHeader.Tag.Equals("TaskStatusColumnHeader"))
+            {
+                columnHeader.ContextMenu.ItemsSource = mainWorkflowPlusAll;
+            }
+
+            if (columnHeader.Tag.Equals("TaskNameColumnHeader"))
+            {
+
+            }
+        }
+
+        private void HeaderClickAssignedBy(object sender, RoutedEventArgs e)
+        {
+
+            DataGridColumnHeader columnHeader = (sender as DataGridColumnHeader);
+            string column = columnHeader.Content.ToString();
+            string sortBy = "lastEdited";
+
+            switch (column)
+            {
+                case "Task Name":
+                    sortBy = "taskName";
+                    break;
+                case "Start Date":
+                    sortBy = "startDate";
+                    break;
+                case "Deadline":
+                    sortBy = "deadline";
+                    break;
+                case "Assigned To":
+                    sortBy = "assignedTo";
+                    break;
+                case "Task Status":
+                    sortBy = "taskStatus";
+                    break;
+                case "Last Edited":
+                    sortBy = "lastEdited";
+                    break;
+            }
+
+            SortDescription previousSort = assignedByListView.SortDescriptions[0];
+
+
+            assignedByListView.SortDescriptions.Clear();
+
+
+            ListSortDirection newDirection = ListSortDirection.Descending;
+
+
+            if (assignedByListSortColumn == columnHeader && previousSort.Direction == ListSortDirection.Descending)
+            {
+                newDirection = ListSortDirection.Ascending;
+            }
+
+            assignedByListSortColumn = columnHeader;
+            assignedByListView.SortDescriptions.Add(new SortDescription(sortBy, newDirection));
+        }
+
+        private void TaskNameContextMenuSearchBox_KeyDownAssignedBy(object sender, KeyEventArgs e)
+        {
+            if (e.Key.Equals(Key.Enter))
+            {
+                string enteredText = (sender as TextBox).Text.ToString();
+                DataStructures.filteredTaskRows.Clear();
+                AssignedByYouList.ItemsSource = null;
+
+                if (enteredText != "")
+                {
+                    foreach (DataStructures.TaskRowStruct taskRow in DataStructures.assignedByTaskRows)
+                    {
+                        if (cultureInfo.CompareInfo.IndexOf(taskRow.taskName, enteredText, CompareOptions.IgnoreCase) >= 0)
+                        {
+                            DataStructures.filteredTaskRows.Add(taskRow);
+                        }
+                    }
+
+                    AssignedByYouList.ItemsSource = DataStructures.filteredTaskRows;
+
+                }
+                else
+                {
+                    AssignedByYouList.ItemsSource = DataStructures.assignedByTaskRows;
+                }
+
+
+
+
+
+            }
+        }
+
+        private void TaskStatusMenuClickAssignedBy(object sender, RoutedEventArgs e)
+        {
+            string selectedStatus = (e.OriginalSource as MenuItem).Header.ToString();
+
+            Console.WriteLine(selectedStatus);
+
+            DataStructures.filteredTaskRows.Clear();
+            AssignedByYouList.ItemsSource = null;
+
+            if (selectedStatus != "All")
+            {
+                foreach (DataStructures.TaskRowStruct taskRow in DataStructures.assignedByTaskRows)
+                {
+                    if (taskRow.taskStatus.Equals(selectedStatus))
+                    {
+                        DataStructures.filteredTaskRows.Add(taskRow);
+                    }
+                }
+
+                AssignedByYouList.ItemsSource = DataStructures.filteredTaskRows;
+
+            }
+            else
+            {
+                AssignedByYouList.ItemsSource = DataStructures.assignedByTaskRows;
+            }
+
         }
 
     }
+
+
 }

@@ -33,6 +33,9 @@ namespace PremierDesignManagement
         public static List<TaskRowStruct> taskRows = new List<TaskRowStruct>();
         public static List<TaskRowStruct> assignedToTaskRows = new List<TaskRowStruct>();
         public static List<TaskRowStruct> assignedByTaskRows = new List<TaskRowStruct>();
+        public static List<TaskRowStruct> filteredTaskRows = new List<TaskRowStruct>();
+
+        public static List<string> taskNames = new List<string>();
 
         public class UpdateRowStruct
         {

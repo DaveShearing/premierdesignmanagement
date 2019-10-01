@@ -15,6 +15,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using Microsoft.Win32;
+using System.Collections.Specialized;
 
 namespace PremierDesignManagement
 {
@@ -31,7 +32,7 @@ namespace PremierDesignManagement
         {
             InitializeComponent();
             AssignToComboBox.ItemsSource = Properties.Settings.Default.UsersStringCollection;
-            StatusComboBox.ItemsSource = Properties.Settings.Default.MainWorkflow;
+            StatusComboBox.ItemsSource = (StringCollection)Application.Current.Resources["MainWorkflow"];
         }
 
         private void CreateTaskButtonClick (object sender, RoutedEventArgs e)

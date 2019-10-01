@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Data;
 using System.Data.SqlClient;
+using System.Collections.Specialized;
 
 namespace PremierDesignManagement
 {
@@ -28,7 +29,7 @@ namespace PremierDesignManagement
         {
             InitializeComponent();
             AssignToComboBox.ItemsSource = Properties.Settings.Default.UsersStringCollection;
-            StatusComboBox.ItemsSource = Properties.Settings.Default.MainWorkflow;
+            StatusComboBox.ItemsSource = (StringCollection)Application.Current.Resources["MainWorkflow"];
 
             selectedTask = task;
 

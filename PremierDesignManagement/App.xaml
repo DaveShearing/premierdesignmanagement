@@ -23,6 +23,7 @@
             <System:String>Changes Requested</System:String>
             <System:String>Completed</System:String>
         </Specialized:StringCollection>
+        <local:DataStructures x:Key="taskNames"></local:DataStructures>
         
 
     </Application.Resources>
