@@ -132,12 +132,14 @@ namespace PremierDesignManagement
             HomeGrid.Visibility = Visibility.Hidden;
         }
 
+        //Opens Create Task Window
         private void CreateTaskButtonClick(object sender, RoutedEventArgs e)
         {
             Window createTask = new CreateTaskWindow();
             createTask.Show();
         }
 
+        //Opens Edit Task Window for Selected Task
         private void EditTaskButtonClick(object sender, RoutedEventArgs e)
         {
             DataStructures.TaskRowStruct selectedTask = new DataStructures.TaskRowStruct();
@@ -163,6 +165,7 @@ namespace PremierDesignManagement
             }
         }
 
+        //Opens View Task Window for Selected Task
         private void ViewTaskButtonClick(object sender, RoutedEventArgs e)
         {
             DataStructures.TaskRowStruct selectedTask = new DataStructures.TaskRowStruct();
@@ -199,11 +202,13 @@ namespace PremierDesignManagement
 
         }
 
+        //Refresh Task List
         private void UpdateTasksButtonClick(object sender, RoutedEventArgs e)
         {
             DataHandling.GetTasksFull();
         }
 
+        //Opens View Task Window for Selected Task
         private void MouseDoubleClickItem (object sender, RoutedEventArgs e)
         {
             DataStructures.TaskRowStruct selectedTask = new DataStructures.TaskRowStruct();
@@ -230,6 +235,7 @@ namespace PremierDesignManagement
             }
         }
 
+        //
         private void TaskListMouseClick (object sender, RoutedEventArgs e)
         {
 

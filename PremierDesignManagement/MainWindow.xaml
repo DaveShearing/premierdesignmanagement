@@ -14,7 +14,7 @@
     <Window.Resources>
         <Color x:Key="BorderColour1">#FF51545D</Color>
         <local:DataStructures x:Key="dataStructuresResource"/>
-        
+
     </Window.Resources>
 
     <Grid x:Name="MainGrid">
@@ -41,10 +41,10 @@
                             <MenuItem.Header>
                                 <TextBox x:Name="TaskNameContextMenuSearchBox" Width="300" Height="26" Foreground="#FF51545D" FontSize="16" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Padding="0,0,0,0" Margin="0,0,0,0" KeyDown="TaskNameContextMenuSearchBox_KeyDown"></TextBox>
                             </MenuItem.Header>
-                            
+
                         </MenuItem>
-                        
-                        
+
+
                     </ContextMenu>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -78,9 +78,9 @@
                             </Trigger>
                         </Style.Triggers>
                     </Style>
-                    
+
                 </ListView.Resources>
-                
+
                 <ListView.View>
                     <GridView AllowsColumnReorder="False">
                         <GridViewColumn x:Name="TaskNameColumn" Width="350">
@@ -134,13 +134,14 @@
             <Border x:Name="HomeBorder" BorderThickness="10,0,0,0" Margin="20,37,100,674" Height="60" BorderBrush="#FFFF505B">
                 <TextBlock x:Name="HomeButton" TextWrapping="Wrap" FontSize="30" TextAlignment="Right" Foreground="{Binding BorderBrush, ElementName=HomeBorder}" HorizontalAlignment="Left" Width="170" Padding="0,9,10,0" Height="60" MouseLeftButtonUp="HomeButtonClick"><Run Text="Home"/></TextBlock>
             </Border>
+            <Button x:Name="NotificationsButton" Content="Notifications" HorizontalAlignment="Left" VerticalAlignment="Top" Width="180" Margin="10,589,0,0" Height="38" FontSize="18" Click="UpdateTasksButtonClick" Foreground="#FF51545D" BorderBrush="#FFFF505B"/>
         </Grid>
         <Grid x:Name="CalendarGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Hidden">
             <Button Content="Button" HorizontalAlignment="Left" Height="99" Margin="314,256,0,0" VerticalAlignment="Top" Width="322"/>
         </Grid>
         <Grid x:Name="HomeGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190">
             <TextBlock x:Name="WelcomeText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="{DynamicResource WelcomeTextString}" VerticalAlignment="Top" Width="640" FontSize="36" Foreground="#FF51545D"/>
-            <Button x:Name="LogInButton" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1044,29,0,0" Height="38" FontSize="18" MouseLeftButtonUp="LogInButtonClick" Click="LogInButtonClick" Visibility="{DynamicResource LogInButtonVisibility}"/>
+            <Button x:Name="LogInButton" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="863,44,0,0" Height="38" FontSize="18" MouseLeftButtonUp="LogInButtonClick" Click="LogInButtonClick" Visibility="{DynamicResource LogInButtonVisibility}"/>
             <Button x:Name="CreateTaskButton_Copy" Content="Create Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="1023,364,0,0" Height="38" FontSize="18" Click="CreateTaskButtonClick" Foreground="#FF51545D"/>
             <ListView x:Name="AssignedToYouList" x:FieldModifier="public" HorizontalAlignment="Left" Height="239" Margin="48,163,0,0" VerticalAlignment="Top" Width="924" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single" MouseDoubleClick="MouseDoubleClickItem">
                 <ListView.Resources>
