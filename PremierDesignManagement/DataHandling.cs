@@ -101,7 +101,7 @@ namespace PremierDesignManagement
             using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
             {
                 SqlCommand getTasks = new SqlCommand("SELECT TaskName, StartDate, Deadline, Details, TaskListFileTableDir, AssignedBy, AssignedTo, TaskStatus, " +
-                    "LastEdited, LastEditedBy, TaskFiles FROM dbo.Tasks", sqlConn);
+                    "LastEdited, LastEditedBy, TaskFiles, NotifyUsers FROM dbo.Tasks", sqlConn);
 
                 sqlConn.Open();
 
@@ -137,6 +137,7 @@ namespace PremierDesignManagement
                     taskRow.lastEdited = reader.GetDateTime(8);
                     taskRow.lastEditedBy = reader.GetString(9);
                     string taskFilesString = reader.GetString(10);
+                    string notifyUsersString = reader.GetString(11);
 
                     if (taskFilesString != "")
                     {
@@ -162,6 +163,19 @@ namespace PremierDesignManagement
                             
                         }
                     }
+
+                    string[] notifyUsersArray = notifyUsersString.Split(',');
+
+                    if (taskRow.notifyUsers == null)
+                    {
+                        taskRow.notifyUsers = new List<string>();
+                    }
+
+                    foreach (string user in notifyUsersArray)
+                    {
+                        taskRow.notifyUsers.Add(user);
+                    }
+
                     
                     DataStructures.taskRows.Add(taskRow);
                     
@@ -218,62 +232,6 @@ namespace PremierDesignManagement
         }
 
         //Loads tasks from database into app (all details)
-        public static void GetTasksFullThread(MainWindow mainWindow)
-        {
-            using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
-            {
-                SqlCommand getTasks = new SqlCommand("SELECT TaskName, StartDate, Deadline, Details, TaskListFileTableDir, AssignedBy, AssignedTo, TaskStatus FROM dbo.Tasks", sqlConn);
-
-                sqlConn.Open();
-
-                SqlDataReader reader = getTasks.ExecuteReader();
-
-                lock (mainWindow.TaskList2)
-                mainWindow.TaskList2.ItemsSource = null;
-
-                /*
-                foreach (Window window in Application.Current.Windows)
-                {
-                    if (window.GetType() == typeof(MainWindow))
-                    {
-                        (window as MainWindow).TaskList2.ItemsSource = null;
-                    }
-                }
-                */
-
-                DataStructures.taskRows.Clear();
-
-                while (reader.Read())
-                {
-                    DataStructures.TaskRowStruct taskRow = new DataStructures.TaskRowStruct();
-                    taskRow.taskName = reader.GetString(0);
-                    taskRow.startDate = reader.GetDateTime(1);
-                    taskRow.deadline = reader.GetDateTime(2);
-                    taskRow.details = reader.GetString(3);
-                    taskRow.taskListFileTableDir = reader.GetString(4);
-                    taskRow.assignedBy = reader.GetString(5);
-                    taskRow.assignedTo = (string)reader.GetString(6);
-                    taskRow.taskStatus = (string)reader.GetString(7);
-
-                    DataStructures.taskRows.Add(taskRow);
-                }
-
-                reader.Close();
-                sqlConn.Close();
-            }
-
-            mainWindow.TaskList2.ItemsSource = DataStructures.taskRows;
-            /*
-            foreach (Window window in Application.Current.Windows)
-            {
-                if (window.GetType() == typeof(MainWindow))
-                {
-                    (window as MainWindow).TaskList2.ItemsSource = DataStructures.taskRows;
-
-                }
-            }
-            */
-        }
 
         public static int GetTaskID(string taskName, string taskDetails)
         {
@@ -297,9 +255,10 @@ namespace PremierDesignManagement
         }
 
         public static void UpdateTask(int taskID, string taskName, DateTime startDate, DateTime deadline, string details, string taskListFileTableDir, string assignedBy,
-            string assignedTo, string taskStatus, string taskFiles)
+            string assignedTo, string taskStatus, string taskFiles, List<string> notifyUsers)
         {
-            
+            string[] notifyUsersArray = notifyUsers.ToArray();
+            string notifyUserString = string.Join(",", notifyUsersArray);
 
             using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
             {
@@ -317,6 +276,7 @@ namespace PremierDesignManagement
                 updateTaskComm.Parameters.AddWithValue("@lastedited", DateTime.Now);
                 updateTaskComm.Parameters.AddWithValue("@lasteditedby", System.Windows.Application.Current.Properties["username"]);
                 updateTaskComm.Parameters.AddWithValue("@taskFiles", taskFiles);
+                updateTaskComm.Parameters.AddWithValue("@notifyUsers", notifyUserString);
 
                 sqlConn.Open();
                 int i = updateTaskComm.ExecuteNonQuery();
@@ -326,6 +286,14 @@ namespace PremierDesignManagement
         public static void UpdateTask(DataStructures.TaskRowStruct selectedTask)
         {
             int taskID = GetTaskID(selectedTask.taskName, selectedTask.details);
+
+            if (selectedTask.notifyUsers.Contains(Application.Current.Properties["username"].ToString()) != true)
+            {
+                selectedTask.notifyUsers.Add(Application.Current.Properties["username"].ToString());
+            }
+
+            string[] notifyUsersArray = selectedTask.notifyUsers.ToArray();
+            string notifyUserString = string.Join(",", notifyUsersArray);
 
             using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
             {
@@ -353,6 +321,8 @@ namespace PremierDesignManagement
 
                 updateTaskComm.Parameters.AddWithValue("@taskFiles", taskFiles);
 
+                updateTaskComm.Parameters.AddWithValue("@notifyUsers", notifyUserString);
+
                 sqlConn.Open();
                 int i = updateTaskComm.ExecuteNonQuery();
                 sqlConn.Close();
@@ -374,6 +344,8 @@ namespace PremierDesignManagement
                 int i = addTaskUpdateComm.ExecuteNonQuery();
                 sqlConn.Close();
             }
+
+            
         }
 
         public static int GetTaskUpdates(int taskID)
@@ -595,21 +567,132 @@ namespace PremierDesignManagement
             System.IO.File.Copy(localFileLocation, fileTableDirectory);
         }
 
-
-
-        public static void RefreshDataLoop(object data)
+        public static void AddNotification(DataStructures.NotificationStruct notification)
         {
-            MainWindow mainWindow = (MainWindow)data;
-
-            while (mainWindow.Dispatcher.Thread.IsAlive == true)
+            using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
             {
-                DataHandling.GetTasksFullThread(mainWindow);
-                Console.WriteLine("Tasks Updated");
-                Thread.Sleep(1000);
-                
-            }
+                SqlCommand addNotificationComm = new SqlCommand("AddNotificationSP", sqlConn);
+                addNotificationComm.CommandType = CommandType.StoredProcedure;
 
-            
+                string[] recipientsArray = notification.notificationRecipients.ToArray();
+                string recipientsString = string.Join(",", recipientsArray);
+
+                addNotificationComm.Parameters.AddWithValue("@notificationText", notification.notificationText);
+                addNotificationComm.Parameters.AddWithValue("@notificationTimeDate", notification.notificationTime);
+                addNotificationComm.Parameters.AddWithValue("@notificationSender", notification.notificationSender);
+                addNotificationComm.Parameters.AddWithValue("@notificationRecipients", recipientsString);
+                addNotificationComm.Parameters.AddWithValue("@taskID", notification.taskID);
+                addNotificationComm.Parameters.AddWithValue("@readByRecipients", "");
+                addNotificationComm.Parameters.AddWithValue("@hiddenByRecipients", "");
+
+                sqlConn.Open();
+                int i = addNotificationComm.ExecuteNonQuery();
+                sqlConn.Close();
+
+            }
+        }
+
+        public static void GetNotifications()
+        {
+            using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
+            {
+                SqlCommand getNotificationsComm = new SqlCommand("SELECT * FROM dbo.Notifications", sqlConn);
+
+                sqlConn.Open();
+
+                SqlDataReader reader = getNotificationsComm.ExecuteReader();
+
+                DataStructures.notificationRows.Clear();
+
+                while (reader.Read())
+                {
+                    string recipientsString, readByRecipientsString, hiddenByRecipientsString;
+                    string[] recipientsArray, readByRecipientsArray, hiddenByRecipientsArray;
+
+                    DataStructures.NotificationStruct notification = new DataStructures.NotificationStruct();
+
+                    notification.notificationID = reader.GetInt32(0);
+                    notification.notificationText = reader.GetString(1);
+                    notification.notificationTime = reader.GetDateTime(2);
+                    notification.notificationSender = reader.GetString(3);
+                    recipientsString = reader.GetString(4);
+                    notification.taskID = reader.GetInt32(5);
+                    readByRecipientsString = reader.GetString(6);
+                    hiddenByRecipientsString = reader.GetString(7);
+
+                    recipientsArray = recipientsString.Split(',');
+                    readByRecipientsArray = readByRecipientsString.Split(',');
+                    hiddenByRecipientsArray = hiddenByRecipientsString.Split(',');
+
+                    notification.notificationRecipients = new List<string>();
+                    notification.readByRecipients = new List<string>();
+                    notification.hiddenByRecipients = new List<string>();
+
+                    foreach (string recipient in recipientsArray)
+                    {
+                        notification.notificationRecipients.Add(recipient);
+                    }
+
+                    foreach (string recipient in readByRecipientsArray)
+                    {
+                        notification.notificationRecipients.Add(recipient);
+                    }
+
+                    foreach (string recipient in hiddenByRecipientsArray)
+                    {
+                        notification.notificationRecipients.Add(recipient);
+                    }
+
+                    DataStructures.notificationRows.Add(notification);
+                }
+
+                reader.Close();
+                sqlConn.Close();
+            }
+        }
+
+        
+
+        public static void UpdateNotificationReadBy(int notificationID)
+        {
+            DataStructures.notificationRows[notificationID - 1].readByRecipients.Add(Application.Current.Properties["username"].ToString());
+
+            string[] readByRecipientsArray = DataStructures.notificationRows[notificationID - 1].readByRecipients.ToArray();
+            string readByRecipientsString = string.Join(",", readByRecipientsArray);
+
+
+            using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
+            {
+                SqlCommand updateReadByComm = new SqlCommand("NotificationEditReadBySP", sqlConn);
+                updateReadByComm.CommandType = CommandType.StoredProcedure;
+                updateReadByComm.Parameters.AddWithValue("@notificationID", notificationID);
+                updateReadByComm.Parameters.AddWithValue("@readByRecipients", readByRecipientsString);
+
+                sqlConn.Open();
+                int i = updateReadByComm.ExecuteNonQuery();
+                sqlConn.Close();
+            }
+        }
+
+        public static void UpdateNotificationHiddenBy(int notificationID)
+        {
+            DataStructures.notificationRows[notificationID - 1].hiddenByRecipients.Add(Application.Current.Properties["username"].ToString());
+
+            string[] hiddenByRecipientsArray = DataStructures.notificationRows[notificationID - 1].hiddenByRecipients.ToArray();
+            string hiddenByRecipientsString = string.Join(",", hiddenByRecipientsArray);
+
+
+            using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
+            {
+                SqlCommand updateReadByComm = new SqlCommand("NotificationEditHiddenBySP", sqlConn);
+                updateReadByComm.CommandType = CommandType.StoredProcedure;
+                updateReadByComm.Parameters.AddWithValue("@notificationID", notificationID);
+                updateReadByComm.Parameters.AddWithValue("@hiddenByRecipients", hiddenByRecipientsString);
+
+                sqlConn.Open();
+                int i = updateReadByComm.ExecuteNonQuery();
+                sqlConn.Close();
+            }
         }
     }
 }

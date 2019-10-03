@@ -134,7 +134,7 @@
             <Border x:Name="HomeBorder" BorderThickness="10,0,0,0" Margin="20,37,100,674" Height="60" BorderBrush="#FFFF505B">
                 <TextBlock x:Name="HomeButton" TextWrapping="Wrap" FontSize="30" TextAlignment="Right" Foreground="{Binding BorderBrush, ElementName=HomeBorder}" HorizontalAlignment="Left" Width="170" Padding="0,9,10,0" Height="60" MouseLeftButtonUp="HomeButtonClick"><Run Text="Home"/></TextBlock>
             </Border>
-            <Button x:Name="NotificationsButton" Content="Notifications" HorizontalAlignment="Left" VerticalAlignment="Top" Width="180" Margin="10,589,0,0" Height="38" FontSize="18" Click="UpdateTasksButtonClick" Foreground="#FF51545D" BorderBrush="#FFFF505B"/>
+            <Button x:Name="NotificationsButton" Content="Notifications" HorizontalAlignment="Left" VerticalAlignment="Top" Width="180" Margin="10,589,0,0" Height="38" FontSize="18" Click="NotificationsButtonClick" Foreground="#FF51545D" BorderBrush="#FFFF505B"/>
         </Grid>
         <Grid x:Name="CalendarGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Hidden">
             <Button Content="Button" HorizontalAlignment="Left" Height="99" Margin="314,256,0,0" VerticalAlignment="Top" Width="322"/>
@@ -198,7 +198,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="90" DisplayMemberBinding="{Binding lastEdited, ConverterCulture=en-GB, StringFormat=HH:mm&#xA;dd/MM/yyyy}">
+                        <GridViewColumn Width="90" DisplayMemberBinding="{Binding lastEdited, ConverterCulture=en-GB, StringFormat='HH:mm&#x0a;dd/MM/yyyy'}">
                             <DataGridColumnHeader Tag="LastEditedColumnHeader" BorderBrush="Transparent" HorizontalContentAlignment="Center" Click="HeaderClickAssignedTo" MouseRightButtonUp="HeaderRightClickAssignedTo" Width="85" ContextMenu="{StaticResource LastEditedContextMenu}">Last Edited</DataGridColumnHeader>
                         </GridViewColumn>
                     </GridView>
@@ -262,7 +262,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="90" DisplayMemberBinding="{Binding lastEdited, ConverterCulture=en-GB, StringFormat=HH:mm&#xA;dd/MM/yyyy}">
+                        <GridViewColumn Width="90" DisplayMemberBinding="{Binding lastEdited, ConverterCulture=en-GB, StringFormat='HH:mm&#x0a;dd/MM/yyyy'}">
                             <DataGridColumnHeader Tag="LastEditedColumnHeader" BorderBrush="Transparent" HorizontalContentAlignment="Center" Click="HeaderClickAssignedBy" MouseRightButtonUp="HeaderRightClickAssignedBy" Width="85" ContextMenu="{StaticResource LastEditedContextMenu}">Last Edited</DataGridColumnHeader>
                         </GridViewColumn>
                     </GridView>

@@ -200,6 +200,15 @@ namespace PremierDesignManagement
                         DataHandling.UpdateTask(selectedTask);
                         DataHandling.AddTaskUpdate(selectedTaskID, addUpdateTextBox.Text);
 
+                        DataStructures.NotificationStruct notificationStruct = new DataStructures.NotificationStruct();
+                        notificationStruct.notificationSender = Application.Current.Properties["username"].ToString();
+                        notificationStruct.notificationText = addUpdateTextBox.Text;
+                        notificationStruct.taskID = selectedTaskID;
+                        notificationStruct.notificationTime = DateTime.Now;
+                        notificationStruct.notificationRecipients = selectedTask.notifyUsers;
+
+                        DataHandling.AddNotification(notificationStruct);
+
                         DataHandling.GetTasksFull();
 
                         int taskIndex = 0;
@@ -226,6 +235,15 @@ namespace PremierDesignManagement
             {
                 DataHandling.UpdateTask(selectedTask);
                 DataHandling.AddTaskUpdate(selectedTaskID, addUpdateTextBox.Text);
+
+                DataStructures.NotificationStruct notificationStruct = new DataStructures.NotificationStruct();
+                notificationStruct.notificationSender = Application.Current.Properties["username"].ToString();
+                notificationStruct.notificationText = addUpdateTextBox.Text;
+                notificationStruct.taskID = selectedTaskID;
+                notificationStruct.notificationTime = DateTime.Now;
+                notificationStruct.notificationRecipients = selectedTask.notifyUsers;
+
+                DataHandling.AddNotification(notificationStruct);
 
                 DataHandling.GetTasksFull();
 

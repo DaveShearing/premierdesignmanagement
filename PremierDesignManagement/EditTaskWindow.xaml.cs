@@ -55,11 +55,25 @@ namespace PremierDesignManagement
             string[] taskFilesArray = selectedTask.taskFiles.ToArray();
             string taskFilesString = string.Join(",", taskFilesArray);
 
+            if (selectedTask.notifyUsers.Contains(assignedUsername) != true)
+            {
+                selectedTask.notifyUsers.Add(assignedUsername);
+            }
+
             DataHandling.UpdateTask(taskID, TaskNameTextBox.Text, StartDatePicker.SelectedDate.Value, DeadlinePicker.SelectedDate.Value, TaskDetailsTextBox.Text,
-                selectedTask.taskListFileTableDir, selectedTask.assignedBy, assignedUsername, StatusComboBox.Text, taskFilesString);
+                selectedTask.taskListFileTableDir, selectedTask.assignedBy, assignedUsername, StatusComboBox.Text, taskFilesString, selectedTask.notifyUsers);
 
             string updateString = GetUpdatedFields();
             DataHandling.AddTaskUpdate(taskID, updateString);
+
+            DataStructures.NotificationStruct notificationStruct = new DataStructures.NotificationStruct();
+            notificationStruct.notificationSender = Application.Current.Properties["username"].ToString();
+            notificationStruct.notificationText = updateString;
+            notificationStruct.taskID = taskID;
+            notificationStruct.notificationTime = DateTime.Now;
+            notificationStruct.notificationRecipients = selectedTask.notifyUsers;
+
+            DataHandling.AddNotification(notificationStruct);
 
             DataHandling.GetTasksFull();
 

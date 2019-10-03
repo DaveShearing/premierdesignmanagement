@@ -20,6 +20,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.Windows.Controls.Primitives;
 using System.Globalization;
+using System.Windows.Threading;
 
 
 namespace PremierDesignManagement
@@ -37,6 +38,8 @@ namespace PremierDesignManagement
         public DataGridColumnHeader taskListSortColumn, assignedToListSortColumn, assignedByListSortColumn;
         public CultureInfo cultureInfo = new CultureInfo("en-GB", false);
         public StringCollection mainWorkflowPlusAll = new StringCollection();
+        public DispatcherTimer refreshTimer = new DispatcherTimer();
+        public static int noOfNotifications = 0;
 
         public static string username;
         public static string forename;
@@ -86,8 +89,35 @@ namespace PremierDesignManagement
             mainWorkflowPlusAll = Properties.Settings.Default.MainWorkflow;
             mainWorkflowPlusAll.Add("All");
 
+            refreshTimer.Interval = new TimeSpan(0,0,30);
+            refreshTimer.Tick += new EventHandler(RefreshTimerTick);
+            refreshTimer.Start();
         }
         
+        public void RefreshTimerTick (object sender, EventArgs e)
+        {
+            DataHandling.GetTasksFull();
+            DataHandling.GetNotifications();
+
+            noOfNotifications = 0;
+
+            foreach (DataStructures.NotificationStruct notification in DataStructures.notificationRows)
+            {
+                if (notification.readByRecipients.Contains(Application.Current.Properties["username"]) != true)
+                {
+                    noOfNotifications++;
+                }
+            }
+
+            if (noOfNotifications != 0)
+            {
+                NotificationsButton.Content = "Notifications (" + noOfNotifications + ")";
+            } else
+            {
+                NotificationsButton.Content = "Notifications";
+            }
+        }
+
         //Opens Log In Window
         private void LogInButtonClick(object sender, RoutedEventArgs e)
         {
@@ -612,6 +642,13 @@ namespace PremierDesignManagement
                 AssignedByYouList.ItemsSource = DataStructures.assignedByTaskRows;
             }
 
+        }
+
+        private void NotificationsButtonClick(object sender, RoutedEventArgs e)
+        {
+            Notifications notifications = new Notifications();
+            
+            notifications.Show();
         }
 
     }

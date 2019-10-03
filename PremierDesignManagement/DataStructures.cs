@@ -26,6 +26,8 @@ namespace PremierDesignManagement
             public DateTime lastEdited { get; set; }
             public string lastEditedBy { get; set; }
             public List<string> taskFiles { get; set; }
+
+            public List<string> notifyUsers { get; set; }
             
         }
 
@@ -47,6 +49,27 @@ namespace PremierDesignManagement
         }
 
         public static List<UpdateRowStruct> updateRows = new List<UpdateRowStruct>();
+
+        public class NotificationStruct
+        {
+            public int notificationID { get; set; }
+
+            public string notificationText { get; set; }
+
+            public DateTime notificationTime { get; set; }
+
+            public string notificationSender { get; set; }
+
+            public List<string> notificationRecipients { get; set; }
+
+            public int taskID { get; set; }
+
+            public List<string> readByRecipients { get; set; }
+
+            public List<string> hiddenByRecipients { get; set; }
+        }
+
+        public static List<NotificationStruct> notificationRows = new List<NotificationStruct>();
 
     }
 }

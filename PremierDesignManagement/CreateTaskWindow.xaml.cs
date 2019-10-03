@@ -53,6 +53,11 @@ namespace PremierDesignManagement
             string[] taskFilesArray = newTask.taskFiles.ToArray();
             string taskFilesString = string.Join(",", taskFilesArray);
 
+            string[] notifyUsersArray = new string[0];
+            notifyUsersArray.Append(newTask.assignedBy);
+            notifyUsersArray.Append(newTask.assignedTo);
+            string notifyUsersString = string.Join(",", notifyUsersArray);
+
             using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
             {
                 
@@ -68,6 +73,7 @@ namespace PremierDesignManagement
                 createTask.Parameters.AddWithValue("@taskstatus", newTask.taskStatus);
                 createTask.Parameters.AddWithValue("@lastedited", newTask.lastEdited);
                 createTask.Parameters.AddWithValue("@taskFiles", taskFilesString);
+                createTask.Parameters.AddWithValue("@notifyUsers", notifyUsersString);
 
                 sqlConn.Open();
                 int i = createTask.ExecuteNonQuery();
@@ -86,6 +92,15 @@ namespace PremierDesignManagement
             DataHandling.GetTasksFull();
 
             int newTaskID = DataHandling.GetTaskID(newTask.taskName, newTask.details);
+
+            DataStructures.NotificationStruct notificationStruct = new DataStructures.NotificationStruct();
+            notificationStruct.notificationSender = Application.Current.Properties["username"].ToString();
+            notificationStruct.notificationText = "Created Task: " + newTask.taskName;
+            notificationStruct.taskID = newTaskID;
+            notificationStruct.notificationTime = DateTime.Now;
+            notificationStruct.notificationRecipients = newTask.notifyUsers;
+
+            DataHandling.AddNotification(notificationStruct);
 
             string taskFilesUpdateString = DataHandling.AddTaskFiles(newTask, selectFiles);
 

@@ -116,6 +116,31 @@ namespace PremierDesignManagement
                     sqlConnection.Close();
 
                     DataHandling.GetTasksFull();
+                    DataHandling.GetNotifications();
+
+                    foreach (DataStructures.NotificationStruct notification in DataStructures.notificationRows)
+                    {
+                        if (notification.readByRecipients.Contains(Application.Current.Properties["username"]) != true)
+                        {
+                            MainWindow.noOfNotifications++;
+                        }
+                    }
+
+                    foreach (Window window in Application.Current.Windows)
+                    {
+                        if (window.GetType() == typeof(MainWindow))
+                        {
+                            if (MainWindow.noOfNotifications != 0)
+                            {
+                                (window as MainWindow).NotificationsButton.Content = "Notifications (" + MainWindow.noOfNotifications + ")";
+                            }
+                            else
+                            {
+                                (window as MainWindow).NotificationsButton.Content = "Notifications";
+                            }
+                        }
+                    }
+
 
                     Close();
 
