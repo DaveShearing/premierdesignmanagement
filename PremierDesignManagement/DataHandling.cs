@@ -100,7 +100,7 @@ namespace PremierDesignManagement
         {
             using (SqlConnection sqlConn = new SqlConnection(Properties.Settings.Default.PDMDatabaseConnectionString))
             {
-                SqlCommand getTasks = new SqlCommand("SELECT TaskName, StartDate, Deadline, Details, TaskListFileTableDir, AssignedBy, AssignedTo, TaskStatus, " +
+                SqlCommand getTasks = new SqlCommand("SELECT TaskID, TaskName, StartDate, Deadline, Details, TaskListFileTableDir, AssignedBy, AssignedTo, TaskStatus, " +
                     "LastEdited, LastEditedBy, TaskFiles, NotifyUsers FROM dbo.Tasks", sqlConn);
 
                 sqlConn.Open();
@@ -126,18 +126,19 @@ namespace PremierDesignManagement
                 while (reader.Read())
                 {
                     DataStructures.TaskRowStruct taskRow = new DataStructures.TaskRowStruct();
-                    taskRow.taskName = reader.GetString(0);
-                    taskRow.startDate = reader.GetDateTime(1);
-                    taskRow.deadline = reader.GetDateTime(2);
-                    taskRow.details = reader.GetString(3);
-                    taskRow.taskListFileTableDir = reader.GetString(4);
-                    taskRow.assignedBy = reader.GetString(5);
-                    taskRow.assignedTo = (string)reader.GetString(6);
-                    taskRow.taskStatus = (string)reader.GetString(7);
-                    taskRow.lastEdited = reader.GetDateTime(8);
-                    taskRow.lastEditedBy = reader.GetString(9);
-                    string taskFilesString = reader.GetString(10);
-                    string notifyUsersString = reader.GetString(11);
+                    taskRow.taskID = reader.GetInt32(0);
+                    taskRow.taskName = reader.GetString(1);
+                    taskRow.startDate = reader.GetDateTime(2);
+                    taskRow.deadline = reader.GetDateTime(3);
+                    taskRow.details = reader.GetString(4);
+                    taskRow.taskListFileTableDir = reader.GetString(5);
+                    taskRow.assignedBy = reader.GetString(6);
+                    taskRow.assignedTo = (string)reader.GetString(7);
+                    taskRow.taskStatus = (string)reader.GetString(8);
+                    taskRow.lastEdited = reader.GetDateTime(9);
+                    taskRow.lastEditedBy = reader.GetString(10);
+                    string taskFilesString = reader.GetString(11);
+                    string notifyUsersString = reader.GetString(12);
 
                     if (taskFilesString != "")
                     {

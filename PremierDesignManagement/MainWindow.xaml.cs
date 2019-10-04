@@ -71,10 +71,12 @@ namespace PremierDesignManagement
 
             DataHandling.GetUsers();
 
+            
+            System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)10;
+
             //Opens new Log In Window
             LogInWindow logIn = new LogInWindow();
-            logIn.Show();
-            System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)10;
+            logIn.ShowDialog();
 
             foreach (String username in Properties.Settings.Default.UsernamesStringCollection)
             {
@@ -647,8 +649,10 @@ namespace PremierDesignManagement
         private void NotificationsButtonClick(object sender, RoutedEventArgs e)
         {
             Notifications notifications = new Notifications();
-            
-            notifications.Show();
+
+            notifications.Top = this.Top + 220;
+            notifications.Left = this.Left + 20;
+            notifications.ShowDialog();
         }
 
     }

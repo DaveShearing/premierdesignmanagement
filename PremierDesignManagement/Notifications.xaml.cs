@@ -25,6 +25,9 @@ namespace PremierDesignManagement
     /// </summary>
     public partial class Notifications : Window
     {
+        int[,] taskIDArray;
+
+
         public Notifications()
         {
             InitializeComponent();
@@ -40,22 +43,31 @@ namespace PremierDesignManagement
         {
 
             int noOfNotifications = DataStructures.notificationRows.Count();
+            taskIDArray = new int[noOfNotifications, 2];
+
 
             foreach (DataStructures.NotificationStruct notification in DataStructures.notificationRows)
             {
+                
+
                 string notificationHeaderString = notification.notificationSender + " at " + notification.notificationTime.ToString("HH:mm dd/MM/yyyy") + ": ";
                 string notificationContentString = notification.notificationText;
 
+                int[,] notifIDtaskID = new int[noOfNotifications,notification.taskID];
+                taskIDArray[noOfNotifications-1, 0] = notification.taskID;
+                taskIDArray[noOfNotifications - 1, 1] = notification.notificationID;
+
                 RowDefinition notificationRow = new RowDefinition();
                 notificationRow.Height = new GridLength(100, GridUnitType.Auto);
+                
+                
                 NotificationsGrid.RowDefinitions.Add(notificationRow);
 
                 Border notificationBorder = new Border();
                 notificationBorder.Width = 380;
                 
-
-
                 Grid notificationTextGrid = new Grid();
+                notificationTextGrid.MouseDown += NotificationTextGrid_MouseDown;
                 
                 
                 TextBlock notificationHeaderTextBlock = new TextBlock();
@@ -92,7 +104,16 @@ namespace PremierDesignManagement
                 notificationTextGrid.Children.Add(notificationContentTextBlock);
 
                 Grid.SetRow(notificationBorder, noOfNotifications - 1);
-                NotificationsGrid.Children.Add(notificationBorder);
+
+                foreach (string username in notification.notificationRecipients)
+                {
+                    if (username.Equals(Application.Current.Properties["username"]))
+                    {
+                        NotificationsGrid.Children.Add(notificationBorder);
+                    }
+                }
+
+                
 
                 noOfNotifications--;
             }
@@ -100,12 +121,59 @@ namespace PremierDesignManagement
             
         }
 
-        public void CloseButtonClick(object sender, RoutedEventArgs e)
+        private void NotificationTextGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)0;
+            int notificationRow = Grid.GetRow(sender as Grid);
 
-            Close();
+            Console.WriteLine(notificationRow);
+
+            for (int i = DataStructures.notificationRows.Count(); i >= 0; i--)
+            {
+                if (i == notificationRow)
+                {
+                    foreach (DataStructures.TaskRowStruct task in DataStructures.taskRows)
+                    {
+                        if (task.taskID == taskIDArray[i,0])
+                        {
+                            ViewTaskWindow viewTask = new ViewTaskWindow(task);
+                            viewTask.Show();
+                            System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)0;
+
+                            DataHandling.UpdateNotificationReadBy(taskIDArray[i, 1]);
+                            taskIDArray = null;
+                            NotificationsGrid.Children.Clear();
+                            Close();
+                        }
+                    }
+                }
+            }
         }
 
+        public void CloseButtonClick(object sender, RoutedEventArgs e)
+        {
+            taskIDArray = null;
+            NotificationsGrid.Children.Clear();
+            Close();
+            System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)0;
+        }
+
+        private void MainGrid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            
+
+
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key.Equals(Key.Escape))
+            {
+                taskIDArray = null;
+                NotificationsGrid.Children.Clear();
+                System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)0;
+                Close();
+
+            }
+        }
     }
 }

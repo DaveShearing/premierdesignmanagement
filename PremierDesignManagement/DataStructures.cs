@@ -15,6 +15,7 @@ namespace PremierDesignManagement
         
         public class TaskRowStruct
         {
+            public int taskID { get; set; }
             public string taskName{ get; set; }
             public DateTime startDate { get; set; }
             public DateTime deadline { get; set; }
