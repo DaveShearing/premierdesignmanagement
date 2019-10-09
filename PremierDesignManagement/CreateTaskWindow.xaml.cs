@@ -50,6 +50,7 @@ namespace PremierDesignManagement
             newTask.taskStatus = StatusComboBox.SelectedValue.ToString();
             newTask.lastEdited = DateTime.Now;
             newTask.taskFiles = new List<string>();
+            newTask.notifyUsers = new List<string>();
             string[] taskFilesArray = newTask.taskFiles.ToArray();
             string taskFilesString = string.Join(",", taskFilesArray);
 
@@ -98,7 +99,9 @@ namespace PremierDesignManagement
             notificationStruct.notificationText = "Created Task: " + newTask.taskName;
             notificationStruct.taskID = newTaskID;
             notificationStruct.notificationTime = DateTime.Now;
-            notificationStruct.notificationRecipients = newTask.notifyUsers;
+            notificationStruct.notificationRecipients = new List<string>();
+            notificationStruct.notificationRecipients.Add(newTask.assignedTo);
+            notificationStruct.notificationRecipients.Add(newTask.assignedBy);
 
             DataHandling.AddNotification(notificationStruct);
 

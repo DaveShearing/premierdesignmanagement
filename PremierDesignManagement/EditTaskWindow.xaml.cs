@@ -68,7 +68,7 @@ namespace PremierDesignManagement
 
             DataStructures.NotificationStruct notificationStruct = new DataStructures.NotificationStruct();
             notificationStruct.notificationSender = Application.Current.Properties["username"].ToString();
-            notificationStruct.notificationText = updateString;
+            notificationStruct.notificationText = "[" + selectedTask.taskName + "]: " + updateString;
             notificationStruct.taskID = taskID;
             notificationStruct.notificationTime = DateTime.Now;
             notificationStruct.notificationRecipients = selectedTask.notifyUsers;

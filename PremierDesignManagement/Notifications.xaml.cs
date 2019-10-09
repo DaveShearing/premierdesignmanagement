@@ -45,6 +45,7 @@ namespace PremierDesignManagement
             int noOfNotifications = DataStructures.notificationRows.Count();
             taskIDArray = new int[noOfNotifications, 2];
 
+            NotificationsGrid.Children.Clear();
 
             foreach (DataStructures.NotificationStruct notification in DataStructures.notificationRows)
             {
@@ -60,11 +61,19 @@ namespace PremierDesignManagement
                 RowDefinition notificationRow = new RowDefinition();
                 notificationRow.Height = new GridLength(100, GridUnitType.Auto);
                 
-                
                 NotificationsGrid.RowDefinitions.Add(notificationRow);
+
+                Rectangle divider = new Rectangle();
+                divider.Width = 350;
+                divider.Height = 1;
+                divider.HorizontalAlignment = HorizontalAlignment.Center;
+                divider.VerticalAlignment = VerticalAlignment.Bottom;
+                divider.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+                divider.Margin = new Thickness(0, 0, 0, 0);
 
                 Border notificationBorder = new Border();
                 notificationBorder.Width = 380;
+                notificationBorder.Margin = new Thickness(2);
                 
                 Grid notificationTextGrid = new Grid();
                 notificationTextGrid.MouseDown += NotificationTextGrid_MouseDown;
@@ -83,37 +92,63 @@ namespace PremierDesignManagement
                 notificationContentTextBlock.FontSize = 14;
                 notificationContentTextBlock.TextWrapping = TextWrapping.Wrap;
 
-                if (notification.readByRecipients.Contains(Application.Current.Properties["username"]) != true)
+                bool readByUser = false;
+
+                foreach (string username in notification.readByRecipients)
+                {
+                    if (username.Equals(Application.Current.Properties["username"].ToString()) == true)
+                    {
+                        readByUser = true;
+                    }
+                }
+
+                if (readByUser != true)
                 {
                     notificationBorder.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFFF4F5A");
                     notificationHeaderTextBlock.FontWeight = FontWeights.Bold;
                     notificationContentTextBlock.FontWeight = FontWeights.Bold;
-                    notificationBorder.BorderThickness = new Thickness(2);
+                    notificationBorder.BorderThickness = new Thickness(10,0,0,0);
                 } else
                 {
                     notificationBorder.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
                     notificationHeaderTextBlock.FontWeight = FontWeights.Normal;
                     notificationContentTextBlock.FontWeight = FontWeights.Normal;
-                    notificationBorder.BorderThickness = new Thickness(1);
-                }
-
-                Grid.SetRow(notificationHeaderTextBlock, 0);
-                Grid.SetRow(notificationContentTextBlock, 1);
-                notificationBorder.Child = notificationTextGrid;
-                notificationTextGrid.Children.Add(notificationHeaderTextBlock);
-                notificationTextGrid.Children.Add(notificationContentTextBlock);
-
-                Grid.SetRow(notificationBorder, noOfNotifications - 1);
-
-                foreach (string username in notification.notificationRecipients)
-                {
-                    if (username.Equals(Application.Current.Properties["username"]))
-                    {
-                        NotificationsGrid.Children.Add(notificationBorder);
-                    }
+                    notificationBorder.BorderThickness = new Thickness(10,0,0,0);
                 }
 
                 
+                Grid.SetRow(notificationHeaderTextBlock, 0);
+                Grid.SetRow(notificationContentTextBlock, 1);
+                Grid.SetRow(divider, 2);
+                notificationBorder.Child = notificationTextGrid;
+                
+                notificationTextGrid.Children.Add(notificationHeaderTextBlock);
+                notificationTextGrid.Children.Add(notificationContentTextBlock);
+                notificationTextGrid.Children.Add(divider);
+
+                Grid.SetRow(notificationBorder, noOfNotifications - 1);
+
+                bool showForUser = false;
+
+                foreach (string username in notification.notificationRecipients)
+                {
+                    if (username.Equals(Application.Current.Properties["username"].ToString()) == true)
+                    {
+                        showForUser = true;
+                    } 
+                }
+
+                if (showForUser != false)
+                {
+                    NotificationsGrid.Children.Add(notificationBorder);
+                }
+                else
+                {
+                    Border border = new Border();
+                    Grid.SetRow(border, noOfNotifications - 1);
+                    NotificationsGrid.Children.Add(border);
+                }
+
 
                 noOfNotifications--;
             }
@@ -123,8 +158,17 @@ namespace PremierDesignManagement
 
         private void NotificationTextGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            int notificationRow = Grid.GetRow(sender as Grid);
+            int notificationRow = -1;
 
+            foreach (Border border in NotificationsGrid.Children)
+            {
+                if (((UIElement)e.Source).IsDescendantOf(border))
+                {
+                    notificationRow = Grid.GetRow(border);
+                }
+            }
+
+            
             Console.WriteLine(notificationRow);
 
             for (int i = DataStructures.notificationRows.Count(); i >= 0; i--)
@@ -136,13 +180,16 @@ namespace PremierDesignManagement
                         if (task.taskID == taskIDArray[i,0])
                         {
                             ViewTaskWindow viewTask = new ViewTaskWindow(task);
-                            viewTask.Show();
+                            
+                            DataHandling.UpdateNotificationReadBy(taskIDArray[i, 1]);
+                            //taskIDArray = null;
+                            NotificationsGrid.Children.Clear();
+
+                            Close();
+                            
                             System.Windows.Application.Current.Resources["BlurEffectRadius"] = (double)0;
 
-                            DataHandling.UpdateNotificationReadBy(taskIDArray[i, 1]);
-                            taskIDArray = null;
-                            NotificationsGrid.Children.Clear();
-                            Close();
+                            viewTask.Show();
                         }
                     }
                 }

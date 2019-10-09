@@ -6,10 +6,12 @@
         xmlns:local="clr-namespace:PremierDesignManagement"
         mc:Ignorable="d"
         Title="Notifications" Height="450" Width="400" KeyDown="Window_KeyDown"  WindowStyle="None"  ResizeMode="NoResize" ShowInTaskbar="False" Icon="assets/pdmicon.ico" Topmost="True" WindowStartupLocation="Manual" Left="0" Top="0">
-    <Grid x:Name="MainGrid" Background="#FFDDDDDD" MouseDown="MainGrid_MouseDown">
+    <Grid x:Name="MainGrid" Background="#FFDDDDDD" MouseDown="MainGrid_MouseDown" ScrollViewer.CanContentScroll="True">
         <TextBlock x:Name="NotificationTitleText" HorizontalAlignment="Left" Height="38" Margin="10,10,0,0" TextWrapping="Wrap" Text="Notifications" VerticalAlignment="Top" Width="173" FontSize="30" Foreground="#FF51545D"/>
         <Button x:Name="CloseButton" Content="Close" HorizontalAlignment="Left" Height="38" Margin="328,10,0,0" VerticalAlignment="Top" Width="62" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="CloseButtonClick" IsCancel="True"/>
-        <Grid x:Name="NotificationsGrid" HorizontalAlignment="Left" Height="387" Margin="10,60,0,0" VerticalAlignment="Top" Width="380"/>
+        <ScrollViewer HorizontalAlignment="Left" Height="387" VerticalAlignment="Top" VerticalScrollBarVisibility="Visible" Width="380" Margin="10,53,0,0" CanContentScroll="True" PanningMode="VerticalOnly">
+            <Grid x:Name="NotificationsGrid" HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Top" Width="380" ScrollViewer.CanContentScroll="True"/>
+        </ScrollViewer>
 
     </Grid>
 </Window>

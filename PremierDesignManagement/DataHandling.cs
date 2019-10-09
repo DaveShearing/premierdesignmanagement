@@ -636,12 +636,12 @@ namespace PremierDesignManagement
 
                     foreach (string recipient in readByRecipientsArray)
                     {
-                        notification.notificationRecipients.Add(recipient);
+                        notification.readByRecipients.Add(recipient);
                     }
 
                     foreach (string recipient in hiddenByRecipientsArray)
                     {
-                        notification.notificationRecipients.Add(recipient);
+                        notification.hiddenByRecipients.Add(recipient);
                     }
 
                     DataStructures.notificationRows.Add(notification);
@@ -656,7 +656,12 @@ namespace PremierDesignManagement
 
         public static void UpdateNotificationReadBy(int notificationID)
         {
-            DataStructures.notificationRows[notificationID - 1].readByRecipients.Add(Application.Current.Properties["username"].ToString());
+            if (DataStructures.notificationRows[notificationID - 1].readByRecipients.Contains(Application.Current.Properties["username"].ToString()) != true)
+            {
+                DataStructures.notificationRows[notificationID - 1].readByRecipients.Add(Application.Current.Properties["username"].ToString());
+            }
+
+            
 
             string[] readByRecipientsArray = DataStructures.notificationRows[notificationID - 1].readByRecipients.ToArray();
             string readByRecipientsString = string.Join(",", readByRecipientsArray);

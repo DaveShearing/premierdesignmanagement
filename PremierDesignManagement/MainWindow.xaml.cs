@@ -91,7 +91,7 @@ namespace PremierDesignManagement
             mainWorkflowPlusAll = Properties.Settings.Default.MainWorkflow;
             mainWorkflowPlusAll.Add("All");
 
-            refreshTimer.Interval = new TimeSpan(0,0,30);
+            refreshTimer.Interval = new TimeSpan(0,0,20);
             refreshTimer.Tick += new EventHandler(RefreshTimerTick);
             refreshTimer.Start();
         }
@@ -102,13 +102,42 @@ namespace PremierDesignManagement
             DataHandling.GetNotifications();
 
             noOfNotifications = 0;
+            bool seenByUser = false;
 
             foreach (DataStructures.NotificationStruct notification in DataStructures.notificationRows)
             {
-                if (notification.readByRecipients.Contains(Application.Current.Properties["username"]) != true)
+                bool notificationForUser = false;
+                seenByUser = false;
+
+                foreach (string username in notification.notificationRecipients)
+                {
+                    if (username.Equals(Application.Current.Properties["username"]) == true)
+                    {
+                        notificationForUser = true;
+                    }
+                }
+
+                foreach (string username in notification.readByRecipients)
+                {
+                    if ((username.Equals(Application.Current.Properties["username"]) == true) && (notificationForUser == true))
+                    {
+                        seenByUser = true;
+                    }
+                }
+
+                if ((notificationForUser == true) && (seenByUser == false))
                 {
                     noOfNotifications++;
                 }
+
+                
+
+                /*
+                if (notification.readByRecipients.Contains(Application.Current.Properties["username"].ToString()) != true)
+                {
+                    noOfNotifications++;
+                }
+                */
             }
 
             if (noOfNotifications != 0)
@@ -652,7 +681,15 @@ namespace PremierDesignManagement
 
             notifications.Top = this.Top + 220;
             notifications.Left = this.Left + 20;
-            notifications.ShowDialog();
+
+            while ((bool)notifications.ShowDialog())
+            {
+
+            }
+            EventArgs e2 = new EventArgs();
+            RefreshTimerTick(sender, e2);
+
+            //notifications.ShowDialog();
         }
 
     }
