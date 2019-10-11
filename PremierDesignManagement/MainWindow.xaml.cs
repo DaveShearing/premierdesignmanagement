@@ -21,6 +21,13 @@ using System.ComponentModel;
 using System.Windows.Controls.Primitives;
 using System.Globalization;
 using System.Windows.Threading;
+using Windows.UI;
+using Windows.Data;
+using Windows.UI.Notifications;
+using Windows.Data.Xml.Dom;
+using System.IO;
+using System.Diagnostics;
+
 
 
 namespace PremierDesignManagement
@@ -44,6 +51,9 @@ namespace PremierDesignManagement
         public static string username;
         public static string forename;
         public static string surname;
+
+        
+        private const string APP_ID = "2daa3a0e-1f2c-4cab-b33b-3c2d2890f215";
 
         public static String Username
         {
@@ -100,7 +110,7 @@ namespace PremierDesignManagement
         {
             DataHandling.GetTasksFull();
             DataHandling.GetNotifications();
-
+            int oldNoOfNotifications = noOfNotifications;
             noOfNotifications = 0;
             bool seenByUser = false;
 
@@ -130,19 +140,32 @@ namespace PremierDesignManagement
                     noOfNotifications++;
                 }
 
-                
-
-                /*
-                if (notification.readByRecipients.Contains(Application.Current.Properties["username"].ToString()) != true)
-                {
-                    noOfNotifications++;
-                }
-                */
             }
 
             if (noOfNotifications != 0)
             {
                 NotificationsButton.Content = "Notifications (" + noOfNotifications + ")";
+
+                if (noOfNotifications > oldNoOfNotifications)
+                {
+                    /*
+                    XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText02);
+
+                    XmlNodeList stringElements = toastXml.GetElementsByTagName("text");
+                    
+                    stringElements[0].AppendChild(toastXml.CreateTextNode("New Notification(s)"));
+                    //stringElements[1].AppendChild(toastXml.CreateTextNode("Open Premier Task Management to see what's changed"));
+
+                    string imagePath = "/assets/Premier_P_Logo_Red_RGB_Small_Trans.png";
+                    XmlNodeList imageElements = toastXml.GetElementsByTagName("image");
+                    imageElements[0].Attributes.GetNamedItem("src").NodeValue = imagePath;
+
+                    ToastNotification toast = new ToastNotification(toastXml);
+
+                    ToastNotificationManager.CreateToastNotifier(APP_ID).Show(toast);
+                    */
+                }
+
             } else
             {
                 NotificationsButton.Content = "Notifications";
@@ -679,8 +702,19 @@ namespace PremierDesignManagement
         {
             Notifications notifications = new Notifications();
 
-            notifications.Top = this.Top + 220;
-            notifications.Left = this.Left + 20;
+            if (this.WindowState == WindowState.Normal)
+            {
+                notifications.Top = this.Top + 150;
+                notifications.Left = this.Left + 20;
+            }
+            else if (this.WindowState == WindowState.Maximized)
+            {
+                notifications.Top = this.Height - 400;
+                notifications.Left = 10;
+            }
+
+            
+            notifications.VerticalAlignment = VerticalAlignment.Bottom;
 
             while ((bool)notifications.ShowDialog())
             {
@@ -691,6 +725,8 @@ namespace PremierDesignManagement
 
             //notifications.ShowDialog();
         }
+
+
 
     }
 

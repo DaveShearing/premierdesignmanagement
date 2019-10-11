@@ -64,7 +64,7 @@ namespace PremierDesignManagement
                 NotificationsGrid.RowDefinitions.Add(notificationRow);
 
                 Rectangle divider = new Rectangle();
-                divider.Width = 350;
+                divider.Width = 320;
                 divider.Height = 1;
                 divider.HorizontalAlignment = HorizontalAlignment.Center;
                 divider.VerticalAlignment = VerticalAlignment.Bottom;
@@ -72,7 +72,7 @@ namespace PremierDesignManagement
                 divider.Margin = new Thickness(0, 0, 0, 0);
 
                 Border notificationBorder = new Border();
-                notificationBorder.Width = 380;
+                notificationBorder.Width = 360;
                 notificationBorder.Margin = new Thickness(2);
                 
                 Grid notificationTextGrid = new Grid();

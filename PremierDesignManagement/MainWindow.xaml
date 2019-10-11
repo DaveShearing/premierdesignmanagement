@@ -9,7 +9,7 @@
         xmlns:syscolgen="clr-namespace:System.Collections.Generic;assembly=mscorlib"
         xmlns:syscol="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Premier Task Management" Height="800" Width="1400" ResizeMode="CanMinimize" Icon="assets/pdmicon.ico" Background="White" Foreground="Black" WindowStartupLocation="CenterScreen"
+        Title="Premier Task Management" Height="800" Width="1400" Icon="assets/pdmicon.ico" Background="White" Foreground="Black" WindowStartupLocation="CenterScreen" MinWidth="1400" MinHeight="800"
         >
     <Window.Resources>
         <Color x:Key="BorderColour1">#FF51545D</Color>
@@ -21,11 +21,10 @@
         <Grid.Effect>
             <BlurEffect Radius="{DynamicResource BlurEffectRadius}" />
         </Grid.Effect>
-        <Image Margin="-235,95,1447,604" Source="assets/Premier_Logo_Single_Line_Red_Grey_RGB_Large_Trans.png" Stretch="Fill"/>
-        <Grid x:Name="TaskListGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" d:IsHidden="True">
+        <Grid x:Name="TaskListGrid" Margin="202,0,0,0">
             <TextBlock x:Name="TitleText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="Task List" VerticalAlignment="Top" Width="640" FontSize="36" Foreground="#FF51545D"/>
-            <Button x:Name="CreateTaskButton" Content="Create Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,121,0,0" Height="38" FontSize="18" Click="CreateTaskButtonClick" Foreground="#FF51545D"/>
-            <ListView x:Name="TaskList2" x:FieldModifier="public" HorizontalAlignment="Left" Height="609" Margin="48,121,0,0" VerticalAlignment="Top" Width="923" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single" MouseDoubleClick="MouseDoubleClickItem">
+            <Button x:Name="CreateTaskButton" Content="Create Task" VerticalAlignment="Top" Margin="0,121,57,0" Height="38" FontSize="18" Click="CreateTaskButtonClick" Foreground="#FF51545D" HorizontalAlignment="Right" Width="109"/>
+            <ListView x:Name="TaskList2" x:FieldModifier="public" Margin="48,121,219,39" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single" MouseDoubleClick="MouseDoubleClickItem">
                 <ListView.ItemsSource>
                     <Binding Mode="OneWay" Source="{StaticResource taskRows}"/>
                 </ListView.ItemsSource>
@@ -114,15 +113,14 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <Button x:Name="EditTaskButton" Content="Edit Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,177,0,0" Height="38" FontSize="18" Click="EditTaskButtonClick" Foreground="#FF51545D"/>
-            <Button x:Name="ViewTaskButton" Content="View Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="1024,234,0,0" Height="38" FontSize="18" Click="ViewTaskButtonClick" Foreground="#FF51545D"/>
-            <Button x:Name="UpdateTasksButton" Content="Update Tasks" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" Margin="1024,692,0,0" Height="38" FontSize="18" Click="UpdateTasksButtonClick" Foreground="#FF51545D"/>
+            <Button x:Name="EditTaskButton" Content="Edit Task" VerticalAlignment="Top" Margin="0,177,57,0" Height="38" FontSize="18" Click="EditTaskButtonClick" Foreground="#FF51545D" HorizontalAlignment="Right" Width="109"/>
+            <Button x:Name="ViewTaskButton" Content="View Task" VerticalAlignment="Top" Margin="0,234,57,0" Height="38" FontSize="18" Click="ViewTaskButtonClick" Foreground="#FF51545D" HorizontalAlignment="Right" Width="109"/>
+            <Button x:Name="UpdateTasksButton" Content="Update Tasks" Margin="0,0,47,39" FontSize="18" Click="UpdateTasksButtonClick" Foreground="#FF51545D" HorizontalAlignment="Right" Width="119" Height="38" VerticalAlignment="Bottom"/>
         </Grid>
-        <Image Margin="-220,215,1447,506" Source="assets/Premier_Logo_Single_Line_RGB_Large_Trans.png" Stretch="Fill"/>
-        <Grid x:Name="SidebarGrid" HorizontalAlignment="Left" Height="771" VerticalAlignment="Top" Width="300" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-            <Rectangle x:Name="Sidebar" Fill="#FFCACBCF" HorizontalAlignment="Left" Height="769" Stroke="#FFC3C4C8" VerticalAlignment="Top" Width="200"/>
-            <Image Margin="50,650,150,21" Source="assets/Premier_P_Logo_Red_RGB_Large_Trans.png" Stretch="Fill" Width="100" Height="100"/>
-            <Border x:Name="TaskListBorder" BorderThickness="10,0,0,0" Margin="20,97,100,614" Height="60">
+        <Grid x:Name="SidebarGrid" HorizontalAlignment="Left" Width="300" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,0,0,-2">
+            <Rectangle x:Name="Sidebar" Fill="#FFCACBCF" HorizontalAlignment="Left" Stroke="#FFC3C4C8" Width="200" Margin="0,0,0,2"/>
+            <Image Margin="50,0,150,21" Source="assets/Premier_P_Logo_Red_RGB_Large_Trans.png" Stretch="Fill" Width="100" Height="100" VerticalAlignment="Bottom"/>
+            <Border x:Name="TaskListBorder" BorderThickness="10,0,0,0" Margin="20,97,0,0" Height="60" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180">
                 <Border.BorderBrush>
                     <SolidColorBrush Color="#FF51545D"/>
                 </Border.BorderBrush>
@@ -131,19 +129,19 @@
             <Border x:Name="CalendarBorder" BorderBrush="#FF51545D" BorderThickness="10,0,0,0" Margin="20,157,100,554" Height="60" Visibility="Hidden">
                 <TextBlock x:Name="CalendarButton" TextWrapping="Wrap" FontSize="30" TextAlignment="Right" Foreground="{Binding BorderBrush, ElementName=CalendarBorder}" HorizontalAlignment="Left" Width="170" Padding="0,9,10,0" Text="Calendar" Height="60" MouseLeftButtonUp="CalendarButtonClick"/>
             </Border>
-            <Border x:Name="HomeBorder" BorderThickness="10,0,0,0" Margin="20,37,100,674" Height="60" BorderBrush="#FFFF505B">
+            <Border x:Name="HomeBorder" BorderThickness="10,0,0,0" Margin="20,37,100,0" Height="60" BorderBrush="#FFFF505B" VerticalAlignment="Top">
                 <TextBlock x:Name="HomeButton" TextWrapping="Wrap" FontSize="30" TextAlignment="Right" Foreground="{Binding BorderBrush, ElementName=HomeBorder}" HorizontalAlignment="Left" Width="170" Padding="0,9,10,0" Height="60" MouseLeftButtonUp="HomeButtonClick"><Run Text="Home"/></TextBlock>
             </Border>
-            <Button x:Name="NotificationsButton" Content="Notifications" HorizontalAlignment="Left" VerticalAlignment="Top" Width="180" Margin="10,589,0,0" Height="38" FontSize="18" Click="NotificationsButtonClick" Foreground="#FF51545D" BorderBrush="#FFFF505B"/>
+            <Button x:Name="NotificationsButton" Content="Notifications" HorizontalAlignment="Left" Width="180" Margin="10,0,0,144" FontSize="18" Click="NotificationsButtonClick" Foreground="#FF51545D" BorderBrush="#FFFF505B" Height="38" VerticalAlignment="Bottom"/>
         </Grid>
         <Grid x:Name="CalendarGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Hidden">
             <Button Content="Button" HorizontalAlignment="Left" Height="99" Margin="314,256,0,0" VerticalAlignment="Top" Width="322"/>
         </Grid>
-        <Grid x:Name="HomeGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190">
+        <Grid x:Name="HomeGrid" Margin="202,0,0,0" d:IsHidden="True">
             <TextBlock x:Name="WelcomeText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="{DynamicResource WelcomeTextString}" VerticalAlignment="Top" Width="640" FontSize="36" Foreground="#FF51545D"/>
             <Button x:Name="LogInButton" Content="Log In" HorizontalAlignment="Left" VerticalAlignment="Top" Width="109" Margin="863,44,0,0" Height="38" FontSize="18" MouseLeftButtonUp="LogInButtonClick" Click="LogInButtonClick" Visibility="{DynamicResource LogInButtonVisibility}"/>
-            <Button x:Name="CreateTaskButton_Copy" Content="Create Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="1023,364,0,0" Height="38" FontSize="18" Click="CreateTaskButtonClick" Foreground="#FF51545D"/>
-            <ListView x:Name="AssignedToYouList" x:FieldModifier="public" HorizontalAlignment="Left" Height="239" Margin="48,163,0,0" VerticalAlignment="Top" Width="924" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single" MouseDoubleClick="MouseDoubleClickItem">
+            <Button x:Name="CreateTaskButton_Copy" Content="Create Task" Margin="0,0,57,367" FontSize="18" Click="CreateTaskButtonClick" Foreground="#FF51545D" HorizontalAlignment="Right" Width="110" Height="38" VerticalAlignment="Bottom"/>
+            <ListView x:Name="AssignedToYouList" x:FieldModifier="public" Margin="48,163,218,367" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single" MouseDoubleClick="MouseDoubleClickItem">
                 <ListView.Resources>
                     <ContextMenu x:Key="TaskStatusContextMenuAssignedTo" DataContext="Properties.Settings" ItemsSource="{StaticResource MainWorkflow}" MenuItem.Click="TaskStatusMenuClickAssignedTo">
                     </ContextMenu>
@@ -204,10 +202,10 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <Button x:Name="EditTaskButton_ToYou" Content="Edit Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="1023,164,0,0" Height="38" FontSize="18" Click="EditTaskButtonClick" Foreground="#FF51545D"/>
-            <Button x:Name="ViewTaskButton_ToYou" Content="View Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="1023,221,0,0" Height="38" FontSize="18" Click="ViewTaskButtonClick" Foreground="#FF51545D"/>
-            <Button x:Name="UpdateTasksButton_Home" Content="Update Tasks" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118" Margin="1023,692,0,0" Height="38" FontSize="18" Click="UpdateTasksButtonClick" Foreground="#FF51545D"/>
-            <ListView x:Name="AssignedByYouList" x:FieldModifier="public" HorizontalAlignment="Left" Height="239" Margin="48,491,0,0" VerticalAlignment="Top" Width="924" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single" MouseDoubleClick="MouseDoubleClickItem">
+            <Button x:Name="EditTaskButton_ToYou" Content="Edit Task" VerticalAlignment="Top" Margin="0,164,57,0" Height="38" FontSize="18" Click="EditTaskButtonClick" Foreground="#FF51545D" HorizontalAlignment="Right" Width="110"/>
+            <Button x:Name="ViewTaskButton_ToYou" Content="View Task" VerticalAlignment="Top" Margin="0,221,57,0" Height="38" FontSize="18" Click="ViewTaskButtonClick" Foreground="#FF51545D" HorizontalAlignment="Right" Width="110"/>
+            <Button x:Name="UpdateTasksButton_Home" Content="Update Tasks" Margin="0,0,49,39" FontSize="18" Click="UpdateTasksButtonClick" Foreground="#FF51545D" Height="38" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="118"/>
+            <ListView x:Name="AssignedByYouList" x:FieldModifier="public" Margin="48,0,218,39" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single" MouseDoubleClick="MouseDoubleClickItem" Height="239" VerticalAlignment="Bottom">
                 <ListView.Resources>
                     <ContextMenu x:Key="TaskStatusContextMenuAssignedBy" DataContext="Properties.Settings" ItemsSource="{StaticResource MainWorkflow}" MenuItem.Click="TaskStatusMenuClickAssignedBy">
                     </ContextMenu>
@@ -269,9 +267,9 @@
                 </ListView.View>
             </ListView>
             <TextBlock x:Name="AssignedToYouLabel" HorizontalAlignment="Left" Height="38" Margin="48,125,0,0" TextWrapping="Wrap" Text="Tasks Assigned To You:" VerticalAlignment="Top" Width="640" FontSize="26" Foreground="#FF51545D"/>
-            <TextBlock x:Name="AssignedByYouLabel" HorizontalAlignment="Left" Height="38" Margin="48,453,0,0" TextWrapping="Wrap" Text="Tasks Assigned By You:" VerticalAlignment="Top" Width="640" FontSize="26" Foreground="#FF51545D"/>
-            <Button x:Name="EditTaskButton_ByYou" Content="Edit Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="1023,492,0,0" Height="38" FontSize="18" Click="EditTaskButtonClick" Foreground="#FF51545D"/>
-            <Button x:Name="ViewTaskButton_ByYou" Content="View Task" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="1023,548,0,0" Height="38" FontSize="18" Click="ViewTaskButtonClick" Foreground="#FF51545D"/>
+            <TextBlock x:Name="AssignedByYouLabel" HorizontalAlignment="Left" Margin="48,0,0,278" TextWrapping="Wrap" Text="Tasks Assigned By You:" Width="640" FontSize="26" Foreground="#FF51545D" Height="38" VerticalAlignment="Bottom"/>
+            <Button x:Name="EditTaskButton_ByYou" Content="Edit Task" VerticalAlignment="Bottom" Margin="0,0,57,239" Height="38" FontSize="18" Click="EditTaskButtonClick" Foreground="#FF51545D" HorizontalAlignment="Right" Width="110"/>
+            <Button x:Name="ViewTaskButton_ByYou" Content="View Task" VerticalAlignment="Bottom" Margin="0,0,57,183" Height="38" FontSize="18" Click="ViewTaskButtonClick" Foreground="#FF51545D" HorizontalAlignment="Right" Width="110"/>
         </Grid>
 
     </Grid>

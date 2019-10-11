@@ -10,7 +10,7 @@
         <TextBlock x:Name="NotificationTitleText" HorizontalAlignment="Left" Height="38" Margin="10,10,0,0" TextWrapping="Wrap" Text="Notifications" VerticalAlignment="Top" Width="173" FontSize="30" Foreground="#FF51545D"/>
         <Button x:Name="CloseButton" Content="Close" HorizontalAlignment="Left" Height="38" Margin="328,10,0,0" VerticalAlignment="Top" Width="62" FontSize="20" Padding="1,-2,1,0" Foreground="#FF51545D" BorderBrush="#FFFF505B" Click="CloseButtonClick" IsCancel="True"/>
         <ScrollViewer HorizontalAlignment="Left" Height="387" VerticalAlignment="Top" VerticalScrollBarVisibility="Visible" Width="380" Margin="10,53,0,0" CanContentScroll="True" PanningMode="VerticalOnly">
-            <Grid x:Name="NotificationsGrid" HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Top" Width="380" ScrollViewer.CanContentScroll="True"/>
+            <Grid x:Name="NotificationsGrid" HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Top" Width="360" ScrollViewer.CanContentScroll="True"/>
         </ScrollViewer>
 
     </Grid>
