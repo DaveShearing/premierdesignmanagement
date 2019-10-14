@@ -27,6 +27,10 @@ using Windows.UI.Notifications;
 using Windows.Data.Xml.Dom;
 using System.IO;
 using System.Diagnostics;
+using RestSharp;
+using Newtonsoft.Json;
+using ToastNotifications;
+using AdaptiveCards;
 
 
 
@@ -726,7 +730,10 @@ namespace PremierDesignManagement
             //notifications.ShowDialog();
         }
 
-
+        private void IntitialiseCalendar()
+        {
+            
+        }
 
     }
 

@@ -21,7 +21,7 @@
         <Grid.Effect>
             <BlurEffect Radius="{DynamicResource BlurEffectRadius}" />
         </Grid.Effect>
-        <Grid x:Name="TaskListGrid" Margin="202,0,0,0">
+        <Grid x:Name="TaskListGrid" Margin="202,0,0,0" d:IsHidden="True">
             <TextBlock x:Name="TitleText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="Task List" VerticalAlignment="Top" Width="640" FontSize="36" Foreground="#FF51545D"/>
             <Button x:Name="CreateTaskButton" Content="Create Task" VerticalAlignment="Top" Margin="0,121,57,0" Height="38" FontSize="18" Click="CreateTaskButtonClick" Foreground="#FF51545D" HorizontalAlignment="Right" Width="109"/>
             <ListView x:Name="TaskList2" x:FieldModifier="public" Margin="48,121,219,39" Background="#FFCACBCF" Foreground="#FF51545D" FontSize="14" HorizontalContentAlignment="Center" SelectionMode="Single" MouseDoubleClick="MouseDoubleClickItem">
@@ -126,7 +126,7 @@
                 </Border.BorderBrush>
                 <TextBlock x:Name="TaskListButton" TextWrapping="Wrap" FontSize="30" TextAlignment="Right" Foreground="{Binding BorderBrush, ElementName=TaskListBorder}" HorizontalAlignment="Left" Width="170" Padding="0,9,10,0" Height="60" MouseLeftButtonUp="TaskListButtonClick"><Run Text="Task List"/></TextBlock>
             </Border>
-            <Border x:Name="CalendarBorder" BorderBrush="#FF51545D" BorderThickness="10,0,0,0" Margin="20,157,100,554" Height="60" Visibility="Hidden">
+            <Border x:Name="CalendarBorder" BorderBrush="#FF51545D" BorderThickness="10,0,0,0" Margin="20,157,100,554" Height="60" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <TextBlock x:Name="CalendarButton" TextWrapping="Wrap" FontSize="30" TextAlignment="Right" Foreground="{Binding BorderBrush, ElementName=CalendarBorder}" HorizontalAlignment="Left" Width="170" Padding="0,9,10,0" Text="Calendar" Height="60" MouseLeftButtonUp="CalendarButtonClick"/>
             </Border>
             <Border x:Name="HomeBorder" BorderThickness="10,0,0,0" Margin="20,37,100,0" Height="60" BorderBrush="#FFFF505B" VerticalAlignment="Top">
@@ -134,8 +134,37 @@
             </Border>
             <Button x:Name="NotificationsButton" Content="Notifications" HorizontalAlignment="Left" Width="180" Margin="10,0,0,144" FontSize="18" Click="NotificationsButtonClick" Foreground="#FF51545D" BorderBrush="#FFFF505B" Height="38" VerticalAlignment="Bottom"/>
         </Grid>
-        <Grid x:Name="CalendarGrid" HorizontalAlignment="Left" Height="769" Margin="202,0,0,0" VerticalAlignment="Top" Width="1190" Visibility="Hidden">
-            <Button Content="Button" HorizontalAlignment="Left" Height="99" Margin="314,256,0,0" VerticalAlignment="Top" Width="322"/>
+        <Grid x:Name="CalendarGrid" Margin="202,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Label Content="Month" Margin="0,20,0,0" VerticalAlignment="Top" FontSize="36" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="4"/>
+            <Label Content="Year" Margin="0,20,0,0" VerticalAlignment="Top" FontSize="36" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="7"/>
+            <Label Content="Monday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="1" Grid.Row="1"/>
+            <Label Content="Tuesday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="2" Grid.Row="1"/>
+            <Label Content="Wednesday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="3" Grid.Row="1"/>
+            <Label Content="Thursday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="4" Grid.Row="1"/>
+            <Label Content="Friday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="5" Grid.Row="1"/>
+            <Label Content="Saturday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="6" Grid.Row="1"/>
+            <Label Content="Sunday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="7" Grid.Row="1"/>
         </Grid>
         <Grid x:Name="HomeGrid" Margin="202,0,0,0" d:IsHidden="True">
             <TextBlock x:Name="WelcomeText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="{DynamicResource WelcomeTextString}" VerticalAlignment="Top" Width="640" FontSize="36" Foreground="#FF51545D"/>

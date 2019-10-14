@@ -128,6 +128,11 @@ namespace PremierDesignManagement
                 updateString += "Status to " + StatusComboBox.SelectedValue.ToString() + ", ";
             }
 
+            if (updateString.Equals("Changed: ") == true)
+            {
+                updateString = "Edited task making no changes";
+            }
+
             return updateString;
         }
 
