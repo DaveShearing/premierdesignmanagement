@@ -31,8 +31,7 @@ using RestSharp;
 using Newtonsoft.Json;
 using ToastNotifications;
 using AdaptiveCards;
-
-
+using Colors = System.Windows.Media.Colors;
 
 namespace PremierDesignManagement
 {
@@ -51,6 +50,7 @@ namespace PremierDesignManagement
         public StringCollection mainWorkflowPlusAll = new StringCollection();
         public DispatcherTimer refreshTimer = new DispatcherTimer();
         public static int noOfNotifications = 0;
+        public static DateTime calendarMonth = DateTime.Today;
 
         public static string username;
         public static string forename;
@@ -108,6 +108,9 @@ namespace PremierDesignManagement
             refreshTimer.Interval = new TimeSpan(0,0,20);
             refreshTimer.Tick += new EventHandler(RefreshTimerTick);
             refreshTimer.Start();
+
+            InitialiseCalendar();
+            LoadTasksIntoCalendar();
         }
         
         public void RefreshTimerTick (object sender, EventArgs e)
@@ -174,6 +177,17 @@ namespace PremierDesignManagement
             {
                 NotificationsButton.Content = "Notifications";
             }
+
+            for (int i = CalendarGrid.Children.Count-1; i > 0; i--)
+            {
+                if (CalendarGrid.Children[i].GetType() == typeof(Grid))
+                {
+                    Grid grid = (Grid)CalendarGrid.Children[i];
+                    CalendarGrid.Children.Remove(grid);
+                }
+            }
+
+            LoadTasksIntoCalendar();
         }
 
         //Opens Log In Window
@@ -730,10 +744,467 @@ namespace PremierDesignManagement
             //notifications.ShowDialog();
         }
 
-        private void IntitialiseCalendar()
+        private void Label_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            
+
         }
+
+        private void InitialiseCalendar()
+        {
+            DateTime today = DateTime.Today;
+            DateTime firstOfMonth = new DateTime(today.Year, today.Month, 1);
+            DayOfWeek firstDayOfMonth = firstOfMonth.DayOfWeek;
+            int daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
+            calendarMonth = today;
+
+            /*
+            TextBlock todaymarker = new TextBlock();
+            todaymarker.Text = "Today!";
+            todaymarker.HorizontalAlignment = HorizontalAlignment.Center;
+            todaymarker.FontSize = 20;
+
+            TextBlock firstDayMarker = new TextBlock();
+            firstDayMarker.Text = "First!";
+            firstDayMarker.FontSize = 20;
+            firstDayMarker.HorizontalAlignment = HorizontalAlignment.Center;
+            Grid.SetRow(firstDayMarker, 2);
+
+            if ((int)firstDayOfMonth > 0)
+            {
+                Grid.SetColumn(firstDayMarker, (int)firstDayOfMonth);
+            } else if ((int)firstDayOfMonth == 0)
+            {
+                Grid.SetColumn(firstDayMarker, (int)firstDayOfMonth);
+            }
+
+            CalendarGrid.Children.Add(firstDayMarker);
+            
+
+            if ((double)(today.Day+firstDayOfMonth-1)/7 <= 1)
+            {
+                Grid.SetRow(todaymarker, 2);
+            } else if ((double)(today.Day + firstDayOfMonth - 1) / 7 > 1 && (double)(today.Day + firstDayOfMonth - 1) / 7 <= 2)
+            {
+                Grid.SetRow(todaymarker, 3);
+            }
+            else if ((double)(today.Day + firstDayOfMonth - 1) / 7 > 2 && (double)(today.Day + firstDayOfMonth - 1) / 7 <= 3)
+            {
+                Grid.SetRow(todaymarker, 4);
+            }
+            else if ((double)(today.Day + firstDayOfMonth - 1) / 7 > 3 && (double)(today.Day + firstDayOfMonth - 1) / 7 <= 4)
+            {
+                Grid.SetRow(todaymarker, 5);
+            }
+            else if ((double)(today.Day + firstDayOfMonth - 1) / 7 > 4 && (double)(today.Day + firstDayOfMonth - 1) / 7 <= 5)
+            {
+                Grid.SetRow(todaymarker, 6);
+            }
+
+            Grid.SetColumn(todaymarker, (int)today.DayOfWeek);
+            CalendarGrid.Children.Add(todaymarker);
+
+            //Grid.SetColumn(todaymarker, (int)today.DayOfWeek+1);
+            */
+
+            MonthLabel.Content = DateTimeFormatInfo.InvariantInfo.GetMonthName(calendarMonth.Month);
+            YearLabel.Content = calendarMonth.Year;
+
+            for (int i = 1; i <= daysInMonth; i++)
+            {
+                TextBlock dayMarker = new TextBlock();
+                dayMarker.Text = i.ToString();
+                dayMarker.HorizontalAlignment = HorizontalAlignment.Center;
+                dayMarker.VerticalAlignment = VerticalAlignment.Center;
+                dayMarker.FontSize = 50;
+                dayMarker.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFCACBCF");
+
+                Rectangle dayBorder = new Rectangle();
+                dayBorder.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFCACBCF");
+                dayBorder.StrokeDashArray = new DoubleCollection() { 2 };
+
+                if ((int)firstDayOfMonth < 5)
+                {
+                    if ((double)(i + firstDayOfMonth - 1) / 7 <= 1 && (double)(i + firstDayOfMonth - 1) / 7 > 0)
+                    {
+                        Grid.SetRow(dayMarker, 3);
+                        Grid.SetRow(dayBorder, 3);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 1 && (double)(i + firstDayOfMonth - 1) / 7 <= 2)
+                    {
+                        Grid.SetRow(dayMarker, 4);
+                        Grid.SetRow(dayBorder, 4);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 2 && (double)(i + firstDayOfMonth - 1) / 7 <= 3)
+                    {
+                        Grid.SetRow(dayMarker, 5);
+                        Grid.SetRow(dayBorder, 5);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 3 && (double)(i + firstDayOfMonth - 1) / 7 <= 4)
+                    {
+                        Grid.SetRow(dayMarker, 6);
+                        Grid.SetRow(dayBorder, 6);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 4 && (double)(i + firstDayOfMonth - 1) / 7 <= 5)
+                    {
+                        Grid.SetRow(dayMarker, 7);
+                        Grid.SetRow(dayBorder, 7);
+                    }
+                    else
+                    {
+                        Grid.SetRow(dayMarker, 2);
+                        Grid.SetRow(dayBorder, 2);
+                    }
+                } else
+                {
+                    if ((double)(i + firstDayOfMonth - 1) / 7 <= 1 && (double)(i + firstDayOfMonth - 1) / 7 > 0)
+                    {
+                        Grid.SetRow(dayMarker, 2);
+                        Grid.SetRow(dayBorder, 2);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 1 && (double)(i + firstDayOfMonth - 1) / 7 <= 2)
+                    {
+                        Grid.SetRow(dayMarker, 3);
+                        Grid.SetRow(dayBorder, 3);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 2 && (double)(i + firstDayOfMonth - 1) / 7 <= 3)
+                    {
+                        Grid.SetRow(dayMarker, 4);
+                        Grid.SetRow(dayBorder, 4);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 3 && (double)(i + firstDayOfMonth - 1) / 7 <= 4)
+                    {
+                        Grid.SetRow(dayMarker, 5);
+                        Grid.SetRow(dayBorder, 5);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 4 && (double)(i + firstDayOfMonth - 1) / 7 <= 5)
+                    {
+                        Grid.SetRow(dayMarker, 6);
+                        Grid.SetRow(dayBorder, 6);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 5)
+                    {
+                        Grid.SetRow(dayMarker, 8);
+                        Grid.SetRow(dayBorder, 8);
+                    }
+                    else
+                    {
+                        Grid.SetRow(dayMarker, 7);
+                        Grid.SetRow(dayBorder, 7);
+                    }
+                }
+                
+
+                DateTime day = new DateTime(today.Year, today.Month, i);
+
+                if ((int)day.DayOfWeek == 0)
+                {
+                    Grid.SetColumn(dayMarker, 7);
+                    Grid.SetColumn(dayBorder, 7);
+                } else
+                {
+                    Grid.SetColumn(dayMarker, (int)day.DayOfWeek);
+                    Grid.SetColumn(dayBorder, (int)day.DayOfWeek);
+                }
+
+                
+                CalendarGrid.Children.Add(dayMarker);
+                CalendarGrid.Children.Add(dayBorder);
+            }
+
+        }
+
+        private void LoadTasksIntoCalendar()
+        {
+            DateTime today = DateTime.Today;
+            DateTime firstOfMonth = new DateTime(calendarMonth.Year, calendarMonth.Month, 1);
+            DayOfWeek firstDayOfMonth = firstOfMonth.DayOfWeek;
+            int daysInMonth = DateTime.DaysInMonth(calendarMonth.Year, calendarMonth.Month);
+
+            for (int i = 1; i <= daysInMonth; i++)
+            {
+                DateTime day = new DateTime(calendarMonth.Year, calendarMonth.Month, i);
+                Grid dayGrid = new Grid();
+                int dayRows = 0;
+                
+                foreach (DataStructures.TaskRowStruct task in DataStructures.taskRows)
+                {
+                    if (day >= task.startDate && day <= task.deadline)
+                    {
+                        RowDefinition rowDefinition = new RowDefinition();
+                        dayGrid.RowDefinitions.Add(rowDefinition);
+                        Rectangle taskRectangle = new Rectangle();
+                        taskRectangle.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFFF505B");
+                        if (day == today)
+                        {
+                            taskRectangle.Opacity = 0.85;
+                        } else
+                        {
+                            taskRectangle.Opacity = 0.7;
+                        }
+                        taskRectangle.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFCACBCF");
+                        taskRectangle.MouseUp += CalendarTaskClick;
+
+                        Label taskLabel = new Label();
+                        taskLabel.Content = task.taskName;
+                        taskLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF51545D");
+                        taskLabel.HorizontalAlignment = HorizontalAlignment.Center;
+                        taskLabel.VerticalAlignment = VerticalAlignment.Center;
+                        taskLabel.FontWeight = FontWeights.Bold;
+                        taskLabel.Name = "task";
+                        taskLabel.MouseUp += CalendarTaskLabelClick;
+
+                        Grid.SetRow(taskRectangle, dayRows);
+                        Grid.SetRow(taskLabel, dayRows);
+                        dayGrid.Children.Add(taskRectangle);
+                        dayGrid.Children.Add(taskLabel);
+                        dayRows++;
+                    }
+                }
+
+                if ((double)(i + firstDayOfMonth - 1) / 7 <= 1)
+                {
+                    Grid.SetRow(dayGrid, 2);
+                }
+                else if ((double)(i + firstDayOfMonth - 1) / 7 > 1 && (double)(i + firstDayOfMonth - 1) / 7 <= 2)
+                {
+                    Grid.SetRow(dayGrid, 3);
+                }
+                else if ((double)(i + firstDayOfMonth - 1) / 7 > 2 && (double)(i + firstDayOfMonth - 1) / 7 <= 3)
+                {
+                    Grid.SetRow(dayGrid, 4);
+                }
+                else if ((double)(i + firstDayOfMonth - 1) / 7 > 3 && (double)(i + firstDayOfMonth - 1) / 7 <= 4)
+                {
+                    Grid.SetRow(dayGrid, 5);
+                }
+                else if ((double)(i + firstDayOfMonth - 1) / 7 > 4 && (double)(i + firstDayOfMonth - 1) / 7 <= 5)
+                {
+                    Grid.SetRow(dayGrid, 6);
+                }
+
+                if ((int)day.DayOfWeek == 0)
+                {
+                    Grid.SetColumn(dayGrid, 7);
+                }
+                else
+                {
+                    Grid.SetColumn(dayGrid, (int)day.DayOfWeek);
+                }
+
+                CalendarGrid.Children.Add(dayGrid);
+            }
+
+        }
+
+        private void CalendarTaskClick (object sender, MouseButtonEventArgs e)
+        {
+            int children = ((e.Source as Rectangle).Parent as Grid).Children.Count;
+
+            for (int i = children-1; i >= 0; i--)
+            {
+                if (((e.Source as Rectangle).Parent as Grid).Children[i].GetType() == typeof(Label)) 
+                {
+                    if (Grid.GetRow(((e.Source as Rectangle).Parent as Grid).Children[i]) == Grid.GetRow((e.Source as Rectangle)))
+                    {
+                        string taskname = (((e.Source as Rectangle).Parent as Grid).Children[i] as Label).Content.ToString();
+
+                        foreach (DataStructures.TaskRowStruct task in DataStructures.taskRows)
+                        {
+                            if (task.taskName.Equals(taskname))
+                            {
+                                ViewTaskWindow viewTask = new ViewTaskWindow(task);
+                                viewTask.Show();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void CalendarTaskLabelClick(object sender, MouseButtonEventArgs e)
+        {
+            int children = ((e.Source as Label).Parent as Grid).Children.Count;
+
+            for (int i = children - 1; i >= 0; i--)
+            {
+                if (((e.Source as Label).Parent as Grid).Children[i].GetType() == typeof(Label))
+                {
+                    if (Grid.GetRow(((e.Source as Label).Parent as Grid).Children[i]) == Grid.GetRow((e.Source as Label)))
+                    {
+                        string taskname = (((e.Source as Label).Parent as Grid).Children[i] as Label).Content.ToString();
+
+                        foreach (DataStructures.TaskRowStruct task in DataStructures.taskRows)
+                        {
+                            if (task.taskName.Equals(taskname))
+                            {
+                                ViewTaskWindow viewTask = new ViewTaskWindow(task);
+                                viewTask.Show();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void PreviousMonthMouseUp (object sender, MouseButtonEventArgs e)
+        {
+            for (int i = CalendarGrid.Children.Count - 1; i > 0; i--)
+            {
+                if (CalendarGrid.Children[i].GetType() == typeof(Grid))
+                {
+                    Grid grid = (Grid)CalendarGrid.Children[i];
+                    CalendarGrid.Children.Remove(grid);
+                }
+            }
+
+            DateTime newMonth = calendarMonth.AddMonths(-1);
+            calendarMonth = newMonth;
+
+            MonthLabel.Content = DateTimeFormatInfo.InvariantInfo.GetMonthName(calendarMonth.Month);
+            YearLabel.Content = calendarMonth.Year;
+
+            ChangeCalendarMonth();
+            LoadTasksIntoCalendar();
+        }
+
+        private void NextMonthMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            for (int i = CalendarGrid.Children.Count - 1; i > 0; i--)
+            {
+                if (CalendarGrid.Children[i].GetType() == typeof(Grid))
+                {
+                    Grid grid = (Grid)CalendarGrid.Children[i];
+                    CalendarGrid.Children.Remove(grid);
+                }
+            }
+
+            DateTime newMonth = calendarMonth.AddMonths(1);
+            calendarMonth = newMonth;
+
+            MonthLabel.Content = DateTimeFormatInfo.InvariantInfo.GetMonthName(calendarMonth.Month);
+            YearLabel.Content = calendarMonth.Year;
+
+            ChangeCalendarMonth();
+            LoadTasksIntoCalendar();
+        }
+
+        private void ChangeCalendarMonth()
+        {
+            DateTime firstOfMonth = new DateTime(calendarMonth.Year, calendarMonth.Month, 1);
+            DayOfWeek firstDayOfMonth = firstOfMonth.DayOfWeek;
+            int daysInMonth = DateTime.DaysInMonth(calendarMonth.Year, calendarMonth.Month);
+
+            
+            for (int i = CalendarGrid.Children.Count-1; i > 0; i--)
+            {
+                if (Grid.GetRow(CalendarGrid.Children[i]) > 1)
+                {
+                    CalendarGrid.Children.RemoveAt(i);
+                }
+            }
+
+            for (int i = 1; i <= daysInMonth; i++)
+            {
+                TextBlock dayMarker = new TextBlock();
+                dayMarker.Text = i.ToString();
+                dayMarker.HorizontalAlignment = HorizontalAlignment.Center;
+                dayMarker.VerticalAlignment = VerticalAlignment.Center;
+                dayMarker.FontSize = 50;
+                dayMarker.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFCACBCF");
+
+                Rectangle dayBorder = new Rectangle();
+                dayBorder.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFCACBCF");
+                dayBorder.StrokeDashArray = new DoubleCollection() { 2 };
+
+
+                if ((int)firstDayOfMonth != 7)
+                {
+                    if ((double)(i + firstDayOfMonth - 1) / 7 <= 1 && (double)(i + firstDayOfMonth - 1) / 7 > 0)
+                    {
+                        Grid.SetRow(dayMarker, 2);
+                        Grid.SetRow(dayBorder, 2);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 1 && (double)(i + firstDayOfMonth - 1) / 7 <= 2)
+                    {
+                        Grid.SetRow(dayMarker, 3);
+                        Grid.SetRow(dayBorder, 3);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 2 && (double)(i + firstDayOfMonth - 1) / 7 <= 3)
+                    {
+                        Grid.SetRow(dayMarker, 4);
+                        Grid.SetRow(dayBorder, 4);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 3 && (double)(i + firstDayOfMonth - 1) / 7 <= 4)
+                    {
+                        Grid.SetRow(dayMarker, 5);
+                        Grid.SetRow(dayBorder, 5);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 4 && (double)(i + firstDayOfMonth - 1) / 7 <= 5)
+                    {
+                        Grid.SetRow(dayMarker, 6);
+                        Grid.SetRow(dayBorder, 6);
+                    }
+                    else
+                    {
+                        Grid.SetRow(dayMarker, 2);
+                        Grid.SetRow(dayBorder, 2);
+                    }
+
+                } else
+                {
+                    if ((double)(i + firstDayOfMonth - 1) / 7 <= 1 && (double)(i + firstDayOfMonth - 1) / 7 > 0)
+                    {
+                        Grid.SetRow(dayMarker, 2);
+                        Grid.SetRow(dayBorder, 2);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 1 && (double)(i + firstDayOfMonth - 1) / 7 <= 2)
+                    {
+                        Grid.SetRow(dayMarker, 3);
+                        Grid.SetRow(dayBorder, 3);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 2 && (double)(i + firstDayOfMonth - 1) / 7 <= 3)
+                    {
+                        Grid.SetRow(dayMarker, 4);
+                        Grid.SetRow(dayBorder, 4);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 3 && (double)(i + firstDayOfMonth - 1) / 7 <= 4)
+                    {
+                        Grid.SetRow(dayMarker, 5);
+                        Grid.SetRow(dayBorder, 5);
+                    }
+                    else if ((double)(i + firstDayOfMonth - 1) / 7 > 4 && (double)(i + firstDayOfMonth - 1) / 7 <= 5)
+                    {
+                        Grid.SetRow(dayMarker, 6);
+                        Grid.SetRow(dayBorder, 6);
+                    }
+                    else
+                    {
+                        Grid.SetRow(dayMarker, 7);
+                        Grid.SetRow(dayBorder, 7);
+                    }
+                }
+                    
+
+                DateTime day = new DateTime(calendarMonth.Year, calendarMonth.Month, i);
+
+                if ((int)day.DayOfWeek == 0)
+                {
+                    Grid.SetColumn(dayMarker, 7);
+                    Grid.SetColumn(dayBorder, 7);
+                }
+                else
+                {
+                    Grid.SetColumn(dayMarker, (int)day.DayOfWeek);
+                    Grid.SetColumn(dayBorder, (int)day.DayOfWeek);
+                }
+
+
+                CalendarGrid.Children.Add(dayMarker);
+                CalendarGrid.Children.Add(dayBorder);
+            }
+        }
+
+
 
     }
 

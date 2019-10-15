@@ -147,8 +147,9 @@
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="80"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="40"/>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -156,15 +157,19 @@
                 <RowDefinition/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <Label Content="Month" Margin="0,20,0,0" VerticalAlignment="Top" FontSize="36" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="4"/>
-            <Label Content="Year" Margin="0,20,0,0" VerticalAlignment="Top" FontSize="36" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="7"/>
-            <Label Content="Monday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="1" Grid.Row="1"/>
-            <Label Content="Tuesday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="2" Grid.Row="1"/>
-            <Label Content="Wednesday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="3" Grid.Row="1"/>
-            <Label Content="Thursday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="4" Grid.Row="1"/>
-            <Label Content="Friday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="5" Grid.Row="1"/>
-            <Label Content="Saturday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="6" Grid.Row="1"/>
-            <Label Content="Sunday" Margin="0,2,0,0" VerticalAlignment="Top" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="7" Grid.Row="1"/>
+            <Label x:Name="YearLabel" Content="Year" Margin="0" VerticalAlignment="Center" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Foreground="#FF51545D" Grid.Column="7"/>
+            <Label Content="Monday" Margin="0,2,0,0" FontSize="20" HorizontalContentAlignment="Center" Foreground="#FF51545D" Grid.Column="1" Grid.Row="1" BorderThickness="1,0,1,1" BorderBrush="#FFCACBCF"/>
+            <Label Content="Tuesday" Margin="0,2,0,0" FontSize="20" HorizontalContentAlignment="Center" Foreground="#FF51545D" Grid.Column="2" Grid.Row="1" BorderBrush="#FFCACBCF" BorderThickness="0,0,1,1"/>
+            <Label Content="Wednesday" Margin="0,2,0,0" FontSize="20" HorizontalContentAlignment="Center" Foreground="#FF51545D" Grid.Column="3" Grid.Row="1" BorderThickness="0,0,1,1" BorderBrush="#FFCACBCF"/>
+            <Label Content="Thursday" Margin="0,2,0,0" FontSize="20" HorizontalContentAlignment="Center" Foreground="#FF51545D" Grid.Column="4" Grid.Row="1" BorderThickness="0,0,1,1" BorderBrush="#FFCACBCF"/>
+            <Label Content="Friday" Margin="0,2,0,0" FontSize="20" HorizontalContentAlignment="Center" Foreground="#FF51545D" Grid.Column="5" Grid.Row="1" BorderBrush="#FFCACBCF" BorderThickness="0,0,1,1"/>
+            <Label Content="Saturday" Margin="0,2,0,0" FontSize="20" HorizontalContentAlignment="Center" Foreground="#FF51545D" Grid.Column="6" Grid.Row="1" BorderThickness="0,0,1,1" BorderBrush="#FFCACBCF"/>
+            <Label Content="Sunday" Margin="0,2,0,0" FontSize="20" HorizontalContentAlignment="Center" Foreground="#FF51545D" Grid.Column="7" Grid.Row="1" BorderBrush="#FFCACBCF" BorderThickness="0,0,1,1"/>
+            <Button x:Name="CreateTaskButton_Copy1" Content="Create Task" VerticalAlignment="Center" Margin="0" Height="38" FontSize="18" Click="CreateTaskButtonClick" Foreground="#FF51545D" HorizontalAlignment="Center" Width="110" Grid.Column="1"/>
+            <Rectangle Grid.Column="1" Fill="#FFCACBCF" Margin="0" Stroke="#FFC3C4C8" Grid.ColumnSpan="7" StrokeThickness="2" VerticalAlignment="Bottom" RadiusX="2" RadiusY="2"/>
+            <Label x:Name="MonthLabel" Content="Month" Margin="0" FontSize="30" HorizontalContentAlignment="Center" Foreground="#FF51545D" Grid.Column="4" BorderThickness="0" VerticalContentAlignment="Center"/>
+            <Label Content="&gt;" Grid.Column="5" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center" FontSize="40" FontWeight="Bold" Foreground="#FF51545D" Padding="5,0,5,5" VerticalContentAlignment="Center" MouseUp="NextMonthMouseUp"/>
+            <Label Content="&lt;" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" FontSize="40" FontWeight="Bold" Foreground="#FF51545D" Padding="5,0,5,5" VerticalContentAlignment="Center" MouseUp="PreviousMonthMouseUp" Grid.Column="3"/>
         </Grid>
         <Grid x:Name="HomeGrid" Margin="202,0,0,0" d:IsHidden="True">
             <TextBlock x:Name="WelcomeText" HorizontalAlignment="Left" Height="52" Margin="48,44,0,0" TextWrapping="Wrap" Text="{DynamicResource WelcomeTextString}" VerticalAlignment="Top" Width="640" FontSize="36" Foreground="#FF51545D"/>
